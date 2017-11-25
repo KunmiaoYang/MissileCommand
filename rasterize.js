@@ -19,6 +19,7 @@ var triangleBuffer; // this contains indices into vertexBuffer in triples
 var triBufferSize = 0; // the number of indices in the triangle buffer
 var vertexPositionAttrib; // where to put position for vertex shader
 var vertexNormalAttrib; // where to put normal for vertex shader
+var uniforms = {};
 
 var models = {};
 models.selectId = -1;
@@ -30,7 +31,6 @@ var useLight = true;
 var lightsURL;
 
 var camera = {};
-var uniforms = {};
 
 var currentlyPressedKeys = [];
 //endregion
@@ -45,12 +45,6 @@ function loadDocumentInputs() {
     lightsURL = document.getElementById("LightsURL").value;
     canvas.width = parseInt(document.getElementById("Width").value);
     canvas.height = parseInt(document.getElementById("Height").value);
-    camera.left = parseFloat(document.getElementById("WLeft").value);
-    camera.right = parseFloat(document.getElementById("WRight").value);
-    camera.top = parseFloat(document.getElementById("WTop").value);
-    camera.bottom = parseFloat(document.getElementById("WBottom").value);
-    camera.near = parseFloat(document.getElementById("WNear").value);
-    camera.far = parseFloat(document.getElementById("WFar").value);
 }
 
 // Set up key event
@@ -236,43 +230,43 @@ function handleKeyDown(event) {
     // Part 5: Interactively select a model
     switch(event.key) {
         case "a":    // a — translate view left along view X
-            translateCamera(vec3.fromValues(-DELTA_TRANS, 0, 0));
+            CAMERA.translateCamera(vec3.fromValues(-DELTA_TRANS, 0, 0));
             renderTriangles();
             return;
         case "d":    // d — translate view right along view X
-            translateCamera(vec3.fromValues(DELTA_TRANS, 0, 0));
+            CAMERA.translateCamera(vec3.fromValues(DELTA_TRANS, 0, 0));
             renderTriangles();
             return;
         case "w":    // w — translate view forward along view Z
-            translateCamera(vec3.fromValues(0, 0, -DELTA_TRANS));
+            CAMERA.translateCamera(vec3.fromValues(0, 0, -DELTA_TRANS));
             renderTriangles();
             return;
         case "s":    // s — translate view backward along view Z
-            translateCamera(vec3.fromValues(0, 0, DELTA_TRANS));
+            CAMERA.translateCamera(vec3.fromValues(0, 0, DELTA_TRANS));
             renderTriangles();
             return;
         case "q":    // q — translate view up along view Y
-            translateCamera(vec3.fromValues(0, DELTA_TRANS, 0));
+            CAMERA.translateCamera(vec3.fromValues(0, DELTA_TRANS, 0));
             renderTriangles();
             return;
         case "e":    // e — translate view down along view Y
-            translateCamera(vec3.fromValues(0, -DELTA_TRANS, 0));
+            CAMERA.translateCamera(vec3.fromValues(0, -DELTA_TRANS, 0));
             renderTriangles();
             return;
         case "A":    // A — rotate view left around view Y (yaw)
-            rotateCamera(DELTA_ROT, vec3.fromValues(0, 1, 0));
+            CAMERA.rotateCamera(DELTA_ROT, vec3.fromValues(0, 1, 0));
             renderTriangles();
             return;
         case "D":    // D — rotate view right around view Y (yaw)
-            rotateCamera(-DELTA_ROT, vec3.fromValues(0, 1, 0));
+            CAMERA.rotateCamera(-DELTA_ROT, vec3.fromValues(0, 1, 0));
             renderTriangles();
             return;
         case "W":    // W — rotate view forward around view X (pitch)
-            rotateCamera(DELTA_ROT, vec3.fromValues(1, 0, 0));
+            CAMERA.rotateCamera(DELTA_ROT, vec3.fromValues(1, 0, 0));
             renderTriangles();
             return;
         case "S":    // S — rotate view backward around view X (pitch)
-            rotateCamera(-DELTA_ROT, vec3.fromValues(1, 0, 0));
+            CAMERA.rotateCamera(-DELTA_ROT, vec3.fromValues(1, 0, 0));
             renderTriangles();
             return;
         case "ArrowLeft":    // left — select and highlight the previous triangle set (previous off)
@@ -336,51 +330,51 @@ function handleKeyDown(event) {
                 renderTriangles();
                 return;
             case "k":   // k — translate selection left along view X
-                mat4.translate(model.tMatrix, model.tMatrix, vec3.scale(vec3.create(), camera.X, -DELTA_TRANS));
+                mat4.translate(model.tMatrix, model.tMatrix, vec3.scale(vec3.create(), CAMERA.X, -DELTA_TRANS));
                 renderTriangles();
                 return;
             case ";":   // ; — translate selection right along view X
-                mat4.translate(model.tMatrix, model.tMatrix, vec3.scale(vec3.create(), camera.X, DELTA_TRANS));
+                mat4.translate(model.tMatrix, model.tMatrix, vec3.scale(vec3.create(), CAMERA.X, DELTA_TRANS));
                 renderTriangles();
                 return;
             case "o":   // o — translate selection forward along view Z
-                mat4.translate(model.tMatrix, model.tMatrix, vec3.scale(vec3.create(), camera.Z, -DELTA_TRANS));
+                mat4.translate(model.tMatrix, model.tMatrix, vec3.scale(vec3.create(), CAMERA.Z, -DELTA_TRANS));
                 renderTriangles();
                 return;
             case "l":   // l — translate selection backward along view Z
-                mat4.translate(model.tMatrix, model.tMatrix, vec3.scale(vec3.create(), camera.Z, DELTA_TRANS));
+                mat4.translate(model.tMatrix, model.tMatrix, vec3.scale(vec3.create(), CAMERA.Z, DELTA_TRANS));
                 renderTriangles();
                 return;
             case "i":   // i — translate selection up along view Y
-                mat4.translate(model.tMatrix, model.tMatrix, vec3.scale(vec3.create(), camera.Y, DELTA_TRANS));
+                mat4.translate(model.tMatrix, model.tMatrix, vec3.scale(vec3.create(), CAMERA.Y, DELTA_TRANS));
                 renderTriangles();
                 return;
             case "p":   // p — translate selection down along view Y
-                mat4.translate(model.tMatrix, model.tMatrix, vec3.scale(vec3.create(), camera.Y, -DELTA_TRANS));
+                mat4.translate(model.tMatrix, model.tMatrix, vec3.scale(vec3.create(), CAMERA.Y, -DELTA_TRANS));
                 renderTriangles();
                 return;
             case "K":   // K — rotate selection left around view Y (yaw)
-                mat4.multiply(model.rMatrix, mat4.fromRotation(mat4.create(), -DELTA_ROT, camera.Y), model.rMatrix);
+                mat4.multiply(model.rMatrix, mat4.fromRotation(mat4.create(), -DELTA_ROT, CAMERA.Y), model.rMatrix);
                 renderTriangles();
                 return;
             case ":":   // : — rotate selection right around view Y (yaw)
-                mat4.multiply(model.rMatrix, mat4.fromRotation(mat4.create(), DELTA_ROT, camera.Y), model.rMatrix);
+                mat4.multiply(model.rMatrix, mat4.fromRotation(mat4.create(), DELTA_ROT, CAMERA.Y), model.rMatrix);
                 renderTriangles();
                 return;
             case "O":   // O — rotate selection forward around view X (pitch)
-                mat4.multiply(model.rMatrix, mat4.fromRotation(mat4.create(), -DELTA_ROT, camera.X), model.rMatrix);
+                mat4.multiply(model.rMatrix, mat4.fromRotation(mat4.create(), -DELTA_ROT, CAMERA.X), model.rMatrix);
                 renderTriangles();
                 return;
             case "L":   // L — rotate selection backward around view X (pitch)
-                mat4.multiply(model.rMatrix, mat4.fromRotation(mat4.create(), DELTA_ROT, camera.X), model.rMatrix);
+                mat4.multiply(model.rMatrix, mat4.fromRotation(mat4.create(), DELTA_ROT, CAMERA.X), model.rMatrix);
                 renderTriangles();
                 return;
             case "I":   // I — rotate selection clockwise around view Z (roll)
-                mat4.multiply(model.rMatrix, mat4.fromRotation(mat4.create(), -DELTA_ROT, camera.Z), model.rMatrix);
+                mat4.multiply(model.rMatrix, mat4.fromRotation(mat4.create(), -DELTA_ROT, CAMERA.Z), model.rMatrix);
                 renderTriangles();
                 return;
             case "P":   // P — rotate selection counterclockwise around view Z (roll)
-                mat4.multiply(model.rMatrix, mat4.fromRotation(mat4.create(), DELTA_ROT, camera.Z), model.rMatrix);
+                mat4.multiply(model.rMatrix, mat4.fromRotation(mat4.create(), DELTA_ROT, CAMERA.Z), model.rMatrix);
                 renderTriangles();
                 return;
         }
@@ -435,15 +429,6 @@ function bufferTriangleSet(triangleSet) {
     triangleSet.triangleBuffer = gl.createBuffer(); // init empty triangle index buffer
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, triangleSet.triangleBuffer); // activate that buffer
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(triangleSet.indexArray), gl.STATIC_DRAW); // indices to that buffer
-}
-
-function initCamera(eye, lookAt, viewUp) {
-    camera.xyz = vec3.fromValues(eye[0], eye[1], eye[2]);
-    camera.pMatrix = calcPerspective(camera.left, camera.right, camera.top, camera.bottom, camera.near, camera.far);
-
-    let center = vec3.fromValues(eye[0] + lookAt[0], eye[1] + lookAt[1], eye[2] + lookAt[2]);
-    camera.vMatrix = mat4.lookAt(mat4.create(), eye, center, viewUp);
-    updateCameraAxis();
 }
 
 // read triangles in, load them into webgl buffers
@@ -679,66 +664,19 @@ function setMaterialUniform(materialUniform, material) {
     gl.uniform3fv(materialUniform.specular, material.specular);
     gl.uniform1f(materialUniform.n, material.n);
 }
-
-function calcPerspective(left, right, top, bottom, near, far) {
-    let n = Math.abs(near), f = Math.abs(far);
-    let width = right - left, height = top - bottom, deep = f - n;
-    var pMatrix = mat4.create();
-    pMatrix[0] = 2*n/width;
-    pMatrix[1] = 0;
-    pMatrix[2] = 0;
-    pMatrix[3] = 0;
-    pMatrix[4] = 0;
-    pMatrix[5] = 2*n/height;
-    pMatrix[6] = 0;
-    pMatrix[7] = 0;
-    pMatrix[8] = (right + left)/width;
-    pMatrix[9] = (top + bottom)/height;
-    pMatrix[10] = -(f+n)/deep;
-    pMatrix[11] = -1;
-    pMatrix[12] = 0;
-    pMatrix[13] = 0;
-    pMatrix[14] = -2*f*n/deep;
-    pMatrix[15] = 0;
-    return pMatrix;
-}
-
-function updateCameraAxis() {
-    camera.X = vec3.fromValues(camera.vMatrix[0], camera.vMatrix[4], camera.vMatrix[8]);
-    camera.Y = vec3.fromValues(camera.vMatrix[1], camera.vMatrix[5], camera.vMatrix[9]);
-    camera.Z = vec3.fromValues(camera.vMatrix[2], camera.vMatrix[6], camera.vMatrix[10]);
-}
-
-function rotateCamera(rad, axis) {
-    mat4.multiply(camera.vMatrix, mat4.fromRotation(mat4.create(), -rad, axis), camera.vMatrix);
-    updateCameraAxis();
-}
-
-function translateCamera(vec) {
-    for(let i = 0; i < 3; i++) {
-        camera.vMatrix[i + 12] -= vec[i];
-        camera.xyz[i] += camera.X[i] * vec[0] + camera.Y[i] * vec[1] + camera.Z[i] * vec[2];
-    }
-}
 //endregions
 
 // render the loaded model
 function renderTriangles() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); // clear frame/depth buffers
 
-    gl.uniform3fv(uniforms.cameraPosUniform, camera.xyz);
-    gl.uniformMatrix4fv(uniforms.vMatrixUniform, false, camera.vMatrix);
-    gl.uniformMatrix4fv(uniforms.pMatrixUniform, false, camera.pMatrix);
+    gl.uniform3fv(uniforms.cameraPosUniform, CAMERA.xyz);
+    gl.uniformMatrix4fv(uniforms.vMatrixUniform, false, CAMERA.vMatrix);
+    gl.uniformMatrix4fv(uniforms.pMatrixUniform, false, CAMERA.pMatrix);
     for (let i = 0; i < lightArray.length; i++) {
         setLightUniform(uniforms.lightUniformArray[i], lightArray[i]);
     }
 
-    // Test rMatrix
-    // ellipsoids.array[0].doubleSide = true;
-    // triangleSets.array[0].doubleSide = false;
-    // mat4.fromRotation(triangleSetArray[1].rMatrix, Math.PI/4, [0,1,0]);
-    // let scaleTest = 3;
-    // mat4.scale(triangleSetArray[1].rMatrix, triangleSetArray[1].rMatrix, [scaleTest, scaleTest, scaleTest]);
     var scaleMatrix = mat4.identity(mat4.create());
     mat4.scale(scaleMatrix, scaleMatrix, [1.2, 1.2, 1.2]);
 
@@ -775,7 +713,7 @@ function refresh() {
     loadDocumentInputs();
     loadLights(); // load in the lights
     setupWebGL(); // set up the webGL environment
-    camera.pMatrix = calcPerspective(camera.left, camera.right, camera.top, camera.bottom, camera.near, camera.far);
+    CAMERA.pMatrix = CAMERA.calcPerspective(CAMERA.left, CAMERA.right, CAMERA.top, CAMERA.bottom, CAMERA.near, CAMERA.far);
     setupShaders(); // setup the webGL shaders
     renderTriangles();
 }
@@ -785,9 +723,10 @@ function refresh() {
 function main() {
 
     loadDocumentInputs();   // load the data from html page
+    DOM.load(OPTION, CAMERA, URL);
     loadLights(); // load in the lights
     setupWebGL(); // set up the webGL environment
-    initCamera(Eye, LookAt, ViewUp); // Initialize camera
+    CAMERA.initCamera(Eye, LookAt, ViewUp); // Initialize camera
     loadTriangleSets(); // load in the triangles from tri file
     loadEllipsoids(); // load in the ellipsoids from ellipsoids file
     setupShaders(); // setup the webGL shaders

@@ -1,9 +1,9 @@
 var DOM = function() {
     return {
-        load: function(option, camera, light) {
+        load: function(option, camera, url) {
             var canvas = document.getElementById("myWebGLCanvas"); // create a js canvas
             option.useLight = document.getElementById("UseLight").checked;
-            light.URL = document.getElementById("LightsURL").value;
+            url.lights = document.getElementById("LightsURL").value;
             canvas.width = parseInt(document.getElementById("Width").value);
             canvas.height = parseInt(document.getElementById("Height").value);
             camera.left = parseFloat(document.getElementById("WLeft").value);
