@@ -1,8 +1,7 @@
 var URL = function () {
     return {
-        base: 'https://pages.github.ncsu.edu/kyang12/CSC561-program4/',
-        triangles: 'triangles.json',
-        spheres: 'ellipsoids.json',
-        lights: 'lights.json'
+        triangles: 'https://kunmiaoyang.github.io/Program4/triangles.json',
+        spheres: 'https://kunmiaoyang.github.io/Program4/ellipsoids.json',
+        lights: 'https://kunmiaoyang.github.io/Program4/lights.json'
     };
 }();

@@ -5,7 +5,8 @@ var JSON_MODEL = function() {
         triangleSets: {},
         ellipsoids: {},
         loadTriangleSets: function(gl) {
-            var inputTriangles = getJSONFile(INPUT_TRIANGLES_URL,"triangles");
+            var inputTriangles = JSON_MODEL.getJSONFile(URL.triangles,"triangles");
+
             JSON_MODEL.triangleSets.array = [];
             JSON_MODEL.triangleSets.selectId = 0;
 
@@ -62,9 +63,10 @@ var JSON_MODEL = function() {
                     JSON_MODEL.triangleSets.array.push(triangleSet);
                 } // end for each triangle set
             } // end if triangles found
+
         },
         loadEllipsoids: function(gl) {
-            var inputEllipsoids = getJSONFile(INPUT_SPHERES_URL,"ellipsoids");
+            var inputEllipsoids = JSON_MODEL.getJSONFile(INPUT_SPHERES_URL,"ellipsoids");
             JSON_MODEL.ellipsoids.array = [];
             JSON_MODEL.ellipsoids.selectId = 0;
 
@@ -121,6 +123,31 @@ var JSON_MODEL = function() {
                     JSON_MODEL.ellipsoids.array.push(triangleSet);
                 } // end for each ellipsoid
             } // end if ellipsoids found
+        },
+        getJSONFile: function(url,descr) {
+            try {
+                if ((typeof(url) !== "string") || (typeof(descr) !== "string"))
+                    throw "getJSONFile: parameter not a string";
+                else {
+                    var httpReq = new XMLHttpRequest(); // a new http request
+                    httpReq.open("GET",url,false); // init the request
+                    httpReq.send(null); // send the request
+                    var startTime = Date.now();
+                    while ((httpReq.status !== 200) && (httpReq.readyState !== XMLHttpRequest.DONE)) {
+                        if ((Date.now()-startTime) > 3000)
+                            break;
+                    } // until its loaded or we time out after three seconds
+                    if ((httpReq.status !== 200) || (httpReq.readyState !== XMLHttpRequest.DONE))
+                        throw "Unable to open "+descr+" file!";
+                    else
+                        return JSON.parse(httpReq.response);
+                } // end if good params
+            } // end try
+
+            catch(e) {
+                console.log(e);
+                return(String.null);
+            }
         }
     };
 }();
