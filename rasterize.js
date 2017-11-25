@@ -137,7 +137,7 @@ function setupShaders() {
             gl_FragColor = vec4(rgb, 1); // all fragments are white
         }
     `;
-    fShaderCode = "#define N_LIGHT " + lightArray.length + "\n" + fShaderCode;
+    fShaderCode = "#define N_LIGHT " + LIGHTS.array.length + "\n" + fShaderCode;
 
     // define vertex shader in essl using es6 template strings
     var vShaderCode = `
@@ -209,7 +209,7 @@ function setupShaders() {
                 uniforms.doubleSideUniform = gl.getUniformLocation(shaderProgram, "uDoubleSide");
                 uniforms.materialUniform = getMaterialUniformLocation(shaderProgram, "uMaterial");
                 uniforms.lightUniformArray = [];
-                for (let i = 0; i < lightArray.length; i++) {
+                for (let i = 0; i < LIGHTS.array.length; i++) {
                     uniforms.lightUniformArray[i] = getLightUniformLocation(shaderProgram, "uLights[" + i + "]");
                 }
             } // end if no shader program link errors
@@ -621,15 +621,6 @@ function loadEllipsoids() {
         } // end for each ellipsoid
     } // end if ellipsoids found
 } // end load ellipsoids
-
-function loadLights() {
-    lightArray = getJSONFile(lightsURL, "lights");
-    // lightArray = JSON.parse("[\n" +
-    //     "{\"x\": -1.0, \"y\": 3.0, \"z\": -0.5, \"ambient\": [1,1,1], \"diffuse\": [1,1,1], \"specular\": [1,1,1]}\n" +
-    //     ",{\"x\": -1.0, \"y\": 3.0, \"z\": -0.5, \"ambient\": [0,0,1], \"diffuse\": [0,0,1], \"specular\": [0,0,1]}\n" +
-    //     ",{\"x\": 2, \"y\": -1, \"z\": -0.5, \"ambient\": [0,1,0], \"diffuse\": [0,1,0], \"specular\": [0,1,0]}\n" +
-    //     "]");
-}
 //endregion
 
 //region Manipulate models
@@ -673,8 +664,8 @@ function renderTriangles() {
     gl.uniform3fv(uniforms.cameraPosUniform, CAMERA.xyz);
     gl.uniformMatrix4fv(uniforms.vMatrixUniform, false, CAMERA.vMatrix);
     gl.uniformMatrix4fv(uniforms.pMatrixUniform, false, CAMERA.pMatrix);
-    for (let i = 0; i < lightArray.length; i++) {
-        setLightUniform(uniforms.lightUniformArray[i], lightArray[i]);
+    for (let i = 0; i < LIGHTS.array.length; i++) {
+        setLightUniform(uniforms.lightUniformArray[i], LIGHTS.array[i]);
     }
 
     var scaleMatrix = mat4.identity(mat4.create());
@@ -709,13 +700,22 @@ function renderTriangles() {
     }
 } // end render triangles
 
+function setupOnLoad() {
+    $('canvas').on('loadData', function () {
+        if (!LIGHTS.ready) {
+            console.log('LIGHTS not ready!');
+        } else {
+            setupShaders(); // setup the webGL shaders
+            renderTriangles(); // draw the triangles using webGL
+        }
+    });
+}
+
 function refresh() {
     loadDocumentInputs();
-    loadLights(); // load in the lights
+    LIGHTS.load(); // load in the lights
     setupWebGL(); // set up the webGL environment
     CAMERA.pMatrix = CAMERA.calcPerspective(CAMERA.left, CAMERA.right, CAMERA.top, CAMERA.bottom, CAMERA.near, CAMERA.far);
-    setupShaders(); // setup the webGL shaders
-    renderTriangles();
 }
 
 /* MAIN -- HERE is where execution begins after window load */
@@ -724,13 +724,11 @@ function main() {
 
     loadDocumentInputs();   // load the data from html page
     DOM.load(OPTION, CAMERA, URL);
-    loadLights(); // load in the lights
+    LIGHTS.load(); // load in the lights
     setupWebGL(); // set up the webGL environment
     CAMERA.initCamera(Eye, LookAt, ViewUp); // Initialize camera
     loadTriangleSets(); // load in the triangles from tri file
     loadEllipsoids(); // load in the ellipsoids from ellipsoids file
-    setupShaders(); // setup the webGL shaders
-    renderTriangles(); // draw the triangles using webGL
     setupKeyEvent();
-  
+    setupOnLoad();
 } // end main
