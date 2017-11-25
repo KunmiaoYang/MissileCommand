@@ -28,6 +28,22 @@ var MODELS = function () {
             gl.uniform3fv(materialUniform.diffuse, material.diffuse);
             gl.uniform3fv(materialUniform.specular, material.specular);
             gl.uniform1f(materialUniform.n, material.n);
+        },
+        bufferTriangleSet: function(gl, triangleSet) {
+            // send the vertex coords to webGL
+            triangleSet.vertexBuffer = gl.createBuffer(); // init empty vertex coord buffer
+            gl.bindBuffer(gl.ARRAY_BUFFER, triangleSet.vertexBuffer); // activate that buffer
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(triangleSet.coordArray), gl.STATIC_DRAW); // coords to that buffer
+
+            // send the vertex normals to webGL
+            triangleSet.normalBuffer = gl.createBuffer(); // init empty vertex coord buffer
+            gl.bindBuffer(gl.ARRAY_BUFFER, triangleSet.normalBuffer); // activate that buffer
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(triangleSet.normalArray), gl.STATIC_DRAW); // normals to that buffer
+
+            // send the triangle indices to webGL
+            triangleSet.triangleBuffer = gl.createBuffer(); // init empty triangle index buffer
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, triangleSet.triangleBuffer); // activate that buffer
+            gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(triangleSet.indexArray), gl.STATIC_DRAW); // indices to that buffer
         }
     }
 }();

@@ -97,6 +97,10 @@ var EVENTS = function () {
         },
         handleKeyUp: function (event) {
             currentlyPressedKeys[event.keyCode] = false;
+        },
+        setupKeyEvent: function() {
+            document.onkeydown = EVENTS.handleKeyDown;
+            document.onkeyup = EVENTS.handleKeyUp;
         }
     };
 }();
