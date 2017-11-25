@@ -191,7 +191,7 @@ function setupShaders() {
                 uniforms.materialUniform = MODELS.getMaterialUniformLocation(gl, shaderProgram, "uMaterial");
                 uniforms.lightUniformArray = [];
                 for (let i = 0; i < LIGHTS.array.length; i++) {
-                    uniforms.lightUniformArray[i] = getLightUniformLocation(shaderProgram, "uLights[" + i + "]");
+                    uniforms.lightUniformArray[i] = LIGHTS.getLightUniformLocation(gl, shaderProgram, "uLights[" + i + "]");
                 }
             } // end if no shader program link errors
         } // end if no compile errors
@@ -373,24 +373,6 @@ function loadEllipsoids() {
 } // end load ellipsoids
 //endregion
 
-//region Manipulate models
-function getLightUniformLocation(program, varName) {
-    var lightUniform = {};
-    lightUniform.xyz = gl.getUniformLocation(program, varName + ".xyz");
-    lightUniform.ambient = gl.getUniformLocation(program, varName + ".ambient");
-    lightUniform.diffuse = gl.getUniformLocation(program, varName + ".diffuse");
-    lightUniform.specular = gl.getUniformLocation(program, varName + ".specular");
-    return lightUniform;
-}
-
-function setLightUniform(lightUniform, light) {
-    gl.uniform3f(lightUniform.xyz, light.x, light.y, light.z);
-    gl.uniform3fv(lightUniform.ambient, light.ambient);
-    gl.uniform3fv(lightUniform.diffuse, light.diffuse);
-    gl.uniform3fv(lightUniform.specular, light.specular);
-}
-//endregions
-
 // render the loaded model
 function renderTriangles() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); // clear frame/depth buffers
@@ -399,7 +381,7 @@ function renderTriangles() {
     gl.uniformMatrix4fv(uniforms.vMatrixUniform, false, CAMERA.vMatrix);
     gl.uniformMatrix4fv(uniforms.pMatrixUniform, false, CAMERA.pMatrix);
     for (let i = 0; i < LIGHTS.array.length; i++) {
-        setLightUniform(uniforms.lightUniformArray[i], LIGHTS.array[i]);
+        LIGHTS.setLightUniform(gl, uniforms.lightUniformArray[i], LIGHTS.array[i]);
     }
 
     var scaleMatrix = mat4.identity(mat4.create());
@@ -434,6 +416,7 @@ function renderTriangles() {
     }
 } // end render triangles
 
+// set up on load event for canvas
 function setupOnLoad() {
     $('canvas').on('loadData', function () {
         if (!LIGHTS.ready) {
@@ -453,7 +436,6 @@ function refresh() {
 }
 
 /* MAIN -- HERE is where execution begins after window load */
-
 function main() {
     DOM.load(OPTION, CAMERA, URL);   // load the data from html page
     LIGHTS.load(); // load in the lights
