@@ -26,11 +26,6 @@ models.selectId = -1;
 models.array = [];
 var triangleSets = {};
 var ellipsoids = {};
-var lightArray = [];
-var useLight = true;
-var lightsURL;
-
-var camera = {};
 
 var currentlyPressedKeys = [];
 //endregion
@@ -38,15 +33,6 @@ var currentlyPressedKeys = [];
 // ASSIGNMENT HELPER FUNCTIONS
 
 //region Set up environment
-// Load data from document
-function loadDocumentInputs() {
-    var canvas = document.getElementById("myWebGLCanvas"); // create a js canvas
-    useLight = document.getElementById("UseLight").checked;
-    lightsURL = document.getElementById("LightsURL").value;
-    canvas.width = parseInt(document.getElementById("Width").value);
-    canvas.height = parseInt(document.getElementById("Height").value);
-}
-
 // Set up key event
 function setupKeyEvent() {
     document.onkeydown = handleKeyDown;
@@ -672,7 +658,7 @@ function renderTriangles() {
     mat4.scale(scaleMatrix, scaleMatrix, [1.2, 1.2, 1.2]);
 
     for(let i = 0; i < models.array.length; i++) {
-        if(useLight)
+        if(OPTION.useLight)
             gl.uniform1i(uniforms.lightModelUniform, models.array[i].specularModel);
         else
             gl.uniform1i(uniforms.lightModelUniform, -1);
@@ -712,7 +698,7 @@ function setupOnLoad() {
 }
 
 function refresh() {
-    loadDocumentInputs();
+    DOM.load(OPTION, CAMERA, URL);   // load the data from html page
     LIGHTS.load(); // load in the lights
     setupWebGL(); // set up the webGL environment
     CAMERA.pMatrix = CAMERA.calcPerspective(CAMERA.left, CAMERA.right, CAMERA.top, CAMERA.bottom, CAMERA.near, CAMERA.far);
@@ -721,9 +707,7 @@ function refresh() {
 /* MAIN -- HERE is where execution begins after window load */
 
 function main() {
-
-    loadDocumentInputs();   // load the data from html page
-    DOM.load(OPTION, CAMERA, URL);
+    DOM.load(OPTION, CAMERA, URL);   // load the data from html page
     LIGHTS.load(); // load in the lights
     setupWebGL(); // set up the webGL environment
     CAMERA.initCamera(Eye, LookAt, ViewUp); // Initialize camera
