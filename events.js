@@ -41,8 +41,8 @@ var EVENTS = function () {
 
             // Part 6: Interactively change lighting on a model
             // Part 7: Interactively transform models
-            if (-1 !== models.selectId) {
-                let model = models.array[models.selectId];
+            if (-1 !== MODELS.selectId) {
+                let model = MODELS.array[MODELS.selectId];
                 switch (event.key) {
                     case "k":   // k — translate selection left along view X
                         mat4.translate(model.tMatrix, model.tMatrix, vec3.scale(vec3.create(), CAMERA.X, -DELTA_TRANS));

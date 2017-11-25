@@ -21,13 +21,8 @@ var vertexPositionAttrib; // where to put position for vertex shader
 var vertexNormalAttrib; // where to put normal for vertex shader
 var uniforms = {};
 
-var models = {};
-models.selectId = -1;
-models.array = [];
 var triangleSets = {};
 var ellipsoids = {};
-
-var currentlyPressedKeys = [];
 //endregion
 
 // ASSIGNMENT HELPER FUNCTIONS
@@ -193,7 +188,7 @@ function setupShaders() {
                 uniforms.pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
                 uniforms.nMatrixUniform = gl.getUniformLocation(shaderProgram, "uNMatrix");
                 uniforms.doubleSideUniform = gl.getUniformLocation(shaderProgram, "uDoubleSide");
-                uniforms.materialUniform = getMaterialUniformLocation(shaderProgram, "uMaterial");
+                uniforms.materialUniform = MODELS.getMaterialUniformLocation(gl, shaderProgram, "uMaterial");
                 uniforms.lightUniformArray = [];
                 for (let i = 0; i < LIGHTS.array.length; i++) {
                     uniforms.lightUniformArray[i] = getLightUniformLocation(shaderProgram, "uLights[" + i + "]");
@@ -253,73 +248,6 @@ function bufferTriangleSet(triangleSet) {
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(triangleSet.indexArray), gl.STATIC_DRAW); // indices to that buffer
 }
 
-// read triangles in, load them into webgl buffers
-// @deprecated
-function loadTriangles() {
-    var inputTriangles = getJSONFile(INPUT_TRIANGLES_URL,"triangles");
-    // inputTriangles = JSON.parse("[\n" +
-    //     "  {\n" +
-    //     "    \"material\": {\"ambient\": [0.1,0.1,0.1], \"diffuse\": [0.6,0.4,0.4], \"specular\": [0.3,0.3,0.3], \"n\":11}, \n" +
-    //     "    \"vertices\": [[0.5, 2.0, 1.0],[2.0, 0.5, 1.0],[-1.0,-1.0, 1.0]],\n" +
-    //     "    \"normals\": [[0, 0, -1],[0, 0, -1],[0, 0, -1]],\n" +
-    //     "    \"triangles\": [[0,1,2]]\n" +
-    //     "  },\n" +
-    //     "  {\n" +
-    //     "    \"material\": {\"ambient\": [0.1,0.1,0.1], \"diffuse\": [0.6,0.6,0.4], \"specular\": [0.3,0.3,0.3], \"n\":17}, \n" +
-    //     "    \"vertices\": [[0.15, 0.15, 0.75],[0.15, 0.35, 0.75],[0.35,0.35,0.75],[0.35,0.15,0.75]],\n" +
-    //     "    \"normals\": [[0, 0, -1],[0, 0, -1],[0, 0, -1],[0, 0, -1]],\n" +
-    //     "    \"triangles\": [[0,1,2],[2,3,0]]\n" +
-    //     "  }\n" +
-    //     "]");
-
-    if (inputTriangles != String.null) { 
-        var whichSetVert; // index of vertex in current triangle set
-        var whichSetTri; // index of triangle in current triangle set
-        var coordArray = []; // 1D array of vertex coords for WebGL
-        var indexArray = []; // 1D array of vertex indices for WebGL
-        var vtxBufferSize = 0; // the number of vertices in the vertex buffer
-        var vtxToAdd = []; // vtx coords to add to the coord array
-        var indexOffset = vec3.create(); // the index offset for the current set
-        var triToAdd = vec3.create(); // tri indices to add to the index array
-        
-        for (var whichSet=0; whichSet<inputTriangles.length; whichSet++) {
-            vec3.set(indexOffset,vtxBufferSize,vtxBufferSize,vtxBufferSize); // update vertex offset
-            
-            // set up the vertex coord array
-            for (whichSetVert=0; whichSetVert<inputTriangles[whichSet].vertices.length; whichSetVert++) {
-                vtxToAdd = inputTriangles[whichSet].vertices[whichSetVert];
-                coordArray.push(vtxToAdd[0],vtxToAdd[1],vtxToAdd[2]);
-            } // end for vertices in set
-            
-            // set up the triangle index array, adjusting indices across sets
-            for (whichSetTri=0; whichSetTri<inputTriangles[whichSet].triangles.length; whichSetTri++) {
-                vec3.add(triToAdd,indexOffset,inputTriangles[whichSet].triangles[whichSetTri]);
-                indexArray.push(triToAdd[0],triToAdd[1],triToAdd[2]);
-            } // end for triangles in set
-
-            vtxBufferSize += inputTriangles[whichSet].vertices.length; // total number of vertices
-            triBufferSize += inputTriangles[whichSet].triangles.length; // total number of tris
-        } // end for each triangle set 
-        triBufferSize *= 3; // now total number of indices
-
-        // console.log("coordinates: "+coordArray.toString());
-        // console.log("numverts: "+vtxBufferSize);
-        // console.log("indices: "+indexArray.toString());
-        // console.log("numindices: "+triBufferSize);
-        
-        // send the vertex coords to webGL
-        vertexBuffer = gl.createBuffer(); // init empty vertex coord buffer
-        gl.bindBuffer(gl.ARRAY_BUFFER,vertexBuffer); // activate that buffer
-        gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(coordArray),gl.STATIC_DRAW); // coords to that buffer
-        
-        // send the triangle indices to webGL
-        triangleBuffer = gl.createBuffer(); // init empty triangle index buffer
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, triangleBuffer); // activate that buffer
-        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(indexArray),gl.STATIC_DRAW); // indices to that buffer
-
-    } // end if triangles found
-} // end load triangles
-
 // Read triangle sets in
 function loadTriangleSets() {
     var inputTriangles = getJSONFile(INPUT_TRIANGLES_URL,"triangles");
@@ -374,8 +302,8 @@ function loadTriangleSets() {
             triangleSet.rMatrix = mat4.identity(mat4.create());
 
             // Push triangleset into array
-            triangleSet.id = models.array.length;
-            models.array.push(triangleSet);
+            triangleSet.id = MODELS.array.length;
+            MODELS.array.push(triangleSet);
             triangleSets.array.push(triangleSet);
         } // end for each triangle set
     } // end if triangles found
@@ -437,8 +365,8 @@ function loadEllipsoids() {
             triangleSet.rMatrix = mat4.identity(mat4.create());
 
             // Push triangleset into array
-            triangleSet.id = models.array.length;
-            models.array.push(triangleSet);
+            triangleSet.id = MODELS.array.length;
+            MODELS.array.push(triangleSet);
             ellipsoids.array.push(triangleSet);
         } // end for each ellipsoid
     } // end if ellipsoids found
@@ -455,27 +383,11 @@ function getLightUniformLocation(program, varName) {
     return lightUniform;
 }
 
-function getMaterialUniformLocation(program, varName) {
-    var lightUniform = {};
-    lightUniform.ambient = gl.getUniformLocation(program, varName + ".ambient");
-    lightUniform.diffuse = gl.getUniformLocation(program, varName + ".diffuse");
-    lightUniform.specular = gl.getUniformLocation(program, varName + ".specular");
-    lightUniform.n = gl.getUniformLocation(program, varName + ".n");
-    return lightUniform;
-}
-
 function setLightUniform(lightUniform, light) {
     gl.uniform3f(lightUniform.xyz, light.x, light.y, light.z);
     gl.uniform3fv(lightUniform.ambient, light.ambient);
     gl.uniform3fv(lightUniform.diffuse, light.diffuse);
     gl.uniform3fv(lightUniform.specular, light.specular);
-}
-
-function setMaterialUniform(materialUniform, material) {
-    gl.uniform3fv(materialUniform.ambient, material.ambient);
-    gl.uniform3fv(materialUniform.diffuse, material.diffuse);
-    gl.uniform3fv(materialUniform.specular, material.specular);
-    gl.uniform1f(materialUniform.n, material.n);
 }
 //endregions
 
@@ -493,32 +405,32 @@ function renderTriangles() {
     var scaleMatrix = mat4.identity(mat4.create());
     mat4.scale(scaleMatrix, scaleMatrix, [1.2, 1.2, 1.2]);
 
-    for(let i = 0; i < models.array.length; i++) {
+    for(let i = 0; i < MODELS.array.length; i++) {
         if(OPTION.useLight)
-            gl.uniform1i(uniforms.lightModelUniform, models.array[i].specularModel);
+            gl.uniform1i(uniforms.lightModelUniform, MODELS.array[i].specularModel);
         else
             gl.uniform1i(uniforms.lightModelUniform, -1);
         // triangleSetArray[i].material.ambient = [0.5,1.0,1.0];
-        gl.uniform1f(uniforms.doubleSideUniform, models.array[i].doubleSide);
-        setMaterialUniform(uniforms.materialUniform, models.array[i].material);
-        var mMatrix = mat4.multiply(mat4.create(), models.array[i].tMatrix, models.array[i].rMatrix);
-        if (models.selectId === i) {
+        gl.uniform1f(uniforms.doubleSideUniform, MODELS.array[i].doubleSide);
+        MODELS.setMaterialUniform(gl, uniforms.materialUniform, MODELS.array[i].material);
+        var mMatrix = mat4.multiply(mat4.create(), MODELS.array[i].tMatrix, MODELS.array[i].rMatrix);
+        if (MODELS.selectId === i) {
             mMatrix = mat4.multiply(mat4.create(), mMatrix, scaleMatrix);
         }
         gl.uniformMatrix4fv(uniforms.mMatrixUniform, false, mMatrix);
-        gl.uniformMatrix3fv(uniforms.nMatrixUniform, false, mat3.normalFromMat4(mat3.create(), models.array[i].rMatrix));
+        gl.uniformMatrix3fv(uniforms.nMatrixUniform, false, mat3.normalFromMat4(mat3.create(), MODELS.array[i].rMatrix));
 
         // vertex buffer: activate and feed into vertex shader
-        gl.bindBuffer(gl.ARRAY_BUFFER, models.array[i].vertexBuffer); // activate
+        gl.bindBuffer(gl.ARRAY_BUFFER, MODELS.array[i].vertexBuffer); // activate
         gl.vertexAttribPointer(vertexPositionAttrib,3,gl.FLOAT,false,0,0); // feed
 
         // vertex normal buffer: activate and feed into vertex shader
-        gl.bindBuffer(gl.ARRAY_BUFFER, models.array[i].normalBuffer); // activate
+        gl.bindBuffer(gl.ARRAY_BUFFER, MODELS.array[i].normalBuffer); // activate
         gl.vertexAttribPointer(vertexNormalAttrib,3,gl.FLOAT,false,0,0); // feed
 
         // triangle buffer: activate and render
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, models.array[i].triangleBuffer); // activate
-        gl.drawElements(gl.TRIANGLES, models.array[i].triBufferSize,gl.UNSIGNED_SHORT,0); // render
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, MODELS.array[i].triangleBuffer); // activate
+        gl.drawElements(gl.TRIANGLES, MODELS.array[i].triBufferSize,gl.UNSIGNED_SHORT,0); // render
     }
 } // end render triangles
 
