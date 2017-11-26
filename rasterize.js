@@ -1,17 +1,3 @@
-//region GLOBAL CONSTANTS AND VARIABLES
-/* assignment specific globals */
-const WIN_Z = 0;  // default graphics window z coord in world space
-const WIN_LEFT = 0; const WIN_RIGHT = 1;  // default left and right x coords in world space
-const WIN_BOTTOM = 0; const WIN_TOP = 1;  // default top and bottom y coords in world space
-const INPUT_TRIANGLES_URL = "https://ncsucgclass.github.io/prog2/triangles.json"; // triangles file loc
-const INPUT_SPHERES_URL = "https://ncsucgclass.github.io/prog2/ellipsoids.json"; // ellipsoids file loc
-const DELTA_TRANS = 0.0125; const DELTA_ROT = 0.02;
-
-var Eye = new vec4.fromValues(0.5,0.5,-0.5,1.0); // default eye position in world space
-var LookAt = vec3.fromValues(0, 0, 1); // default eye look at direction in world space
-var ViewUp = vec3.fromValues(0, 1, 0); // default eye view up direction in world space
-//endregion
-
 // render the loaded model
 function renderTriangles() {
     SHADER.gl.clear(SHADER.gl.COLOR_BUFFER_BIT | SHADER.gl.DEPTH_BUFFER_BIT); // clear frame/depth buffers
@@ -80,7 +66,7 @@ function main() {
     DOM.load(OPTION, CAMERA, URL);   // load the data from html page
     LIGHTS.load(); // load in the lights
     SHADER.setupWebGL(); // set up the webGL environment
-    CAMERA.initCamera(Eye, LookAt, ViewUp); // Initialize camera
+    CAMERA.initCamera(); // Initialize camera
     JSON_MODEL.loadTriangleSets(SHADER.gl); // load in the triangles from tri file
     JSON_MODEL.loadEllipsoids(SHADER.gl); // load in the ellipsoids from ellipsoids file
     EVENTS.setupKeyEvent();

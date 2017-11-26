@@ -66,7 +66,7 @@ var JSON_MODEL = function() {
 
         },
         loadEllipsoids: function(gl) {
-            var inputEllipsoids = JSON_MODEL.getJSONFile(INPUT_SPHERES_URL,"ellipsoids");
+            var inputEllipsoids = JSON_MODEL.getJSONFile(URL.ellipsoids,"ellipsoids");
             JSON_MODEL.ellipsoids.array = [];
             JSON_MODEL.ellipsoids.selectId = 0;
 

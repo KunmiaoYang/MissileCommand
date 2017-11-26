@@ -1,14 +1,17 @@
 var CAMERA = function () {
+    var coord = vec3.fromValues(0.5,0.5,-0.5); // default camera position in world space
+    var lookAt = vec3.fromValues(0, 0, 1); // default camera look at direction in world space
+    var viewUp = vec3.fromValues(0, 1, 0); // default camera view up direction in world space
     return {
         left: -0.5, right: 0.5,
         top: -0.5, bottom: 0.5,
         near: 0.5, far: 1.5,
-        initCamera: function(eye, lookAt, viewUp) {
-            this.xyz = vec3.fromValues(eye[0], eye[1], eye[2]);
+        initCamera: function() {
+            this.xyz = coord;
             this.pMatrix = this.calcPerspective(this.left, this.right, this.top, this.bottom, this.near, this.far);
 
-            let center = vec3.fromValues(eye[0] + lookAt[0], eye[1] + lookAt[1], eye[2] + lookAt[2]);
-            this.vMatrix = mat4.lookAt(mat4.create(), eye, center, viewUp);
+            let center = vec3.fromValues(this.xyz[0] + lookAt[0], this.xyz[1] + lookAt[1], this.xyz[2] + lookAt[2]);
+            this.vMatrix = mat4.lookAt(mat4.create(), this.xyz, center, viewUp);
             this.updateCameraAxis();
         },
         updateCameraAxis: function() {

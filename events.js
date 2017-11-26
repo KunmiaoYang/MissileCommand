@@ -1,4 +1,5 @@
 var EVENTS = function () {
+    const DELTA_TRANS = 0.0125; const DELTA_ROT = 0.02;
     var currentlyPressedKeys = [];
     return {
         handleKeyDown: function (event) {
