@@ -40,7 +40,10 @@ function setupOnLoad() {
     $('canvas').on('loadData', function () {
         if (!LIGHTS.ready) {
             console.log('LIGHTS not ready!');
+        } else if(SKECHUP_MODEL.incomplete > 0) {
+            console.log('SKECHUP_MODEL not ready!');
         } else {
+            console.log('All model ready!');
             SHADER.setupShaders(); // setup the webGL shaders
             renderTriangles(); // draw the triangles using webGL
         }
@@ -63,6 +66,7 @@ function main() {
     CAMERA.initCamera(); // Initialize camera
     JSON_MODEL.loadTriangleSets(SHADER.gl); // load in the triangles from tri file
     JSON_MODEL.loadEllipsoids(SHADER.gl); // load in the ellipsoids from ellipsoids file
+    SKECHUP_MODEL.loadModel(SHADER.gl, URL.cityModel, 'city', 0.002);
     EVENTS.setupKeyEvent();
     setupOnLoad();
 } // end main

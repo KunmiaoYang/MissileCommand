@@ -9,6 +9,7 @@ var MODELS = function () {
         createModel: function() {
             return {
                 material: this.createMaterial(),
+                triBufferSize: 0,
                 coordArray: [],
                 normalArray: [],
                 indexArray: []
