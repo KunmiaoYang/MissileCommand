@@ -1,5 +1,5 @@
 var CAMERA = function () {
-    var coord = vec3.fromValues(0.5,0.5,-0.5); // default camera position in world space
+    var coord = vec3.fromValues(0.5,0.5,-0.7); // default camera position in world space
     var lookAt = vec3.fromValues(0, 0, 1); // default camera look at direction in world space
     var viewUp = vec3.fromValues(0, 1, 0); // default camera view up direction in world space
     return {

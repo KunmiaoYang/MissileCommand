@@ -66,7 +66,7 @@ function main() {
     CAMERA.initCamera(); // Initialize camera
     JSON_MODEL.loadTriangleSets(SHADER.gl); // load in the triangles from tri file
     JSON_MODEL.loadEllipsoids(SHADER.gl); // load in the ellipsoids from ellipsoids file
-    SKECHUP_MODEL.loadModel(SHADER.gl, URL.cityModel, 'city', 0.002);
+    SKECHUP_MODEL.loadModel(SHADER.gl, URL.cityModel, 'city', 0.004);
     EVENTS.setupKeyEvent();
     setupOnLoad();
 } // end main
