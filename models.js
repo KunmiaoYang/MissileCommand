@@ -1,6 +1,5 @@
 var MODELS = function () {
     return {
-        selectId: -1,
         array: [],
         createMaterial: function() {
             return {

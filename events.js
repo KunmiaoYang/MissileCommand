@@ -42,7 +42,7 @@ var EVENTS = function () {
 
             // Part 6: Interactively change lighting on a model
             // Part 7: Interactively transform models
-            if (-1 !== MODELS.selectId) {
+            if (false) {
                 let model = MODELS.array[MODELS.selectId];
                 switch (event.key) {
                     case "k":   // k — translate selection left along view X

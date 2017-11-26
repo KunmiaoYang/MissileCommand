@@ -9,9 +9,6 @@ function renderTriangles() {
         LIGHTS.setLightUniform(SHADER.gl, SHADER.uniforms.lightUniformArray[i], LIGHTS.array[i]);
     }
 
-    var scaleMatrix = mat4.identity(mat4.create());
-    mat4.scale(scaleMatrix, scaleMatrix, [1.2, 1.2, 1.2]);
-
     for(let i = 0; i < MODELS.array.length; i++) {
         if(OPTION.useLight)
             SHADER.gl.uniform1i(SHADER.uniforms.lightModelUniform, MODELS.array[i].specularModel);
@@ -21,9 +18,6 @@ function renderTriangles() {
         SHADER.gl.uniform1f(SHADER.uniforms.doubleSideUniform, MODELS.array[i].doubleSide);
         MODELS.setMaterialUniform(SHADER.gl, SHADER.uniforms.materialUniform, MODELS.array[i].material);
         var mMatrix = mat4.multiply(mat4.create(), MODELS.array[i].tMatrix, MODELS.array[i].rMatrix);
-        if (MODELS.selectId === i) {
-            mMatrix = mat4.multiply(mat4.create(), mMatrix, scaleMatrix);
-        }
         SHADER.gl.uniformMatrix4fv(SHADER.uniforms.mMatrixUniform, false, mMatrix);
         SHADER.gl.uniformMatrix3fv(SHADER.uniforms.nMatrixUniform, false, mat3.normalFromMat4(mat3.create(), MODELS.array[i].rMatrix));
 

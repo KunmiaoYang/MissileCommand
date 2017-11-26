@@ -5,12 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3b121063-8de4-436e-8109-1ca6ec105083" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/JSONModel.js" afterPath="$PROJECT_DIR$/JSONModel.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/camera.js" afterPath="$PROJECT_DIR$/camera.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/events.js" afterPath="$PROJECT_DIR$/events.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models.js" afterPath="$PROJECT_DIR$/models.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rasterize.js" afterPath="$PROJECT_DIR$/rasterize.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/url.js" afterPath="$PROJECT_DIR$/url.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -22,50 +19,41 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="DockManager">
-    <window id="1">
-      <content type="file-editors">
-        <state>
-          <leaf>
-            <file leaf-file-name="rasterize.js" pinned="false" current-in-tab="true">
-              <entry file="file://$PROJECT_DIR$/rasterize.js">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="231">
-                    <caret line="74" column="0" lean-forward="true" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
-                    <folding>
-                      <element signature="n#!!block;n#renderTriangles#0" expanded="false" />
-                      <element signature="e#1341#1426#0" expanded="false" />
-                      <element signature="n#!!block;n#setupOnLoad#0" expanded="false" />
-                      <element signature="e#2621#2678#0" expanded="false" />
-                      <element signature="n#!!block;n#refresh#0" expanded="false" />
-                      <element signature="n#!!block;n#main#0" expanded="false" />
-                    </folding>
-                  </state>
-                </provider>
-              </entry>
-            </file>
-            <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
-              <entry file="file://$PROJECT_DIR$/index.html">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="84">
-                    <caret line="4" column="34" lean-forward="false" selection-start-line="4" selection-start-column="34" selection-end-line="4" selection-end-column="34" />
-                    <folding>
-                      <element signature="n#style#0;n#input#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-                    </folding>
-                  </state>
-                </provider>
-              </entry>
-            </file>
-          </leaf>
-        </state>
-      </content>
-    </window>
-  </component>
   <component name="FavoritesManager">
     <favorites_list name="CSC561Prog4" />
   </component>
   <component name="FileEditorManager">
     <leaf>
+      <file leaf-file-name="rasterize.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/rasterize.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="10" column="0" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+              <folding>
+                <element signature="n#!!block;n#setupOnLoad#0" expanded="false" />
+                <element signature="e#2388#2445#0" expanded="false" />
+                <element signature="n#!!block;n#refresh#0" expanded="false" />
+                <element signature="n#!!block;n#main#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="models.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/models.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="42">
+              <caret line="2" column="18" lean-forward="true" selection-start-line="2" selection-start-column="18" selection-end-line="2" selection-end-column="18" />
+              <folding>
+                <element signature="e#115#223#0" expanded="false" />
+                <element signature="e#528#880#0" expanded="false" />
+                <element signature="e#950#1230#0" expanded="false" />
+                <element signature="e#1285#2406#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="dom.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dom.js">
           <provider selected="true" editor-type-id="text-editor">
@@ -79,16 +67,16 @@
       <file leaf-file-name="JSONModel.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/JSONModel.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="168">
-              <caret line="68" column="71" lean-forward="false" selection-start-line="68" selection-start-column="61" selection-end-line="68" selection-end-column="71" />
+            <state relative-caret-position="315">
+              <caret line="67" column="37" lean-forward="false" selection-start-line="67" selection-start-column="37" selection-end-line="67" selection-end-column="37" />
               <folding>
-                <element signature="e#181#3226#0" expanded="false" />
                 <element signature="e#414#3189#0" expanded="false" />
                 <element signature="e#1404#1503#0" expanded="false" />
                 <element signature="e#1704#1913#0" expanded="false" />
                 <element signature="e#2027#2168#0" expanded="false" />
                 <element signature="e#2309#2532#0" expanded="false" />
                 <element signature="e#2392#2510#0" expanded="false" />
+                <element signature="e#3265#6592#0" expanded="false" />
                 <element signature="e#3497#6555#0" expanded="false" />
                 <element signature="e#4823#5396#0" expanded="false" />
                 <element signature="e#4991#5374#0" expanded="false" />
@@ -102,15 +90,16 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="events.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="events.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/events.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="42">
-              <caret line="2" column="34" lean-forward="true" selection-start-line="2" selection-start-column="34" selection-end-line="2" selection-end-column="34" />
+            <state relative-caret-position="231">
+              <caret line="42" column="56" lean-forward="false" selection-start-line="42" selection-start-column="56" selection-end-line="42" selection-end-column="56" />
               <folding>
-                <element signature="e#2337#5821#0" expanded="false" />
-                <element signature="e#5871#5939#0" expanded="false" />
-                <element signature="e#5975#6092#0" expanded="false" />
+                <element signature="e#343#2177#0" expanded="false" />
+                <element signature="e#2320#5804#0" expanded="false" />
+                <element signature="e#5854#5922#0" expanded="false" />
+                <element signature="e#5958#6075#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -127,43 +116,6 @@
                 <element signature="e#3603#4653#0" expanded="false" />
                 <element signature="e#8816#8855#0" expanded="false" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="models.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/models.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="31" column="14" lean-forward="true" selection-start-line="31" selection-start-column="14" selection-end-line="31" selection-end-column="14" />
-              <folding>
-                <element signature="e#137#245#0" expanded="false" />
-                <element signature="e#550#902#0" expanded="false" />
-                <element signature="e#972#1252#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="lights.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lights.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="147">
-              <caret line="7" column="36" lean-forward="true" selection-start-line="7" selection-start-column="36" selection-end-line="7" selection-end-column="36" />
-              <folding>
-                <element signature="e#407#763#0" expanded="false" />
-                <element signature="e#824#1100#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="option.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/option.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="42">
-              <caret line="2" column="22" lean-forward="false" selection-start-line="2" selection-start-column="22" selection-end-line="2" selection-end-column="22" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -198,6 +150,18 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-546">
+              <caret line="4" column="34" lean-forward="false" selection-start-line="4" selection-start-column="34" selection-end-line="4" selection-end-column="34" />
+              <folding>
+                <element signature="n#style#0;n#input#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
     </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
@@ -217,7 +181,6 @@
       <find>;</find>
       <find>triangleSets</find>
       <find>ellipsoids</find>
-      <find>models</find>
       <find>gl</find>
       <find>vertexPositionAttrib</find>
       <find>shaderProgram</find>
@@ -225,12 +188,12 @@
       <find>uniforms</find>
       <find>vShaderCode</find>
       <find>coord</find>
+      <find>models</find>
     </findStrings>
     <replaceStrings>
       <replace>this</replace>
       <replace>CAMERA</replace>
       <replace>:</replace>
-      <replace>MODELS</replace>
       <replace>,</replace>
       <replace>SHADER.shaderProgram</replace>
       <replace>SHADER.gl</replace>
@@ -238,6 +201,7 @@
       <replace>SHADER.uniforms</replace>
       <replace>SHADER.vertexPositionAttrib</replace>
       <replace>this.xyz</replace>
+      <replace>MODELS</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -251,7 +215,6 @@
         <option value="$PROJECT_DIR$/option.js" />
         <option value="$PROJECT_DIR$/light.js" />
         <option value="$PROJECT_DIR$/Lights.js" />
-        <option value="$PROJECT_DIR$/models.js" />
         <option value="$PROJECT_DIR$/dom.js" />
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/lights.js" />
@@ -259,9 +222,10 @@
         <option value="$PROJECT_DIR$/JSONModel.js" />
         <option value="$PROJECT_DIR$/url.js" />
         <option value="$PROJECT_DIR$/camera.js" />
-        <option value="$PROJECT_DIR$/events.js" />
-        <option value="$PROJECT_DIR$/rasterize.js" />
         <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/events.js" />
+        <option value="$PROJECT_DIR$/models.js" />
+        <option value="$PROJECT_DIR$/rasterize.js" />
       </list>
     </option>
   </component>
@@ -272,10 +236,10 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-403" />
-    <option name="y" value="110" />
-    <option name="width" value="2423" />
-    <option name="height" value="1323" />
+    <option name="x" value="-9" />
+    <option name="y" value="-9" />
+    <option name="width" value="1938" />
+    <option name="height" value="1048" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -348,12 +312,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1511629363523</updated>
-      <workItem from="1511629365680" duration="26824000" />
+      <workItem from="1511629365680" duration="27795000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="26824000" />
+    <option name="totallyTimeSpent" value="27795000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1048" extended-state="6" />
@@ -424,18 +388,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/models.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="31" column="14" lean-forward="true" selection-start-line="31" selection-start-column="14" selection-end-line="31" selection-end-column="14" />
-          <folding>
-            <element signature="e#137#245#0" expanded="false" />
-            <element signature="e#550#902#0" expanded="false" />
-            <element signature="e#972#1252#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lights.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="147">
@@ -492,18 +444,54 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/events.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="231">
+          <caret line="42" column="56" lean-forward="false" selection-start-line="42" selection-start-column="56" selection-end-line="42" selection-end-column="56" />
+          <folding>
+            <element signature="e#343#2177#0" expanded="false" />
+            <element signature="e#2320#5804#0" expanded="false" />
+            <element signature="e#5854#5922#0" expanded="false" />
+            <element signature="e#5958#6075#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-546">
+          <caret line="4" column="34" lean-forward="false" selection-start-line="4" selection-start-column="34" selection-end-line="4" selection-end-column="34" />
+          <folding>
+            <element signature="n#style#0;n#input#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/models.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="42">
+          <caret line="2" column="18" lean-forward="true" selection-start-line="2" selection-start-column="18" selection-end-line="2" selection-end-column="18" />
+          <folding>
+            <element signature="e#115#223#0" expanded="false" />
+            <element signature="e#528#880#0" expanded="false" />
+            <element signature="e#950#1230#0" expanded="false" />
+            <element signature="e#1285#2406#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/JSONModel.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="68" column="71" lean-forward="false" selection-start-line="68" selection-start-column="61" selection-end-line="68" selection-end-column="71" />
+        <state relative-caret-position="315">
+          <caret line="67" column="37" lean-forward="false" selection-start-line="67" selection-start-column="37" selection-end-line="67" selection-end-column="37" />
           <folding>
-            <element signature="e#181#3226#0" expanded="false" />
             <element signature="e#414#3189#0" expanded="false" />
             <element signature="e#1404#1503#0" expanded="false" />
             <element signature="e#1704#1913#0" expanded="false" />
             <element signature="e#2027#2168#0" expanded="false" />
             <element signature="e#2309#2532#0" expanded="false" />
             <element signature="e#2392#2510#0" expanded="false" />
+            <element signature="e#3265#6592#0" expanded="false" />
             <element signature="e#3497#6555#0" expanded="false" />
             <element signature="e#4823#5396#0" expanded="false" />
             <element signature="e#4991#5374#0" expanded="false" />
@@ -516,37 +504,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/events.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="2" column="34" lean-forward="true" selection-start-line="2" selection-start-column="34" selection-end-line="2" selection-end-column="34" />
-          <folding>
-            <element signature="e#2337#5821#0" expanded="false" />
-            <element signature="e#5871#5939#0" expanded="false" />
-            <element signature="e#5975#6092#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="84">
-          <caret line="4" column="34" lean-forward="false" selection-start-line="4" selection-start-column="34" selection-end-line="4" selection-end-column="34" />
-          <folding>
-            <element signature="n#style#0;n#input#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/rasterize.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="74" column="0" lean-forward="true" selection-start-line="74" selection-start-column="0" selection-end-line="74" selection-end-column="0" />
+        <state relative-caret-position="210">
+          <caret line="10" column="0" lean-forward="true" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
           <folding>
-            <element signature="n#!!block;n#renderTriangles#0" expanded="false" />
-            <element signature="e#1341#1426#0" expanded="false" />
             <element signature="n#!!block;n#setupOnLoad#0" expanded="false" />
-            <element signature="e#2621#2678#0" expanded="false" />
+            <element signature="e#2388#2445#0" expanded="false" />
             <element signature="n#!!block;n#refresh#0" expanded="false" />
             <element signature="n#!!block;n#main#0" expanded="false" />
           </folding>
