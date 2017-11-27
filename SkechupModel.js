@@ -49,18 +49,18 @@ var SKECHUP_MODEL = function() {
                 let model = SKECHUP_MODEL.mergeModels(models);
 
                 // Initialize light mode
-                model.doubleSide = false;
-                model.specularModel = 1;
-
-                // Initialize model transform matrices
-                model.tMatrix = mat4.create();
-                model.rMatrix = mat4.create();
+                model.doubleSide = true;
+                // model.specularModel = 1;
+                //
+                // // Initialize model transform matrices
+                // model.tMatrix = mat4.create();
+                // model.rMatrix = mat4.create();
 
                 // Buffer data arrays into GPU
                 MODELS.bufferTriangleSet(gl, model);
 
                 // Push triangleset into array
-                model.id = MODELS.array.length;
+                // model.id = MODELS.array.length;
                 // MODELS.array.push(model);
                 SKECHUP_MODEL.incomplete--;
                 $('canvas').trigger('loadData');
