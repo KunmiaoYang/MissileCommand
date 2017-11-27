@@ -10,6 +10,10 @@ var MODELS = function () {
             return {
                 material: this.createMaterial(),
                 triBufferSize: 0,
+                doubleSide: false,
+                specularModel: 1,
+                tMatrix: mat4.create(),
+                rMatrix: mat4.create(),
                 coordArray: [],
                 normalArray: [],
                 indexArray: []
@@ -44,6 +48,20 @@ var MODELS = function () {
             triangleSet.triangleBuffer = gl.createBuffer(); // init empty triangle index buffer
             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, triangleSet.triangleBuffer); // activate that buffer
             gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(triangleSet.indexArray), gl.STATIC_DRAW); // indices to that buffer
+        },
+        shallowClone(model) {
+            return {
+                material: model.material,
+                triBufferSize: model.triBufferSize,
+                doubleSide: model.doubleSide,
+                specularModel: model.specularModel,
+                coordArray: model.coordArray,
+                normalArray: model.normalArray,
+                indexArray: model.indexArray,
+                vertexBuffer: model.vertexBuffer,
+                normalBuffer: model.normalBuffer,
+                triangleBuffer: model.triangleBuffer
+            }
         }
     }
 }();

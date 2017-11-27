@@ -43,7 +43,7 @@ var SKECHUP_MODEL = function() {
             });
             return mergedModel;
         },
-        loadModel: function (gl, modelFile, name, scale) {
+        loadModel: function (gl, modelFile, callback) {
             SKECHUP_MODEL.incomplete++;
             SKECHUP_MODEL.parseModels(modelFile, function (models) {
                 let model = SKECHUP_MODEL.mergeModels(models);
@@ -55,17 +55,16 @@ var SKECHUP_MODEL = function() {
                 // Initialize model transform matrices
                 model.tMatrix = mat4.create();
                 model.rMatrix = mat4.create();
-                model.rMatrix = mat4.scale(model.rMatrix, model.rMatrix, [scale, scale, scale]);
 
                 // Buffer data arrays into GPU
                 MODELS.bufferTriangleSet(gl, model);
 
                 // Push triangleset into array
                 model.id = MODELS.array.length;
-                MODELS.array.push(model);
-                MODELS[name] = model;
+                // MODELS.array.push(model);
                 SKECHUP_MODEL.incomplete--;
                 $('canvas').trigger('loadData');
+                if(callback) callback(model);
             });
         }
     };

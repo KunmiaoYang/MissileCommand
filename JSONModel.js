@@ -2,14 +2,10 @@ var JSON_MODEL = function() {
     var nLatitude = 20,
         nLongitude = 40;
     return {
-        triangleSets: {},
         ellipsoids: {},
         loadTriangleSets: function(gl) {
             var inputTriangles = JSON_MODEL.getJSONFile(URL.triangles,"triangles");
-
-            JSON_MODEL.triangleSets.array = [];
-            JSON_MODEL.triangleSets.selectId = 0;
-
+            var triangleSets = [];
             if (inputTriangles != String.null) {
                 var whichSetTri; // index of triangle in current triangle set
                 var vtxToAdd = []; // vtx coords to add to the coord array
@@ -60,10 +56,10 @@ var JSON_MODEL = function() {
                     // Push triangleset into array
                     triangleSet.id = MODELS.array.length;
                     MODELS.array.push(triangleSet);
-                    JSON_MODEL.triangleSets.array.push(triangleSet);
+                    triangleSets.push(triangleSet);
                 } // end for each triangle set
             } // end if triangles found
-
+            return triangleSets;
         },
         loadEllipsoids: function(gl) {
             var inputEllipsoids = JSON_MODEL.getJSONFile(URL.ellipsoids,"ellipsoids");
