@@ -7,7 +7,7 @@ var MODELS = function () {
             }
         },
         createModel: function() {
-            return {
+            var model = {
                 material: this.createMaterial(),
                 triBufferSize: 0,
                 doubleSide: false,
@@ -18,6 +18,7 @@ var MODELS = function () {
                 normalArray: [],
                 indexArray: []
             };
+            return model;
         },
         getMaterialUniformLocation: function(gl, program, varName) {
             return {

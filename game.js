@@ -1,7 +1,7 @@
 var GAME = function() {
     const CITY_SCALE = 0.003, CITY_COUNT = 6,
         BATTERY_SCALE = 0.05, BATTERY_COUNT = 3,
-        MISSILE_SCALE = 0.02, UFO_SCALE = 0.02;
+        MISSILE_SCALE = 0.01, UFO_SCALE = 0.02;
     var city = {
         pos: [0.875, 0.75, 0.625, 0.375, 0.25, 0.125],
         tMatrixArray: [],
@@ -42,10 +42,17 @@ var GAME = function() {
                     GAME.model.batteries[i].tMatrix = battery.tMatrixArray[i];
                 }
             });
+            SKECHUP_MODEL.loadModel(SHADER.gl, URL.missileModel, function (model) {
+                GAME.model.missile = {prototype: model};
+                let rMatrix = mat4.create();
+                GAME.model.missile.prototype.rMatrix = mat4.scale(rMatrix, rMatrix, [MISSILE_SCALE, MISSILE_SCALE, MISSILE_SCALE]);
+                // GAME.model.missile.prototype.tMatrix[13] = 0.1;
+            })
         },
         play: function () {
             MODELS.array = GAME.model.background.concat(GAME.model.cities);
             MODELS.array = MODELS.array.concat(GAME.model.batteries);
+            MODELS.array.push(GAME.model.missile.prototype);
             renderTriangles();
         }
     }

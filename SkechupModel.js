@@ -8,7 +8,7 @@ var SKECHUP_MODEL = function() {
     return {
         incomplete: 0,
         parseModels: function (modelFile, complete) {
-            models = [];
+            let models = [];
             $.get(modelFile, function (data, status) {
                 let geometries = $(data).find('geometry');
                 $.each(geometries, function (i, geo) {
