@@ -119,7 +119,8 @@ var GAME = function() {
             GAME.initMODELS();
             GAME.initDefenseTarget();
             GAME.initDefenseMissile();
-            renderTriangles();
+            ANIMATION.start();
+            // renderTriangles();
         },
         test: function () {
             let missiles = GAME.model.defenseMissiles;
@@ -127,7 +128,6 @@ var GAME = function() {
             for(let i = 0; i < 3; i++)
                 for(let j = 0; j < missiles[i].length; j++)
                     guidance(missiles[i][j], t);
-            renderTriangles();
         }
     }
 }();
