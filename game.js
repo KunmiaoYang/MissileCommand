@@ -65,10 +65,12 @@ var GAME = function() {
         initDefenseTarget: function () {
             GAME.model.defenseTarget = new Array(CITY_COUNT + BATTERY_COUNT);
             for(let i = 0; i < CITY_COUNT; i++) {
+                GAME.model.cities[i].xyz = vec3.fromValues(city.pos[i], 0, 0);
                 GAME.model.defenseTarget[i] = GAME.model.cities[i];
                 MODELS.array.push(GAME.model.cities[i]);
             }
             for(let i = 0; i < BATTERY_COUNT; i++) {
+                GAME.model.batteries[i].xyz = vec3.fromValues(battery.pos[i], 0, 0);
                 GAME.model.defenseTarget[i + CITY_COUNT] = GAME.model.batteries[i];
                 MODELS.array.push(GAME.model.batteries[i]);
             }
