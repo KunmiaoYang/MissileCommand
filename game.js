@@ -42,9 +42,8 @@ var GAME = function() {
             for(let i = 0; i < BATTERY_COUNT; i++) {
                 missiles[i] = [];
                 for(let j = 0, len = defenseMissile.tMatrixArray[i].length; j < len; j++) {
-                    missiles[i][j] = MODELS.shallowClone(GAME.model.missile.prototype);
-                    missiles[i][j].rMatrix = defenseMissile.rMatrixArray[i][j];
-                    missiles[i][j].tMatrix = defenseMissile.tMatrixArray[i][j];
+                    missiles[i][j] = MODELS.copyModel(GAME.model.missile.prototype,
+                        defenseMissile.rMatrixArray[i][j], defenseMissile.tMatrixArray[i][j]);
                 }
             }
             GAME.model.defenseMissiles = missiles;
@@ -54,17 +53,13 @@ var GAME = function() {
             SKECHUP_MODEL.loadModel(SHADER.gl, URL.cityModel, function (model) {
                 GAME.model.cities = [];
                 for(let i = 0; i < CITY_COUNT; i++) {
-                    GAME.model.cities[i] = MODELS.shallowClone(model);
-                    GAME.model.cities[i].rMatrix = city.rMatrixArray[i];
-                    GAME.model.cities[i].tMatrix = city.tMatrixArray[i];
+                    GAME.model.cities[i] = MODELS.copyModel(model, city.rMatrixArray[i], city.tMatrixArray[i]);
                 }
             });
             SKECHUP_MODEL.loadModel(SHADER.gl, URL.batteryModel, function (model) {
                 GAME.model.batteries = [];
                 for(let i = 0; i < BATTERY_COUNT; i++) {
-                    GAME.model.batteries[i] = MODELS.shallowClone(model);
-                    GAME.model.batteries[i].rMatrix = battery.rMatrixArray[i];
-                    GAME.model.batteries[i].tMatrix = battery.tMatrixArray[i];
+                    GAME.model.batteries[i] = MODELS.copyModel(model, battery.rMatrixArray[i], battery.tMatrixArray[i]);
                 }
             });
             SKECHUP_MODEL.loadModel(SHADER.gl, URL.missileModel, function (model) {

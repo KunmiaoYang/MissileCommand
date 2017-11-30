@@ -1,4 +1,18 @@
 var MODELS = function () {
+    function shallowClone(model) {
+        return {
+            material: model.material,
+            triBufferSize: model.triBufferSize,
+            doubleSide: model.doubleSide,
+            specularModel: model.specularModel,
+            coordArray: model.coordArray,
+            normalArray: model.normalArray,
+            indexArray: model.indexArray,
+            vertexBuffer: model.vertexBuffer,
+            normalBuffer: model.normalBuffer,
+            triangleBuffer: model.triangleBuffer
+        };
+    }
     return {
         array: [],
         createMaterial: function() {
@@ -50,19 +64,11 @@ var MODELS = function () {
             gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, triangleSet.triangleBuffer); // activate that buffer
             gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(triangleSet.indexArray), gl.STATIC_DRAW); // indices to that buffer
         },
-        shallowClone(model) {
-            return {
-                material: model.material,
-                triBufferSize: model.triBufferSize,
-                doubleSide: model.doubleSide,
-                specularModel: model.specularModel,
-                coordArray: model.coordArray,
-                normalArray: model.normalArray,
-                indexArray: model.indexArray,
-                vertexBuffer: model.vertexBuffer,
-                normalBuffer: model.normalBuffer,
-                triangleBuffer: model.triangleBuffer
-            }
+        copyModel: function(prototype, rMatrix, tMatrix) {
+            let newModel = shallowClone(prototype);
+            newModel.rMatrix = rMatrix;
+            newModel.tMatrix = tMatrix;
+            return newModel;
         }
     }
 }();

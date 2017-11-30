@@ -10,6 +10,7 @@ function renderTriangles() {
     }
 
     for(let i = 0; i < MODELS.array.length; i++) {
+        if(MODELS.array[i].disable) continue;
         if(OPTION.useLight)
             SHADER.gl.uniform1i(SHADER.uniforms.lightModelUniform, MODELS.array[i].specularModel);
         else
