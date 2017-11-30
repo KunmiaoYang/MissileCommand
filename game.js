@@ -2,7 +2,7 @@ var GAME = function() {
     const CITY_SCALE = 0.003, CITY_COUNT = 6,
         BATTERY_SCALE = 0.05, BATTERY_COUNT = 3,
         MISSILE_SCALE = 0.01, UFO_SCALE = 0.02,
-        DEFENSE_MISSILE_SPEED = 0.2,
+        DEFENSE_MISSILE_SPEED = 0.4,
         EXPLOSION_RANGE = 0.04;
     const ZERO_THRESHOLD = 0.0001;
     function guidance(missile, target) {
@@ -18,14 +18,20 @@ var GAME = function() {
             missile.direction = direction;
         }
     }
+    function hitAir() {
+        let i;
+        if((i = MODELS.array.indexOf(this)) > -1) MODELS.array.splice(i, 1);
+        launchedMissile.splice(launchedMissile.indexOf(this), 1);
+    }
     function createAirTarget(xyz) {
         return {
-            xyz: xyz
+            xyz: xyz,
         }
     }
-    function launch(missile, speed, target) {
+    function launch(missile, speed, target, hit) {
         guidance(missile, target);
         missile.speed = speed;
+        missile.hit = hit;
         launchedMissile.push(missile);
     }
     var launchedMissile = [];
@@ -135,12 +141,14 @@ var GAME = function() {
                 launchedMissile[i].tMatrix[12] += distance * launchedMissile[i].direction[0];
                 launchedMissile[i].tMatrix[13] += distance * launchedMissile[i].direction[1];
                 launchedMissile[i].tMatrix[14] += distance * launchedMissile[i].direction[2];
+                launchedMissile[i].distance += distance;
+                if(launchedMissile[i].distance > launchedMissile[i].target.distance) launchedMissile[i].hit();
             }
         },
         test: function (i, j) {
             let missiles = GAME.model.defenseMissiles;
             let t = createAirTarget(vec3.fromValues(0.5, 0.5, 0));
-            launch(missiles[i][j], DEFENSE_MISSILE_SPEED, t);
+            launch(missiles[i][j], DEFENSE_MISSILE_SPEED, t, hitAir);
         }
     }
 }();

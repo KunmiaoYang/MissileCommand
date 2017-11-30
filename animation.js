@@ -10,7 +10,7 @@ var ANIMATION = function () {
         animate: function(now) {
             if(ANIMATION.pause) return;
             let duration = now - lastTime;
-            if (duration > 10) {
+            if (duration > 20) {
                 lastTime = now;
                 GAME.update(duration);
                 renderTriangles();
