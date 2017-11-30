@@ -10,8 +10,9 @@ var ANIMATION = function () {
         animate: function(now) {
             if(ANIMATION.pause) return;
             let duration = now - lastTime;
-            if (duration > 100) {
+            if (duration > 10) {
                 lastTime = now;
+                GAME.update(duration);
                 renderTriangles();
             }
             requestAnimationFrame(ANIMATION.animate);

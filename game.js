@@ -23,6 +23,12 @@ var GAME = function() {
             xyz: xyz
         }
     }
+    function launch(missile, speed, target) {
+        guidance(missile, target);
+        missile.speed = speed;
+        launchedMissile.push(missile);
+    }
+    var launchedMissile = [];
     var city = {
         pos: [0.875, 0.75, 0.625, 0.375, 0.25, 0.125],
         tMatrixArray: [],
@@ -122,12 +128,19 @@ var GAME = function() {
             ANIMATION.start();
             // renderTriangles();
         },
-        test: function () {
+        update: function(duration) {
+            let seconds = duration/1000;
+            for(let i = 0, len = launchedMissile.length; i < len; i++) {
+                let distance = launchedMissile[i].speed * seconds;
+                launchedMissile[i].tMatrix[12] += distance * launchedMissile[i].direction[0];
+                launchedMissile[i].tMatrix[13] += distance * launchedMissile[i].direction[1];
+                launchedMissile[i].tMatrix[14] += distance * launchedMissile[i].direction[2];
+            }
+        },
+        test: function (i, j) {
             let missiles = GAME.model.defenseMissiles;
             let t = createAirTarget(vec3.fromValues(0.5, 0.5, 0));
-            for(let i = 0; i < 3; i++)
-                for(let j = 0; j < missiles[i].length; j++)
-                    guidance(missiles[i][j], t);
+            launch(missiles[i][j], DEFENSE_MISSILE_SPEED, t);
         }
     }
 }();
