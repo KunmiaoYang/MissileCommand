@@ -1,9 +1,27 @@
 var GAME = function() {
     const CITY_SCALE = 0.003, CITY_COUNT = 6,
         BATTERY_SCALE = 0.05, BATTERY_COUNT = 3,
-        MISSILE_SCALE = 0.01, UFO_SCALE = 0.02;
+        MISSILE_SCALE = 0.01, UFO_SCALE = 0.02,
+        DEFENSE_MISSILE_SPEED = 0.2,
+        EXPLOSION_RANGE = 0.04;
+    const ZERO_THRESHOLD = 0.0001;
     function guidance(missile, target) {
-
+        missile.target = target;
+        missile.distance = 0;
+        let direction = vec3.subtract(vec3.create(), target.xyz, missile.xyz);
+        missile.target.distance = vec3.length(direction);
+        vec3.normalize(direction, direction);
+        let axis = vec3.cross(vec3.create(), missile.direction, direction),
+            rad = vec3.length(axis);
+        if(rad > ZERO_THRESHOLD) {
+            missile.rMatrix = mat4.rotate(mat4.create(), missile.rMatrix, rad, axis);
+            missile.direction = direction;
+        }
+    }
+    function createAirTarget(xyz) {
+        return {
+            xyz: xyz
+        }
     }
     var city = {
         pos: [0.875, 0.75, 0.625, 0.375, 0.25, 0.125],
@@ -27,6 +45,9 @@ var GAME = function() {
         tMatrixArray: [],
         rMatrixArray: []
     };
+    var attackMissile = {
+        speed: 0.02
+    }
     for(let i = 0, idMatrix = mat4.create(); i < BATTERY_COUNT; i++) {
         battery.rMatrixArray.push(mat4.scale(mat4.create(), idMatrix, [BATTERY_SCALE, BATTERY_SCALE, BATTERY_SCALE]));
         battery.tMatrixArray.push(mat4.fromTranslation(mat4.create(), [battery.pos[i], 0, 0]));
@@ -57,6 +78,7 @@ var GAME = function() {
                     missiles[i][j] = MODELS.copyModel(GAME.model.missile.prototype,
                         defenseMissile.rMatrixArray[i][j], defenseMissile.tMatrixArray[i][j]);
                     missiles[i][j].xyz = defenseMissile.xyz[i][j];
+                    missiles[i][j].direction = vec3.fromValues(0, 1, 0);
                     MODELS.array.push(missiles[i][j]);
                 }
             }
@@ -97,6 +119,14 @@ var GAME = function() {
             GAME.initMODELS();
             GAME.initDefenseTarget();
             GAME.initDefenseMissile();
+            renderTriangles();
+        },
+        test: function () {
+            let missiles = GAME.model.defenseMissiles;
+            let t = createAirTarget(vec3.fromValues(0.5, 0.5, 0));
+            for(let i = 0; i < 3; i++)
+                for(let j = 0; j < missiles[i].length; j++)
+                    guidance(missiles[i][j], t);
             renderTriangles();
         }
     }
