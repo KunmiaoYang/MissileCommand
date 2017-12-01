@@ -21,13 +21,14 @@ var GAME = function() {
         }
     }
     function hitAir() {
-        let i;
-        if((i = MODELS.array.indexOf(this)) > -1) MODELS.array.splice(i, 1);
         this.disable = true;
+
         // create explosion area
-        var exp = {
-            timeRemain: EXPLOSION_DURATION
-        }
+        airExplosions.push({
+            xyz: this.target.xyz,
+            timeRemain: EXPLOSION_DURATION,
+            range: EXPLOSION_RANGE
+        });
     }
     function createAirTarget(xyz) {
         return {
@@ -103,6 +104,7 @@ var GAME = function() {
                     missiles[i][j].xyz = vec3.clone(defenseMissile.xyz[i][j]);
                     missiles[i][j].direction = vec3.fromValues(0, 1, 0);
                     missiles[i][j].material = defenseMissile.material;
+                    missiles[i][j].isDefense = true;
                     MODELS.array.push(missiles[i][j]);
                 }
             }
@@ -172,14 +174,34 @@ var GAME = function() {
                 launchedMissile[i].tMatrix[13] += distance * launchedMissile[i].direction[1];
                 launchedMissile[i].tMatrix[14] += distance * launchedMissile[i].direction[2];
                 launchedMissile[i].distance += distance;
+
                 if(launchedMissile[i].distance > launchedMissile[i].target.distance) launchedMissile[i].hit();
             }
-            // TODO: update explosion
+
+            // update explosion
+            for(let i = 0, iLen = airExplosions.length; i < iLen; i++) {
+                for(let j = 0, jLen = launchedMissile.length; j < jLen; j++) {
+                    if(launchedMissile[j].disable || launchedMissile[j].isDefense) continue;
+                    let dis = vec3.distance(airExplosions[i].xyz, launchedMissile[j].xyz);
+                    if(dis <= airExplosions[i].range) launchedMissile[j].disable = true;
+                }
+                airExplosions[i].timeRemain -= duration;
+                if(airExplosions[i].timeRemain <= 0) airExplosions.disable = true;
+            }
 
             // remove disabled missiles
-            for(let i = 0; i < launchedMissile.length; ) {
-                if(launchedMissile[i].disable) launchedMissile.splice(i, 1);
-                else i++;
+            for(let i = 0, j; i < launchedMissile.length; ) {
+                if(launchedMissile[i].disable) {
+                    if((j = MODELS.array.indexOf(launchedMissile[i])) > -1) MODELS.array.splice(j, 1);
+                    launchedMissile.splice(i, 1);
+                } else i++;
+            }
+
+            // remove disabled explosions
+            for(let i = 0; i < airExplosions.length; ) {
+                if(airExplosions[i].disable) {
+                    airExplosions.splice(i, 1);
+                } else i++;
             }
         },
         test: function (i, j) {
