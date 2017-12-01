@@ -5,7 +5,7 @@ var GAME = function() {
         BATTERY_SCALE = 0.05, BATTERY_COUNT = 3,
         MISSILE_SCALE = 0.01, UFO_SCALE = 0.02,
         DEFENSE_MISSILE_SPEED = 0.4,
-        EXPLOSION_RANGE = 0.04;
+        EXPLOSION_RANGE = 0.04, EXPLOSION_DURATION = 1500;
     const ZERO_THRESHOLD = 0.0001;
     function guidance(missile, target) {
         missile.target = target;
@@ -24,7 +24,10 @@ var GAME = function() {
         let i;
         if((i = MODELS.array.indexOf(this)) > -1) MODELS.array.splice(i, 1);
         this.disable = true;
-        // TODO: create explosion area
+        // create explosion area
+        var exp = {
+            timeRemain: EXPLOSION_DURATION
+        }
     }
     function createAirTarget(xyz) {
         return {
@@ -38,7 +41,7 @@ var GAME = function() {
         launchedMissile.push(missile);
     }
 
-    var launchedMissile = [];
+    var launchedMissile = [], airExplosions = [];
     var city = {
         pos: [0.875, 0.75, 0.625, 0.375, 0.25, 0.125],
         tMatrixArray: [],
@@ -55,6 +58,7 @@ var GAME = function() {
         rMatrixArray: []
     };
     var defenseMissile = {
+        material: MODELS.createMaterial(),
         xPos: [-0.015, 0, 0.015],
         zPos: [-0.015, 0, 0.015],
         xyz: [],
@@ -62,8 +66,11 @@ var GAME = function() {
         rMatrixArray: []
     };
     var attackMissile = {
+        material: MODELS.createMaterial(),
         speed: 0.02
-    }
+    };
+    defenseMissile.material.diffuse = [0,1,0];
+    attackMissile.material.diffuse = [1,0,0];
     for(let i = 0, idMatrix = mat4.create(); i < BATTERY_COUNT; i++) {
         battery.rMatrixArray.push(mat4.scale(mat4.create(), idMatrix, [BATTERY_SCALE, BATTERY_SCALE, BATTERY_SCALE]));
         battery.tMatrixArray.push(mat4.fromTranslation(mat4.create(), [battery.pos[i], 0, 0]));
@@ -92,9 +99,10 @@ var GAME = function() {
                 missiles[i] = [];
                 for(let j = 0, len = defenseMissile.tMatrixArray[i].length; j < len; j++) {
                     missiles[i][j] = MODELS.copyModel(GAME.model.missile.prototype,
-                        defenseMissile.rMatrixArray[i][j], defenseMissile.tMatrixArray[i][j]);
-                    missiles[i][j].xyz = defenseMissile.xyz[i][j];
+                        mat4.clone(defenseMissile.rMatrixArray[i][j]), mat4.clone(defenseMissile.tMatrixArray[i][j]));
+                    missiles[i][j].xyz = vec3.clone(defenseMissile.xyz[i][j]);
                     missiles[i][j].direction = vec3.fromValues(0, 1, 0);
+                    missiles[i][j].material = defenseMissile.material;
                     MODELS.array.push(missiles[i][j]);
                 }
             }
@@ -143,6 +151,7 @@ var GAME = function() {
                 tar = createAirTarget(xyz),
                 batteryIndex = -1,
                 missiles = GAME.model.defenseMissiles;
+            if(xyz[1] < 0) return;
             for(let i = 0, delta = WIDTH; i < BATTERY_COUNT; i++) {
                 if(0 === missiles[i].length) continue;
                 if(delta > Math.abs(battery.pos[i] - xyz[0])) {
@@ -156,6 +165,7 @@ var GAME = function() {
         },
         update: function(duration) {
             let seconds = duration/1000;
+            // update missile coordinate
             for(let i = 0, len = launchedMissile.length; i < len; i++) {
                 let distance = launchedMissile[i].speed * seconds;
                 launchedMissile[i].tMatrix[12] += distance * launchedMissile[i].direction[0];
@@ -164,6 +174,8 @@ var GAME = function() {
                 launchedMissile[i].distance += distance;
                 if(launchedMissile[i].distance > launchedMissile[i].target.distance) launchedMissile[i].hit();
             }
+            // TODO: update explosion
+
             // remove disabled missiles
             for(let i = 0; i < launchedMissile.length; ) {
                 if(launchedMissile[i].disable) launchedMissile.splice(i, 1);
