@@ -65,6 +65,6 @@ function main() {
     SHADER.setupWebGL(); // set up the webGL environment
     CAMERA.initCamera(); // Initialize camera
     GAME.loadModels();
-    EVENTS.setupKeyEvent();
+    EVENTS.setupEvent();
     setupOnLoad();
 } // end main

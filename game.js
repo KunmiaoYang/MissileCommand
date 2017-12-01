@@ -1,4 +1,6 @@
 var GAME = function() {
+    const WIDTH = 1.3, HEIGHT = 1.3,
+        CANVAS_ORIGIN = [1.15, 1.15, 0];
     const CITY_SCALE = 0.003, CITY_COUNT = 6,
         BATTERY_SCALE = 0.05, BATTERY_COUNT = 3,
         MISSILE_SCALE = 0.01, UFO_SCALE = 0.02,
@@ -21,7 +23,8 @@ var GAME = function() {
     function hitAir() {
         let i;
         if((i = MODELS.array.indexOf(this)) > -1) MODELS.array.splice(i, 1);
-        launchedMissile.splice(launchedMissile.indexOf(this), 1);
+        this.disable = true;
+        // TODO: create explosion area
     }
     function createAirTarget(xyz) {
         return {
@@ -34,6 +37,7 @@ var GAME = function() {
         missile.hit = hit;
         launchedMissile.push(missile);
     }
+
     var launchedMissile = [];
     var city = {
         pos: [0.875, 0.75, 0.625, 0.375, 0.25, 0.125],
@@ -134,6 +138,22 @@ var GAME = function() {
             ANIMATION.start();
             // renderTriangles();
         },
+        launchDefenseMissile: function(ratioX, ratioY) {
+            let xyz = vec3.fromValues(CANVAS_ORIGIN[0] - WIDTH * ratioX, CANVAS_ORIGIN[1] - HEIGHT * ratioY, 0),
+                tar = createAirTarget(xyz),
+                batteryIndex = -1,
+                missiles = GAME.model.defenseMissiles;
+            for(let i = 0, delta = WIDTH; i < BATTERY_COUNT; i++) {
+                if(0 === missiles[i].length) continue;
+                if(delta > Math.abs(battery.pos[i] - xyz[0])) {
+                    batteryIndex = i;
+                    delta = Math.abs(battery.pos[i] - xyz[0]);
+                }
+            }
+            if(-1 === batteryIndex) return;
+            let missile = missiles[batteryIndex].pop();
+            launch(missile, DEFENSE_MISSILE_SPEED, tar, hitAir);
+        },
         update: function(duration) {
             let seconds = duration/1000;
             for(let i = 0, len = launchedMissile.length; i < len; i++) {
@@ -143,6 +163,11 @@ var GAME = function() {
                 launchedMissile[i].tMatrix[14] += distance * launchedMissile[i].direction[2];
                 launchedMissile[i].distance += distance;
                 if(launchedMissile[i].distance > launchedMissile[i].target.distance) launchedMissile[i].hit();
+            }
+            // remove disabled missiles
+            for(let i = 0; i < launchedMissile.length; ) {
+                if(launchedMissile[i].disable) launchedMissile.splice(i, 1);
+                else i++;
             }
         },
         test: function (i, j) {

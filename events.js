@@ -99,9 +99,14 @@ var EVENTS = function () {
         handleKeyUp: function (event) {
             currentlyPressedKeys[event.keyCode] = false;
         },
-        setupKeyEvent: function() {
+        handleClick: function(event) {
+            console.log({x: event.offsetX, y: event.offsetY});
+            GAME.launchDefenseMissile(event.offsetX/SHADER.gl.canvas.width, event.offsetY/SHADER.gl.canvas.height);
+        },
+        setupEvent: function() {
             document.onkeydown = EVENTS.handleKeyDown;
             document.onkeyup = EVENTS.handleKeyUp;
+            $('#myWebGLCanvas').on('click', EVENTS.handleClick);
         }
     };
 }();
