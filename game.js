@@ -186,7 +186,6 @@ var GAME = function() {
                     if(dis <= airExplosions[i].range) launchedMissile[j].disable = true;
                 }
                 airExplosions[i].timeRemain -= duration;
-                if(airExplosions[i].timeRemain <= 0) airExplosions.disable = true;
             }
 
             // remove disabled missiles
@@ -199,7 +198,7 @@ var GAME = function() {
 
             // remove disabled explosions
             for(let i = 0; i < airExplosions.length; ) {
-                if(airExplosions[i].disable) {
+                if(airExplosions[i].timeRemain <= 0) {
                     airExplosions.splice(i, 1);
                 } else i++;
             }
