@@ -5,8 +5,9 @@ var GAME = function() {
         BATTERY_SCALE = 0.05, BATTERY_COUNT = 3,
         MOUNTAIN_SCALE = 0.05, MOUNTAIN_HEIGHT_LIMIT = 0.05,
         MISSILE_SCALE = 0.01, UFO_SCALE = 0.02,
-        DEFENSE_MISSILE_SPEED = 1.0, ATTACK_MISSILE_HEIGHT = 1.2,
-        EXPLOSION_RANGE = 0.04, EXPLOSION_DURATION = 1500;
+        DEFENSE_MISSILE_SPEED = 1.5, ATTACK_MISSILE_HEIGHT = 1.2,
+        EXPLOSION_INITIAL_RANGE = 0.01, EXPLOSION_RANGE = 0.04,
+        EXPLOSION_GROW_SPEED = 0.0025, EXPLOSION_DURATION = 1500;
     const ZERO_THRESHOLD = 0.0001;
     function guidance(missile, target) {
         missile.target = target;
@@ -65,14 +66,15 @@ var GAME = function() {
         }
     }
     function createExplosion(xyz) {
-        let expModel = MODELS.copyModel(GAME.model.explosion.prototype, mat4.create(),
+        let expModel = MODELS.copyModel(GAME.model.explosion.prototype,
+            mat4.scale(mat4.create(), idMatrix,[ZERO_THRESHOLD, ZERO_THRESHOLD, ZERO_THRESHOLD]),
             mat4.fromTranslation(mat4.create(), xyz));
         MODELS.array.push(expModel);
         // TODO: add status determine whether this explosion destroy missile
         airExplosions.push({
             xyz: xyz,
             timeRemain: EXPLOSION_DURATION,
-            range: EXPLOSION_RANGE,
+            range: ZERO_THRESHOLD,
             model: expModel
         });
     }
@@ -369,6 +371,12 @@ var GAME = function() {
 
             // update explosion
             for(let i = 0, iLen = airExplosions.length; i < iLen; i++) {
+                if(airExplosions[i].range < EXPLOSION_RANGE) {
+                    airExplosions[i].range = Math.sin(airExplosions[i].timeRemain / EXPLOSION_DURATION * Math.PI) * EXPLOSION_RANGE;
+                    airExplosions[i].model.rMatrix[0] = airExplosions[i].range;
+                    airExplosions[i].model.rMatrix[5] = airExplosions[i].range;
+                    airExplosions[i].model.rMatrix[10] = airExplosions[i].range;
+                }
                 for(let j = 0, jLen = launchedMissile.length; j < jLen; j++) {
                     if(launchedMissile[j].disable || launchedMissile[j].isDefense) continue;
                     let dis = vec3.distance(airExplosions[i].xyz, launchedMissile[j].xyz);
