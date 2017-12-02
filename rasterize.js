@@ -1,5 +1,6 @@
 // render the loaded model
 function renderTriangles() {
+    SHADER.gl.lineWidth(1.5);
     SHADER.gl.clear(SHADER.gl.COLOR_BUFFER_BIT | SHADER.gl.DEPTH_BUFFER_BIT); // clear frame/depth buffers
 
     SHADER.gl.uniform3fv(SHADER.uniforms.cameraPosUniform, CAMERA.xyz);
