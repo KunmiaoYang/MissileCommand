@@ -39,69 +39,13 @@ var EVENTS = function () {
                     CAMERA.rotateCamera(-DELTA_ROT, vec3.fromValues(1, 0, 0));
                     return;
             }
-
-            // Part 6: Interactively change lighting on a model
-            // Part 7: Interactively transform models
-            if (false) {
-                let model = MODELS.array[MODELS.selectId];
-                switch (event.key) {
-                    case "k":   // k — translate selection left along view X
-                        mat4.translate(model.tMatrix, model.tMatrix, vec3.scale(vec3.create(), CAMERA.X, -DELTA_TRANS));
-                        renderTriangles();
-                        return;
-                    case ";":   // ; — translate selection right along view X
-                        mat4.translate(model.tMatrix, model.tMatrix, vec3.scale(vec3.create(), CAMERA.X, DELTA_TRANS));
-                        renderTriangles();
-                        return;
-                    case "o":   // o — translate selection forward along view Z
-                        mat4.translate(model.tMatrix, model.tMatrix, vec3.scale(vec3.create(), CAMERA.Z, -DELTA_TRANS));
-                        renderTriangles();
-                        return;
-                    case "l":   // l — translate selection backward along view Z
-                        mat4.translate(model.tMatrix, model.tMatrix, vec3.scale(vec3.create(), CAMERA.Z, DELTA_TRANS));
-                        renderTriangles();
-                        return;
-                    case "i":   // i — translate selection up along view Y
-                        mat4.translate(model.tMatrix, model.tMatrix, vec3.scale(vec3.create(), CAMERA.Y, DELTA_TRANS));
-                        renderTriangles();
-                        return;
-                    case "p":   // p — translate selection down along view Y
-                        mat4.translate(model.tMatrix, model.tMatrix, vec3.scale(vec3.create(), CAMERA.Y, -DELTA_TRANS));
-                        renderTriangles();
-                        return;
-                    case "K":   // K — rotate selection left around view Y (yaw)
-                        mat4.multiply(model.rMatrix, mat4.fromRotation(mat4.create(), -DELTA_ROT, CAMERA.Y), model.rMatrix);
-                        renderTriangles();
-                        return;
-                    case ":":   // : — rotate selection right around view Y (yaw)
-                        mat4.multiply(model.rMatrix, mat4.fromRotation(mat4.create(), DELTA_ROT, CAMERA.Y), model.rMatrix);
-                        renderTriangles();
-                        return;
-                    case "O":   // O — rotate selection forward around view X (pitch)
-                        mat4.multiply(model.rMatrix, mat4.fromRotation(mat4.create(), -DELTA_ROT, CAMERA.X), model.rMatrix);
-                        renderTriangles();
-                        return;
-                    case "L":   // L — rotate selection backward around view X (pitch)
-                        mat4.multiply(model.rMatrix, mat4.fromRotation(mat4.create(), DELTA_ROT, CAMERA.X), model.rMatrix);
-                        renderTriangles();
-                        return;
-                    case "I":   // I — rotate selection clockwise around view Z (roll)
-                        mat4.multiply(model.rMatrix, mat4.fromRotation(mat4.create(), -DELTA_ROT, CAMERA.Z), model.rMatrix);
-                        renderTriangles();
-                        return;
-                    case "P":   // P — rotate selection counterclockwise around view Z (roll)
-                        mat4.multiply(model.rMatrix, mat4.fromRotation(mat4.create(), DELTA_ROT, CAMERA.Z), model.rMatrix);
-                        renderTriangles();
-                        return;
-                }
-            }
         },
         handleKeyUp: function (event) {
             currentlyPressedKeys[event.keyCode] = false;
         },
         handleClick: function(event) {
             console.log({x: event.offsetX, y: event.offsetY});
-            GAME.launchDefenseMissile(event.offsetX/SHADER.gl.canvas.width, event.offsetY/SHADER.gl.canvas.height);
+            GAME.launchDefenseMissile(event.offsetX/SHADER.canvas.width, event.offsetY/SHADER.canvas.height);
         },
         setupEvent: function() {
             document.onkeydown = EVENTS.handleKeyDown;

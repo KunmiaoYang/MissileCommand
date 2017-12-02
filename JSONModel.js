@@ -1,6 +1,6 @@
 var JSON_MODEL = function() {
-    var nLatitude = 20,
-        nLongitude = 40;
+    var nLatitude = 4,
+        nLongitude = 8;
     return {
         ellipsoids: {},
         loadTriangleSets: function(gl) {
@@ -54,8 +54,8 @@ var JSON_MODEL = function() {
                     triangleSet.rMatrix = mat4.identity(mat4.create());
 
                     // Push triangleset into array
-                    triangleSet.id = MODELS.array.length;
-                    MODELS.array.push(triangleSet);
+                    // triangleSet.id = MODELS.array.length;
+                    // MODELS.array.push(triangleSet);
                     triangleSets.push(triangleSet);
                 } // end for each triangle set
             } // end if triangles found
@@ -63,8 +63,7 @@ var JSON_MODEL = function() {
         },
         loadEllipsoids: function(gl) {
             var inputEllipsoids = JSON_MODEL.getJSONFile(URL.ellipsoids,"ellipsoids");
-            JSON_MODEL.ellipsoids.array = [];
-            JSON_MODEL.ellipsoids.selectId = 0;
+            var ellipsoids = [];
 
             if (inputEllipsoids != String.null) {
                 for (var whichSet=0; whichSet<inputEllipsoids.length; whichSet++) {
@@ -114,10 +113,9 @@ var JSON_MODEL = function() {
                     triangleSet.rMatrix = mat4.identity(mat4.create());
 
                     // Push triangleset into array
-                    triangleSet.id = MODELS.array.length;
-                    MODELS.array.push(triangleSet);
-                    JSON_MODEL.ellipsoids.array.push(triangleSet);
+                    ellipsoids.push(triangleSet);
                 } // end for each ellipsoid
+                return ellipsoids;
             } // end if ellipsoids found
         },
         getJSONFile: function(url,descr) {

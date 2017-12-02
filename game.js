@@ -174,6 +174,8 @@ var GAME = function() {
         },
         loadModels: function() {
             GAME.model.background = JSON_MODEL.loadTriangleSets(SHADER.gl);
+            MODELS.array = MODELS.array.concat(GAME.model.background);
+            GAME.model.explosion = JSON_MODEL.loadEllipsoids(SHADER.gl)[0];
             SKECHUP_MODEL.loadModel(SHADER.gl, URL.cityModel, function (model) {
                 model.material.diffuse = [0.2, 0.2, 0.8];
                 GAME.model.cities = [];

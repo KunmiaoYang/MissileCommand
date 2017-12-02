@@ -85,6 +85,7 @@ var SHADER = function() {
         `;
     }
     return {
+        canvas: document.getElementById("myWebGLCanvas"),
         gl: null,
         shaderProgram: null,
         vertexPositionAttrib: null,
@@ -93,11 +94,11 @@ var SHADER = function() {
         setupWebGL: function() {
 
             // Get the canvas and context
-            var canvas = document.getElementById("myWebGLCanvas"); // create a js canvas
+            var canvas = SHADER.canvas; // create a js canvas
             SHADER.gl = canvas.getContext("webgl"); // get a webgl object from it
             SHADER.gl.viewportWidth = canvas.width; // store width
             SHADER.gl.viewportHeight = canvas.height; // store height
-            SHADER.gl.viewport(0, 0, SHADER.gl.canvas.width, SHADER.gl.canvas.height);
+            SHADER.gl.viewport(0, 0, canvas.width, canvas.height);
 
             try {
                 if (SHADER.gl == null) {
