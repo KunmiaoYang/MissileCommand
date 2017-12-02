@@ -11,7 +11,7 @@ var GAME = function() {
         missile.target = target;
         missile.distance = 0;
         let direction = vec3.subtract(vec3.create(), target.xyz, missile.xyz);
-        missile.target.distance = vec3.length(direction);
+        missile.targetDistance = vec3.length(direction);
         vec3.normalize(direction, direction);
         let axis = vec3.cross(vec3.create(), missile.direction, direction),
             sinRad = vec3.length(axis), cosRad = vec3.dot(missile.direction, direction);
@@ -114,7 +114,7 @@ var GAME = function() {
                 targetCount = BATTERY_COUNT + CITY_COUNT;
             for(let i = startIndex, j = 0; i < targetCount && j < count; i++) {
                 if(i === curIndex) continue;
-                let missile = attackMissile.create(this.xyz);
+                let missile = attackMissile.create(vec3.clone(this.xyz));
                 launch(missile, GAME.level.attackMissileSpeed, targets[i], hitTarget);
                 j++;
             }
@@ -301,7 +301,7 @@ var GAME = function() {
                 launchedMissile[i].xyz[1] = launchedMissile[i].tMatrix[13];
                 launchedMissile[i].xyz[2] = launchedMissile[i].tMatrix[14];
 
-                if(launchedMissile[i].distance > launchedMissile[i].target.distance) launchedMissile[i].hit();
+                if(launchedMissile[i].distance > launchedMissile[i].targetDistance) launchedMissile[i].hit();
                 else if(!launchedMissile[i].isDefense && Math.random() < GAME.level.splitProbability) launchedMissile[i].split();
             }
 
