@@ -31,18 +31,13 @@ var GAME = function() {
         this.disable = true;
 
         // create explosion
-        let expModel = MODELS.copyModel(GAME.model.explosion.prototype, mat4.create(),
-            mat4.fromTranslation(mat4.create(), this.target.xyz));
-        MODELS.array.push(expModel);
-        airExplosions.push({
-            xyz: this.target.xyz,
-            timeRemain: EXPLOSION_DURATION,
-            range: EXPLOSION_RANGE,
-            model: expModel
-        });
+        createExplosion(this.target.xyz);
     }
     function hitTarget() {
         this.disable = true;
+
+        // create explosion
+        createExplosion(this.target.xyz);
 
         // destroy target
         if((j = MODELS.array.indexOf(this.target)) > -1) MODELS.array.splice(j, 1);
@@ -67,6 +62,18 @@ var GAME = function() {
         return {
             xyz: xyz,
         }
+    }
+    function createExplosion(xyz) {
+        let expModel = MODELS.copyModel(GAME.model.explosion.prototype, mat4.create(),
+            mat4.fromTranslation(mat4.create(), xyz));
+        MODELS.array.push(expModel);
+        // TODO: add status determine whether this explosion destroy missile
+        airExplosions.push({
+            xyz: xyz,
+            timeRemain: EXPLOSION_DURATION,
+            range: EXPLOSION_RANGE,
+            model: expModel
+        });
     }
     function launch(missile, speed, target, hit) {
         guidance(missile, target);
