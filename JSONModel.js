@@ -1,6 +1,6 @@
 var JSON_MODEL = function() {
-    var nLatitude = 4,
-        nLongitude = 8;
+    var nLatitude = 10,
+        nLongitude = 20;
     return {
         ellipsoids: {},
         loadTriangleSets: function(gl) {

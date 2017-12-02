@@ -26,11 +26,15 @@ var GAME = function() {
     function hitAir() {
         this.disable = true;
 
-        // create explosion area
+        // create explosion
+        let expModel = MODELS.copyModel(GAME.model.explosion.prototype, mat4.create(),
+            mat4.fromTranslation(mat4.create(), this.target.xyz));
+        MODELS.array.push(expModel);
         airExplosions.push({
             xyz: this.target.xyz,
             timeRemain: EXPLOSION_DURATION,
-            range: EXPLOSION_RANGE
+            range: EXPLOSION_RANGE,
+            model: expModel
         });
     }
     function hitTarget() {
@@ -131,7 +135,7 @@ var GAME = function() {
         initAttackMissile: function () {
             let missiles = [];
             for(let i = 0; i < GAME.level.attackMissileCount; i++) {
-                let xyz = [Math.random(), 1.4, 0];
+                let xyz = [Math.random(), 1.35, 0];
                 missiles[i] = MODELS.copyModel(GAME.model.missile.prototype,
                     mat4.clone(attackMissile.rMatrix),
                     mat4.fromTranslation(mat4.create(), xyz));
@@ -175,7 +179,10 @@ var GAME = function() {
         loadModels: function() {
             GAME.model.background = JSON_MODEL.loadTriangleSets(SHADER.gl);
             MODELS.array = MODELS.array.concat(GAME.model.background);
-            GAME.model.explosion = JSON_MODEL.loadEllipsoids(SHADER.gl)[0];
+            GAME.model.explosion = {
+                prototype: JSON_MODEL.loadEllipsoids(SHADER.gl)[0],
+                airExplosions: airExplosions
+            };
             SKECHUP_MODEL.loadModel(SHADER.gl, URL.cityModel, function (model) {
                 model.material.diffuse = [0.2, 0.2, 0.8];
                 GAME.model.cities = [];
@@ -191,7 +198,10 @@ var GAME = function() {
                 }
             });
             SKECHUP_MODEL.loadModel(SHADER.gl, URL.missileModel, function (model) {
-                GAME.model.missile = {prototype: model};
+                GAME.model.missile = {
+                    prototype: model,
+                    launchedMissile: launchedMissile
+                };
             })
         },
         play: function () {
@@ -260,7 +270,8 @@ var GAME = function() {
             // remove disabled explosions
             for(let i = 0; i < airExplosions.length; ) {
                 if(airExplosions[i].timeRemain <= 0) {
-                    airExplosions.splice(i, 1);
+                    explosion = airExplosions.splice(i, 1)[0];
+                    if((j = MODELS.array.indexOf(explosion.model)) > -1) MODELS.array.splice(j, 1);
                 } else i++;
             }
 
