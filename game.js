@@ -52,6 +52,7 @@ var GAME = function() {
         if(this.disable) return;
         this.disable = true;
         city.count--;
+        console.log("City count: " + city.count);
     }
     function destroyBattery() {
         if(this.disable) return;
@@ -157,7 +158,7 @@ var GAME = function() {
             attackMissileSpeed: 0.1,
             duration: 15000,
             splitLimit: 3,
-            splitProbability: 0.002,
+            splitProbability: 0.001,
             nextMissile: 0,
             time: 0,
             missileSchedule: []
@@ -166,6 +167,12 @@ var GAME = function() {
             MODELS.array = [];
             for(let i = 0, len = GAME.model.background.length; i < len; i++)
                 MODELS.array.push(GAME.model.background[i]);
+        },
+        initGame: function () {
+            city.count = CITY_COUNT;
+            for(let i = 0; i < CITY_COUNT; i++) {
+                GAME.model.cities[i].disable = false;
+            }
         },
         initLevel: function () {
             // schedule missile
@@ -176,16 +183,6 @@ var GAME = function() {
             GAME.level.nextMissile = 0;
             GAME.level.time = 0;
             launchedMissile = [];
-        },
-        nextLevel: function () {
-            GAME.level.id++;
-            GAME.level.attackMissileCount += 2;
-            GAME.level.attackMissileSpeed += 0.1;
-            GAME.initLevel();
-            GAME.initMODELS();
-            GAME.initBattery();
-            GAME.initDefenseMissile();
-            GAME.initAttackMissile();
         },
         initAttackMissile: function () {
             let missiles = [];
@@ -210,7 +207,14 @@ var GAME = function() {
             }
             GAME.model.defenseMissiles = missiles;
         },
-        initBattery: function () {
+        initDefenseTarget: function () {
+            GAME.model.defenseTarget = new Array(CITY_COUNT + BATTERY_COUNT);
+            for(let i = 0; i < CITY_COUNT; i++) {
+                GAME.model.cities[i].xyz = vec3.fromValues(city.pos[i], 0, 0);
+                GAME.model.cities[i].destroy = destroyCity;
+                GAME.model.defenseTarget[i] = GAME.model.cities[i];
+                if(!GAME.model.cities[i].disable) MODELS.array.push(GAME.model.cities[i]);
+            }
             battery.count = BATTERY_COUNT;
             for(let i = 0; i < BATTERY_COUNT; i++) {
                 GAME.model.batteries[i].xyz = vec3.fromValues(battery.pos[i], 0, 0);
@@ -219,18 +223,6 @@ var GAME = function() {
                 GAME.model.defenseTarget[i + CITY_COUNT] = GAME.model.batteries[i];
                 MODELS.array.push(GAME.model.batteries[i]);
             }
-        },
-        initDefenseTarget: function () {
-            GAME.model.defenseTarget = new Array(CITY_COUNT + BATTERY_COUNT);
-            city.count = CITY_COUNT;
-            for(let i = 0; i < CITY_COUNT; i++) {
-                GAME.model.cities[i].xyz = vec3.fromValues(city.pos[i], 0, 0);
-                GAME.model.cities[i].destroy = destroyCity;
-                GAME.model.cities[i].disable = false;
-                GAME.model.defenseTarget[i] = GAME.model.cities[i];
-                MODELS.array.push(GAME.model.cities[i]);
-            }
-            GAME.initBattery();
         },
         loadModels: function() {
             GAME.model.background = JSON_MODEL.loadTriangleSets(SHADER.gl);
@@ -261,6 +253,7 @@ var GAME = function() {
             })
         },
         play: function () {
+            GAME.initGame();
             GAME.initLevel();
             GAME.initMODELS();
             GAME.initDefenseTarget();
@@ -268,6 +261,20 @@ var GAME = function() {
             GAME.initAttackMissile();
             ANIMATION.start();
             // renderTriangles();
+        },
+        nextLevel: function () {
+            GAME.level.id++;
+            GAME.level.attackMissileCount += 2;
+            GAME.level.attackMissileSpeed += 0.02;
+            GAME.initLevel();
+            GAME.initMODELS();
+            GAME.initDefenseTarget();
+            GAME.initDefenseMissile();
+            GAME.initAttackMissile();
+        },
+        over: function () {
+            ANIMATION.pause = true;
+            renderTriangles();
         },
         launchDefenseMissile: function(ratioX, ratioY) {
             let xyz = vec3.fromValues(CANVAS_ORIGIN[0] - WIDTH * ratioX, CANVAS_ORIGIN[1] - HEIGHT * ratioY, 0),
@@ -287,7 +294,7 @@ var GAME = function() {
             launch(missile, DEFENSE_MISSILE_SPEED, tar, hitAir);
         },
         update: function(duration) {
-            let seconds = duration/1000;
+            let seconds = duration/1000, level = GAME.level;
             GAME.level.time += duration;
 
             // update missile
@@ -332,12 +339,18 @@ var GAME = function() {
             }
 
             // launch attack missiles
-            for(let level = GAME.level, len = level.attackMissileCount, defenseTarget = GAME.model.defenseTarget;
+            for(let len = level.attackMissileCount, defenseTarget = GAME.model.defenseTarget;
                 level.nextMissile < len && level.missileSchedule[level.nextMissile] < level.time; level.nextMissile++) {
-                console.log(level.time + ": " + level.nextMissile + ": " + level.missileSchedule[level.nextMissile]);
+                console.log(level.time + ": " + level.nextMissile + ": speed: " + level.attackMissileSpeed);
                 let tar = defenseTarget[Math.floor(Math.random()*defenseTarget.length)];
                 launch(GAME.model.attackMissiles.pop(), level.attackMissileSpeed, tar, hitTarget);
             }
+
+            // next level
+            if(0 == launchedMissile.length && level.nextMissile >= level.attackMissileCount) GAME.nextLevel();
+
+            // game over
+            if(0 >= city.count) GAME.over();
         },
         test: function (i, j) {
             let missiles = GAME.model.defenseMissiles;

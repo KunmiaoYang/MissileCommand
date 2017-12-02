@@ -44,7 +44,6 @@ var EVENTS = function () {
             currentlyPressedKeys[event.keyCode] = false;
         },
         handleClick: function(event) {
-            console.log({x: event.offsetX, y: event.offsetY});
             GAME.launchDefenseMissile(event.offsetX/SHADER.canvas.width, event.offsetY/SHADER.canvas.height);
         },
         setupEvent: function() {
