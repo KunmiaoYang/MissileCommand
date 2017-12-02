@@ -3,7 +3,7 @@ var ANIMATION = function () {
     return {
         pause: true,
         start: function () {
-            lastTime = 0;
+            lastTime = performance.now();
             ANIMATION.pause = false;
             requestAnimationFrame(ANIMATION.animate);
         },
