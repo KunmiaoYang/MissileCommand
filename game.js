@@ -229,6 +229,9 @@ var GAME = function() {
                 launchedMissile[i].tMatrix[13] += distance * launchedMissile[i].direction[1];
                 launchedMissile[i].tMatrix[14] += distance * launchedMissile[i].direction[2];
                 launchedMissile[i].distance += distance;
+                launchedMissile[i].xyz[0] = launchedMissile[i].tMatrix[12];
+                launchedMissile[i].xyz[1] = launchedMissile[i].tMatrix[13];
+                launchedMissile[i].xyz[2] = launchedMissile[i].tMatrix[14];
 
                 if(launchedMissile[i].distance > launchedMissile[i].target.distance) launchedMissile[i].hit();
             }
@@ -238,7 +241,8 @@ var GAME = function() {
                 for(let j = 0, jLen = launchedMissile.length; j < jLen; j++) {
                     if(launchedMissile[j].disable || launchedMissile[j].isDefense) continue;
                     let dis = vec3.distance(airExplosions[i].xyz, launchedMissile[j].xyz);
-                    if(dis <= airExplosions[i].range) launchedMissile[j].disable = true;
+                    if(dis <= airExplosions[i].range)
+                        launchedMissile[j].disable = true;
                 }
                 airExplosions[i].timeRemain -= duration;
             }
