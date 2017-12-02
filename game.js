@@ -40,7 +40,21 @@ var GAME = function() {
     function hitTarget() {
         this.disable = true;
 
-        // TODO: destroy target
+        // destroy target
+        if((j = MODELS.array.indexOf(this.target)) > -1) MODELS.array.splice(j, 1);
+        this.target.destroy();
+    }
+    function destroyCity() {
+        this.disable = true;
+        city.count--;
+    }
+    function destroyBattery() {
+        this.disable = true;
+        let i = GAME.model.batteries.indexOf(this), missiles = GAME.model.defenseMissiles[i];
+        for(let j = 0, len = missiles.length, k; j < len; j++) {
+            if ((k = MODELS.array.indexOf(missiles[j])) > -1) MODELS.array.splice(k, 1);
+        }
+        GAME.model.defenseMissiles[i] = [];
     }
     function createAirTarget(xyz) {
         return {
@@ -57,6 +71,7 @@ var GAME = function() {
     var idMatrix = mat4.create();
     var launchedMissile = [], airExplosions = [];
     var city = {
+        count: CITY_COUNT,
         pos: [0.875, 0.75, 0.625, 0.375, 0.25, 0.125],
         tMatrixArray: [],
         rMatrixArray: []
@@ -105,7 +120,7 @@ var GAME = function() {
         level: {
             id: 1,
             attackMissileCount: 10,
-            attackMissileSpeed: 0.05,
+            attackMissileSpeed: 0.1,
             duration: 15000,
             nextMissile: 0,
             time: 0,
@@ -167,11 +182,13 @@ var GAME = function() {
             GAME.model.defenseTarget = new Array(CITY_COUNT + BATTERY_COUNT);
             for(let i = 0; i < CITY_COUNT; i++) {
                 GAME.model.cities[i].xyz = vec3.fromValues(city.pos[i], 0, 0);
+                GAME.model.cities[i].destroy = destroyCity;
                 GAME.model.defenseTarget[i] = GAME.model.cities[i];
                 MODELS.array.push(GAME.model.cities[i]);
             }
             for(let i = 0; i < BATTERY_COUNT; i++) {
                 GAME.model.batteries[i].xyz = vec3.fromValues(battery.pos[i], 0, 0);
+                GAME.model.batteries[i].destroy = destroyBattery;
                 GAME.model.defenseTarget[i + CITY_COUNT] = GAME.model.batteries[i];
                 MODELS.array.push(GAME.model.batteries[i]);
             }
