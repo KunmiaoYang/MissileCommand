@@ -9,9 +9,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3b121063-8de4-436e-8109-1ca6ec105083" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/JSONModel.js" afterPath="$PROJECT_DIR$/JSONModel.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ellipsoids.json" afterPath="$PROJECT_DIR$/ellipsoids.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game.js" afterPath="$PROJECT_DIR$/game.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -142,21 +140,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="JSONModel.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="JSONModel.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/JSONModel.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="42">
-              <caret line="2" column="24" lean-forward="true" selection-start-line="2" selection-start-column="24" selection-end-line="2" selection-end-column="24" />
+            <state relative-caret-position="336">
+              <caret line="16" column="50" lean-forward="true" selection-start-line="16" selection-start-column="50" selection-end-line="16" selection-end-column="50" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ellipsoids.json" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ellipsoids.json" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ellipsoids.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="63">
-              <caret line="3" column="0" lean-forward="true" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+            <state relative-caret-position="21">
+              <caret line="1" column="106" lean-forward="false" selection-start-line="1" selection-start-column="106" selection-end-line="1" selection-end-column="106" />
               <folding />
             </state>
           </provider>
@@ -263,9 +261,9 @@
         <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/events.js" />
         <option value="$PROJECT_DIR$/url.js" />
-        <option value="$PROJECT_DIR$/ellipsoids.json" />
         <option value="$PROJECT_DIR$/game.js" />
         <option value="$PROJECT_DIR$/JSONModel.js" />
+        <option value="$PROJECT_DIR$/ellipsoids.json" />
       </list>
     </option>
   </component>
@@ -373,12 +371,12 @@
       <workItem from="1512084713817" duration="7821000" />
       <workItem from="1512145589447" duration="5944000" />
       <workItem from="1512165338123" duration="4852000" />
-      <workItem from="1512183292728" duration="11408000" />
+      <workItem from="1512183292728" duration="11635000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="103062000" />
+    <option name="totallyTimeSpent" value="103289000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1006,14 +1004,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ellipsoids.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="63">
-          <caret line="3" column="0" lean-forward="true" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/game.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="355">
@@ -1062,8 +1052,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/JSONModel.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="2" column="24" lean-forward="true" selection-start-line="2" selection-start-column="24" selection-end-line="2" selection-end-column="24" />
+        <state relative-caret-position="336">
+          <caret line="16" column="50" lean-forward="true" selection-start-line="16" selection-start-column="50" selection-end-line="16" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/ellipsoids.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="21">
+          <caret line="1" column="106" lean-forward="false" selection-start-line="1" selection-start-column="106" selection-end-line="1" selection-end-column="106" />
           <folding />
         </state>
       </provider>
