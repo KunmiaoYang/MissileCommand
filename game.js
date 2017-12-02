@@ -52,7 +52,6 @@ var GAME = function() {
         if(this.disable) return;
         this.disable = true;
         city.count--;
-        console.log("City count: " + city.count);
     }
     function destroyBattery() {
         if(this.disable) return;
@@ -152,23 +151,24 @@ var GAME = function() {
     }
     return {
         model: {},
-        level: {
-            id: 1,
-            attackMissileCount: 10,
-            attackMissileSpeed: 0.1,
-            duration: 15000,
-            splitLimit: 3,
-            splitProbability: 0.001,
-            nextMissile: 0,
-            time: 0,
-            missileSchedule: []
-        },
+        level: {},
         initMODELS() {
             MODELS.array = [];
             for(let i = 0, len = GAME.model.background.length; i < len; i++)
                 MODELS.array.push(GAME.model.background[i]);
         },
         initGame: function () {
+            GAME.level = {
+                id: 1,
+                attackMissileCount: 10,
+                attackMissileSpeed: 0.1,
+                duration: 15000,
+                splitLimit: 3,
+                splitProbability: 0.001,
+                nextMissile: 0,
+                time: 0,
+                missileSchedule: []
+            };
             city.count = CITY_COUNT;
             for(let i = 0; i < CITY_COUNT; i++) {
                 GAME.model.cities[i].disable = false;
@@ -263,9 +263,11 @@ var GAME = function() {
             // renderTriangles();
         },
         nextLevel: function () {
+            ANIMATION.pause(5000);
             GAME.level.id++;
             GAME.level.attackMissileCount += 2;
             GAME.level.attackMissileSpeed += 0.02;
+            console.log("New level: " + GAME.level.id);
             GAME.initLevel();
             GAME.initMODELS();
             GAME.initDefenseTarget();
@@ -273,7 +275,7 @@ var GAME = function() {
             GAME.initAttackMissile();
         },
         over: function () {
-            ANIMATION.pause = true;
+            ANIMATION.stop = true;
             renderTriangles();
         },
         launchDefenseMissile: function(ratioX, ratioY) {
