@@ -147,8 +147,9 @@ var GAME = function() {
     var UFO = {
         material: MODELS.createMaterial(),
         rMatrix: mat4.scale(mat4.create(), idMatrix, [UFO_SCALE, UFO_SCALE, UFO_SCALE]),
-        dummySplit: function () {
-            // Do nothing
+        disappear: function () {
+            this.disable = true;
+            GAME.model.UFO.models.splice(GAME.model.UFO.models.indexOf(this), 1);
         },
         create: function(xyz) {
             let spaceship = MODELS.copyModel(GAME.model.UFO.prototype,
@@ -240,6 +241,7 @@ var GAME = function() {
                 missiles[i] = attackMissile.create([Math.random(), ATTACK_MISSILE_HEIGHT, 0]);
             }
             GAME.model.attackMissiles = missiles;
+            GAME.model.UFO.models = [];
         },
         initDefenseMissile: function () {
             let missiles = [];
@@ -330,7 +332,7 @@ var GAME = function() {
             SKECHUP_MODEL.loadModel(SHADER.gl, URL.UFOModel, function (model) {
                 GAME.model.UFO = {
                     prototype: model,
-                    launchedMissile: launchedMissile
+                    models: []
                 };
             });
         },
@@ -350,6 +352,7 @@ var GAME = function() {
             GAME.level.attackMissileCount += 2;
             GAME.level.attackMissileSpeed += 0.02;
             GAME.level.spaceshipSpeed += 0.02;
+            console.log(launchedMissile);
             console.log("Level: " + GAME.level.id);
             GAME.initLevel();
             GAME.initMODELS();
@@ -432,7 +435,6 @@ var GAME = function() {
             // launch attack missiles
             for(let len = level.attackMissileCount, defenseTarget = GAME.model.defenseTarget;
                 level.nextMissile < len && level.missileSchedule[level.nextMissile] < level.time; level.nextMissile++) {
-                console.log(level.time + ": " + level.nextMissile + ": speed: " + level.attackMissileSpeed);
                 let tar = defenseTarget[Math.floor(Math.random()*defenseTarget.length)];
                 launch(GAME.model.attackMissiles.pop(), level.attackMissileSpeed, tar, hitTarget);
             }
@@ -442,11 +444,12 @@ var GAME = function() {
                 let xyz = [Math.random() < 0.5 ? -UFO_OFFSET : 1 + UFO_OFFSET, Math.random()*0.5 + 0.5, 0],
                     spaceship = UFO.create(xyz),
                     tar = createAirTarget([1.0 - xyz[0], xyz[1], 0]);
-                launch(spaceship, level.spaceshipSpeed, tar, hitAir);
+                GAME.model.UFO.models.push(spaceship);
+                launch(spaceship, level.spaceshipSpeed, tar, UFO.disappear);
             }
 
             // next level
-            if(0 == launchedMissile.length && level.nextMissile >= level.attackMissileCount) GAME.nextLevel();
+            if(GAME.model.UFO.models.length >= launchedMissile.length && level.nextMissile >= level.attackMissileCount) GAME.nextLevel();
 
             // game over
             if(0 >= city.count) GAME.over();
