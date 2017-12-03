@@ -16,6 +16,7 @@ var ANIMATION = function () {
                 lastTime = now;
                 GAME.update(duration);
                 if(!ANIMATION.stop) renderTriangles();
+                renderInfo();
             }
             requestAnimationFrame(ANIMATION.animate);
         },

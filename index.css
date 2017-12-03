@@ -1,3 +1,11 @@
 .config {
     visibility: hidden;
 }
+
+.info_value {
+    width: 100px;
+}
+
+.info {
+    font-weight:bold;
+}

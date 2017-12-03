@@ -36,6 +36,12 @@ function renderTriangles() {
     }
 } // end render triangles
 
+// render info
+function renderInfo() {
+    $('#level').text(GAME.level.id);
+    $('#score').text(GAME.score);
+}
+
 // set up on load event for canvas
 function setupOnLoad() {
     $('canvas').on('loadData', function () {
