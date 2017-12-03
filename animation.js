@@ -1,6 +1,7 @@
 var ANIMATION = function () {
     var lastTime = 0;
-    var restartTime = 0;
+    var callTime = 0;
+    var node;
     return {
         stop: true,
         timeStart: 0,
@@ -20,13 +21,13 @@ var ANIMATION = function () {
             }
             requestAnimationFrame(ANIMATION.animate);
         },
-        pause: function (timeRemain) {
-            ANIMATION.stop = true;
-            restartTime = performance.now() + timeRemain;
+        delayPlay: function (timeRemain, media) {
+            node = media;
+            callTime = performance.now() + timeRemain;
             requestAnimationFrame(ANIMATION.sleep);
         },
         sleep: function (now) {
-            if(now > restartTime) ANIMATION.start();
+            if(now > callTime) node.play();
             else requestAnimationFrame(ANIMATION.sleep);
         }
     }

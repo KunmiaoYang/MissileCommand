@@ -372,6 +372,7 @@ var GAME = function() {
             SOUND.gamePlay.load();
             SOUND.gamePlay.play();
             ANIMATION.start();
+            $('#play_game').hide();
         },
         endLevel: function () {
             ANIMATION.stop = true;
@@ -380,9 +381,7 @@ var GAME = function() {
             SOUND.missionComplete.play();
             city.countScore();
             battery.countScore();
-            $('#play_game').text("Next Level");
-            $('#play_game').attr('onclick',"GAME.nextLevel()");
-            // alert("Mission Complete!\nScore: " + GAME.score);
+            $('#play_game').show().text("Next Level").attr('onclick',"GAME.nextLevel()");
         },
         nextLevel: function () {
             GAME.level.id++;
@@ -402,10 +401,17 @@ var GAME = function() {
             SOUND.gamePlay.load();
             SOUND.gamePlay.play();
             ANIMATION.start();
+            $('#play_game').hide();
         },
         over: function () {
             ANIMATION.stop = true;
+            SOUND.UFO.pause();
+            SOUND.gamePlay.pause();
+            SOUND.gameOver.play();
+            SOUND.gamePlay.load();
+            ANIMATION.delayPlay(8000, SOUND.intro);
             renderTriangles();
+            $('#play_game').show().text("Play").attr('onclick',"GAME.play()");
         },
         launchDefenseMissile: function(ratioX, ratioY) {
             let xyz = vec3.fromValues(CANVAS_ORIGIN[0] - WIDTH * ratioX, CANVAS_ORIGIN[1] - HEIGHT * ratioY, 0),
