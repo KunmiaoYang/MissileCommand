@@ -34,12 +34,14 @@ var GAME = function() {
 
         // create explosion
         createExplosion(this.target.xyz);
+        SOUND.explosion.play();
     }
     function hitTarget() {
         this.disable = true;
 
         // create explosion
         createExplosion(this.target.xyz);
+        SOUND.explosion.play();
 
         // destroy target
         if((j = MODELS.array.indexOf(this.target)) > -1) MODELS.array.splice(j, 1);
@@ -113,7 +115,9 @@ var GAME = function() {
         rMatrixArray: []
     }
     var defenseMissile = {
-        material: MODELS.createMaterial(),
+        material: {
+            ambient: [0.1,0.1,0.1], diffuse: [0,0,1], specular: [0,0,0], n:1
+        },
         xPos: [-0.015, 0, 0.015],
         zPos: [-0.015, 0, 0.015],
         xyz: [],
@@ -121,7 +125,9 @@ var GAME = function() {
         rMatrixArray: []
     };
     var attackMissile = {
-        material: MODELS.createMaterial(),
+        material: {
+            ambient: [0.1,0.1,0.1], diffuse: [1,0,0], specular: [0,0,0], n:1
+        },
         rMatrix: mat4.scale(mat4.create(), idMatrix, [MISSILE_SCALE, -MISSILE_SCALE, MISSILE_SCALE]),
         splitMissile: function() {
             console.log("Split missile: " + this.xyz[1]);
@@ -166,6 +172,7 @@ var GAME = function() {
             GAME.score += UFO_SCORE;
             this.disable = true;
             GAME.model.UFO.models.splice(GAME.model.UFO.models.indexOf(this), 1);
+            SOUND.UFO.pause();
         },
         create: function(xyz) {
             let spaceship = MODELS.copyModel(GAME.model.UFO.prototype,
@@ -182,8 +189,6 @@ var GAME = function() {
             return spaceship;
         }
     };
-    defenseMissile.material.diffuse = [0,0,1];
-    attackMissile.material.diffuse = [1,0,0];
     for(let i = 0; i < CITY_COUNT; i++) {
         // Init cities
         city.rMatrixArray.push(mat4.scale(mat4.create(), idMatrix, [CITY_SCALE, CITY_SCALE, CITY_SCALE]));
@@ -363,13 +368,23 @@ var GAME = function() {
             GAME.initDefenseTarget();
             GAME.initDefenseMissile();
             GAME.initAttackMissile();
+            SOUND.intro.pause();
+            SOUND.gamePlay.load();
+            SOUND.gamePlay.play();
             ANIMATION.start();
-            // renderTriangles();
         },
-        nextLevel: function () {
+        endLevel: function () {
+            ANIMATION.stop = true;
+            SOUND.gamePlay.pause();
+            SOUND.missionComplete.load();
+            SOUND.missionComplete.play();
             city.countScore();
             battery.countScore();
-            ANIMATION.pause(5000);
+            $('#play_game').text("Next Level");
+            $('#play_game').attr('onclick',"GAME.nextLevel()");
+            // alert("Mission Complete!\nScore: " + GAME.score);
+        },
+        nextLevel: function () {
             GAME.level.id++;
             GAME.level.splitProbability += 0.0002;
             GAME.level.spaceshipProbability += 0.0002;
@@ -383,6 +398,10 @@ var GAME = function() {
             GAME.initDefenseTarget();
             GAME.initDefenseMissile();
             GAME.initAttackMissile();
+            SOUND.missionComplete.pause();
+            SOUND.gamePlay.load();
+            SOUND.gamePlay.play();
+            ANIMATION.start();
         },
         over: function () {
             ANIMATION.stop = true;
@@ -404,6 +423,7 @@ var GAME = function() {
             if(-1 === batteryIndex) return;
             let missile = missiles[batteryIndex].pop();
             launch(missile, DEFENSE_MISSILE_SPEED, tar, hitAir);
+            SOUND.launch.play();
         },
         update: function(duration) {
             let seconds = duration/1000, level = GAME.level;
@@ -474,6 +494,7 @@ var GAME = function() {
                     tar = createAirTarget([1.0 - xyz[0], xyz[1], 0]);
                 GAME.model.UFO.models.push(spaceship);
                 launch(spaceship, level.spaceshipSpeed, tar, UFO.disappear);
+                SOUND.UFO.play();
             }
 
             // next level
@@ -485,7 +506,7 @@ var GAME = function() {
                         break;
                     }
                 }
-                if(isEnd) GAME.nextLevel();
+                if(isEnd) GAME.endLevel();
             }
 
             // game over

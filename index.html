@@ -8,15 +8,15 @@
   </head>
 
   <body onload="main();">
-  <table>
-    <tr>
-      <td class="info">Level: </td><td id="level" class="info info_value">1</td>
-      <td class="info">Score: </td><td id="score" class="info info_value">0</td>
-    </tr>
-  </table>
+    <table>
+      <tr>
+        <td class="info">Level: </td><td id="level" class="info info_value">1</td>
+        <td class="info">Score: </td><td id="score" class="info info_value">0</td>
+      </tr>
+    </table>
     <canvas id="myWebGLCanvas" width="512" height="512"></canvas>
     <br>
-    <button onclick="GAME.play()" style="height: 25px;width: 500px;">Play</button><br>
+    <button id="play_game" onclick="GAME.play()" style="height: 25px;width: 500px;">Play</button><br>
     <table class="config">
       <tr>
         <td></td>
@@ -57,6 +57,25 @@
     </table>
     <label class="config" for="LightsURL">Lights JSON URL</label>
     <input class="config" type = "text" id="LightsURL" value="https://kunmiaoyang.github.io/Program4/model/lights.json" style="width: 400px;">
+    <!--load sounds-->
+    <audio id="sound_intro" autoplay loop controls>
+      <source src="sound/intro.mp3" type="audio/mp3">
+    </audio>
+    <audio id="sound_play" loop controls>
+      <source src="sound/play.mp3" type="audio/mp3">
+    </audio>
+    <audio id="sound_mission_complete" loop controls>
+      <source src="sound/mission_complete.mp3" type="audio/mp3">
+    </audio>
+    <audio id="sound_UFO" controls>
+      <source src="sound/UFO.mp3" type="audio/mp3">
+    </audio>
+    <audio id="sound_launch" controls>
+      <source src="sound/launch_missile.wav" type="audio/wav">
+    </audio>
+    <audio id="sound_explosion" controls>
+      <source src="sound/explosion.wav" type="audio/wav">
+    </audio>
     <!--load scripts-->
     <script type="text/javascript" src="jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="gl-matrix-min.js"></script>
@@ -67,6 +86,7 @@
     <script type="text/javascript" src="models.js"></script>
     <script type="text/javascript" src="JSONModel.js"></script>
     <script type="text/javascript" src="SkechupModel.js"></script>
+    <script type="text/javascript" src="sound.js"></script>
     <script type="text/javascript" src="shader.js"></script>
     <script type="text/javascript" src="events.js"></script>
     <script type="text/javascript" src="camera.js"></script>

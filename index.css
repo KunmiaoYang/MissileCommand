@@ -9,3 +9,7 @@
 .info {
     font-weight:bold;
 }
+
+audio {
+    visibility: hidden;
+}
