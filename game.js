@@ -389,6 +389,7 @@ var GAME = function() {
             GAME.level.spaceshipProbability += 0.0002;
             GAME.level.attackMissileSpeed += 0.02;
             GAME.level.spaceshipSpeed += 0.02;
+            GAME.level.attackMissileCount += 1;
             console.log(launchedMissile);
             console.log(GAME.model.UFO.models);
             console.log("Level: " + GAME.level.id);

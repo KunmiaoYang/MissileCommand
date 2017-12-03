@@ -40,15 +40,16 @@ function renderTriangles() {
 function renderInfo() {
     $('#level').text(GAME.level.id);
     $('#score').text(GAME.score);
+    $('#incoming').text(GAME.level.attackMissileCount - GAME.level.nextMissile);
 }
 
 // set up on load event for canvas
 function setupOnLoad() {
     $('canvas').on('loadData', function () {
         if (!LIGHTS.ready) {
-            console.log('LIGHTS not ready!');
+            console.log('Loading LIGHTS...');
         } else if(SKECHUP_MODEL.incomplete > 0) {
-            console.log('SKECHUP_MODEL not ready!');
+            console.log('Loading SKECHUP MODEL...');
         } else {
             console.log('All model ready!');
             SHADER.setupShaders(); // setup the webGL shaders
