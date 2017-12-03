@@ -4,7 +4,7 @@ var GAME = function() {
     const CITY_SCALE = 0.0025, CITY_COUNT = 6,
         BATTERY_SCALE = 0.05, BATTERY_COUNT = 3,
         MOUNTAIN_SCALE = 0.05, MOUNTAIN_HEIGHT_LIMIT = 0.05,
-        MISSILE_SCALE = 0.01, UFO_SCALE = 0.02,
+        MISSILE_SCALE = 0.01, UFO_SCALE = 0.02, UFO_OFFSET = 0.2,
         DEFENSE_MISSILE_SPEED = 1.5, ATTACK_MISSILE_HEIGHT = 1.2,
         EXPLOSION_INITIAL_RANGE = 0.01, EXPLOSION_RANGE = 0.04,
         EXPLOSION_GROW_SPEED = 0.0025, EXPLOSION_DURATION = 1500;
@@ -144,6 +144,25 @@ var GAME = function() {
             return missile;
         }
     };
+    var UFO = {
+        material: MODELS.createMaterial(),
+        rMatrix: mat4.scale(mat4.create(), idMatrix, [UFO_SCALE, UFO_SCALE, UFO_SCALE]),
+        dummySplit: function () {
+            // Do nothing
+        },
+        create: function(xyz) {
+            let spaceship = MODELS.copyModel(GAME.model.UFO.prototype,
+                mat4.clone(UFO.rMatrix),
+                mat4.fromTranslation(mat4.create(), xyz));
+            spaceship.xyz = xyz;
+            spaceship.direction = vec3.fromValues(xyz[0] < 0.5 ? 1 : -1, 0, 0);
+            spaceship.material = UFO.material;
+            spaceship.split = attackMissile.splitMissile;
+            spaceship.isDefense = false;
+            MODELS.array.push(spaceship);
+            return spaceship;
+        }
+    };
     defenseMissile.material.diffuse = [0,0,1];
     attackMissile.material.diffuse = [1,0,0];
     for(let i = 0; i < CITY_COUNT; i++) {
@@ -191,9 +210,11 @@ var GAME = function() {
                 id: 1,
                 attackMissileCount: 10,
                 attackMissileSpeed: 0.1,
+                spaceshipSpeed: 0.1,
                 duration: 15000,
                 splitLimit: 3,
                 splitProbability: 0.001,
+                spaceshipProbability: 0.004,
                 nextMissile: 0,
                 time: 0,
                 missileSchedule: []
@@ -306,6 +327,12 @@ var GAME = function() {
                     GAME.model.mountainModel.mountains[i] = MODELS.copyModel(model, mountain.rMatrixArray[i], mountain.tMatrixArray[i]);
                 }
             });
+            SKECHUP_MODEL.loadModel(SHADER.gl, URL.UFOModel, function (model) {
+                GAME.model.UFO = {
+                    prototype: model,
+                    launchedMissile: launchedMissile
+                };
+            });
         },
         play: function () {
             GAME.initGame();
@@ -322,7 +349,8 @@ var GAME = function() {
             GAME.level.id++;
             GAME.level.attackMissileCount += 2;
             GAME.level.attackMissileSpeed += 0.02;
-            console.log("New level: " + GAME.level.id);
+            GAME.level.spaceshipSpeed += 0.02;
+            console.log("Level: " + GAME.level.id);
             GAME.initLevel();
             GAME.initMODELS();
             GAME.initDefenseTarget();
@@ -407,6 +435,14 @@ var GAME = function() {
                 console.log(level.time + ": " + level.nextMissile + ": speed: " + level.attackMissileSpeed);
                 let tar = defenseTarget[Math.floor(Math.random()*defenseTarget.length)];
                 launch(GAME.model.attackMissiles.pop(), level.attackMissileSpeed, tar, hitTarget);
+            }
+
+            // launch space ship
+            if(Math.random() < GAME.level.spaceshipProbability) {
+                let xyz = [Math.random() < 0.5 ? -UFO_OFFSET : 1 + UFO_OFFSET, Math.random()*0.5 + 0.5, 0],
+                    spaceship = UFO.create(xyz),
+                    tar = createAirTarget([1.0 - xyz[0], xyz[1], 0]);
+                launch(spaceship, level.spaceshipSpeed, tar, hitAir);
             }
 
             // next level
