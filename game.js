@@ -4,7 +4,7 @@ var GAME = function() {
     const CITY_SCALE = 0.0025, CITY_COUNT = 6, CITY_SCORE = 20,
         BATTERY_SCALE = 0.05, BATTERY_COUNT = 3, BATTERY_SCORE = 10,
         MOUNTAIN_SCALE = 0.05, MOUNTAIN_HEIGHT_LIMIT = 0.05,
-        MISSILE_SCALE = 0.01, MISSILE_SCORE = 1,
+        MISSILE_SCALE = 0.015, MISSILE_SCORE = 1,
         UFO_SCALE = 0.02, UFO_OFFSET = 0.2, UFO_SCORE = 5,
         DEFENSE_MISSILE_SPEED = 1.5, ATTACK_MISSILE_HEIGHT = 1.2,
         EXPLOSION_RANGE = 0.04, EXPLOSION_DURATION = 2000;
@@ -122,7 +122,7 @@ var GAME = function() {
     }
     var defenseMissile = {
         material: {
-            ambient: [0.1,0.1,0.1], diffuse: [1.0, 1.0, 0], specular: [0.3,0.3,0.3], n:1, textureMode: 0
+            ambient: [0.1,0.1,0.1], diffuse: [1.0, 1.0, 0], specular: [0.5,0.5,0.5], n:1, textureMode: 0
         },
         xPos: [-0.015, 0, 0.015],
         zPos: [-0.015, 0, 0.015],
@@ -132,7 +132,7 @@ var GAME = function() {
     };
     var attackMissile = {
         material: {
-            ambient: [0.1,0.1,0.1], diffuse: [1,0,0], specular: [0,0,0], n:1, textureMode: 0
+            ambient: [0.1,0.1,0.1], diffuse: [1,0,0], specular: [0.5,0.5,0.5], n:1, textureMode: 0
         },
         rMatrix: mat4.scale(mat4.create(), idMatrix, [MISSILE_SCALE, -MISSILE_SCALE, MISSILE_SCALE]),
         splitMissile: function() {
@@ -168,7 +168,9 @@ var GAME = function() {
         }
     };
     var UFO = {
-        material: MODELS.createMaterial(),
+        material: {
+            ambient: [0.1,0.1,0.1], diffuse: [1,0,0], specular: [0.5,0.5,0.5], n:1, textureMode: 0
+        },
         rMatrix: mat4.scale(mat4.create(), idMatrix, [UFO_SCALE, UFO_SCALE, UFO_SCALE]),
         disappear: function () {
             this.disable = true;
@@ -246,7 +248,7 @@ var GAME = function() {
                 duration: 15000,
                 splitLimit: 3,
                 splitProbability: 0.0005,
-                spaceshipProbability: 0.001,
+                spaceshipProbability: 0.101,
                 nextMissile: 0,
                 time: 0,
                 missileSchedule: []

@@ -2,7 +2,7 @@ var URL = function () {
     return {
         triangles: 'model/triangles.json',
         ellipsoids: 'model/ellipsoids.json',
-        lights: 'https://kunmiaoyang.github.io/Program4/model/lights.json',
+        lights: '/model/lights.json',
         cityModel: 'https://kunmiaoyang.github.io/Program4/model/city.dae',
         batteryModel: 'https://kunmiaoyang.github.io/Program4/model/battery.dae',
         mountainModel: 'https://kunmiaoyang.github.io/Program4/model/mountain.dae',
