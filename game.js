@@ -2,8 +2,8 @@ var GAME = function() {
     const WIDTH = 1.3, HEIGHT = 1.3,
         CANVAS_ORIGIN = [1.15, 1.15, 0];
     const CITY_SCALE = 0.0025, CITY_COUNT = 6, CITY_SCORE = 20,
-        BATTERY_SCALE = 0.05, BATTERY_COUNT = 3, BATTERY_SCORE = 10,
-        MOUNTAIN_SCALE = 0.05, MOUNTAIN_HEIGHT_LIMIT = 0.05,
+        BATTERY_SCALE = 0.0025, BATTERY_COUNT = 3, BATTERY_SCORE = 10,
+        MOUNTAIN_SCALE = 0.05, TARGET_HEIGHT_RANGE = 0.15,
         MISSILE_SCALE = 0.015, MISSILE_SCORE = 1,
         UFO_SCALE = 0.02, UFO_OFFSET = 0.2, UFO_SCORE = 5,
         DEFENSE_MISSILE_SPEED = 1.5, ATTACK_MISSILE_HEIGHT = 1.2,
@@ -93,7 +93,7 @@ var GAME = function() {
         count: CITY_COUNT,
         pos: [0.875, 0.75, 0.625, 0.375, 0.25, 0.125],
         material: {
-            ambient: [0.1,0.1,0.1], diffuse: [0.278, 0.278, 0.957], specular: [0.0,0.0,0.0], n:1, textureMode: 0
+            ambient: [0.1,0.1,0.1], diffuse: [0.278, 0.278, 0.957], specular: [0.3,0.3,0.3], n:1, textureMode: 0
         },
         tMatrixArray: [],
         rMatrixArray: [],
@@ -301,28 +301,29 @@ var GAME = function() {
                 // Init city models
                 let targetModel =  GAME.model.cities[i],
                     mountainModel = GAME.model.mountainModel.mountains[i],
-                    height = Math.random() * MOUNTAIN_HEIGHT_LIMIT;
+                    height = Math.random() * TARGET_HEIGHT_RANGE;
                 targetModel.tMatrix[13] = height;
                 mountainModel.tMatrix[13] = height;
                 targetModel.xyz = vec3.fromValues(city.pos[i], height, 0);
                 targetModel.destroy = destroyCity;
                 GAME.model.defenseTarget[i] = targetModel;
                 if(!targetModel.disable) MODELS.array.push(targetModel);
-                MODELS.array.push(mountainModel);
+                // MODELS.array.push(mountainModel);
             }
             battery.count = BATTERY_COUNT;
             for(let i = 0; i < BATTERY_COUNT; i++) {
                 // Init battery models
                 let targetModel =  GAME.model.batteries[i],
                     mountainModel = GAME.model.mountainModel.mountains[i + CITY_COUNT],
-                    height = Math.random() * MOUNTAIN_HEIGHT_LIMIT;
+                    height = Math.random() * TARGET_HEIGHT_RANGE;
                 targetModel.tMatrix[13] = height;
                 mountainModel.tMatrix[13] = height;
                 targetModel.xyz = vec3.fromValues(battery.pos[i], height, 0);
                 targetModel.destroy = destroyBattery;
                 targetModel.disable = false;
                 GAME.model.defenseTarget[i + CITY_COUNT] = targetModel;
-                MODELS.array.push(targetModel, mountainModel);
+                // MODELS.array.push(targetModel, mountainModel);
+                MODELS.array.push(targetModel);
             }
         },
         loadModels: function() {
@@ -505,7 +506,7 @@ var GAME = function() {
             }
 
             // launch space ship
-            if(Math.random() < GAME.level.spaceshipProbability) {
+            if(level.nextMissile < level.attackMissileCount && Math.random() < GAME.level.spaceshipProbability) {
                 let xyz = [Math.random() < 0.5 ? -UFO_OFFSET : 1 + UFO_OFFSET, Math.random()*0.5 + 0.5, 0],
                     spaceship = UFO.create(xyz),
                     tar = createAirTarget([1.0 - xyz[0], xyz[1], 0]);
