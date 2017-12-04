@@ -3,7 +3,7 @@ var GAME = function() {
         CANVAS_ORIGIN = [1.15, 1.15, 0];
     const CITY_SCALE = 0.0025, CITY_COUNT = 6, CITY_SCORE = 20,
         BATTERY_SCALE = 0.0025, BATTERY_COUNT = 3, BATTERY_SCORE = 10,
-        TARGET_HEIGHT_RANGE = 0.15,
+        TARGET_HEIGHT_RANGE = 0.15, TARGET_FLOAT_AMPLITUDE = 0.01, TARGET_FLOAT_PERIOD = 3000,
         MISSILE_SCALE = 0.015, MISSILE_SCORE = 1,
         UFO_SCALE = 0.02, UFO_OFFSET = 0.2, UFO_SCORE = 5,
         DEFENSE_MISSILE_SPEED = 1.5, ATTACK_MISSILE_HEIGHT = 1.2,
@@ -286,6 +286,8 @@ var GAME = function() {
                 // Init city models
                 let targetModel =  GAME.model.cities[i],
                     height = Math.random() * TARGET_HEIGHT_RANGE;
+                targetModel.phase = Math.random()*2*Math.PI;
+                targetModel.height = height;
                 targetModel.tMatrix[13] = height;
                 targetModel.xyz = vec3.fromValues(city.pos[i], height, 0);
                 targetModel.destroy = destroyCity;
@@ -298,6 +300,8 @@ var GAME = function() {
                 // Init battery models
                 let targetModel =  GAME.model.batteries[i],
                     height = Math.random() * TARGET_HEIGHT_RANGE;
+                targetModel.phase = Math.random()*2*Math.PI;
+                targetModel.height = height;
                 targetModel.tMatrix[13] = height;
                 targetModel.xyz = vec3.fromValues(battery.pos[i], height, 0);
                 targetModel.destroy = destroyBattery;
@@ -413,7 +417,7 @@ var GAME = function() {
             launch(missile, DEFENSE_MISSILE_SPEED, tar, hitAir);
             SOUND.launch.play();
         },
-        update: function(duration) {
+        update: function(duration, now) {
             let seconds = duration/1000, level = GAME.level;
             GAME.level.time += duration;
 
@@ -483,6 +487,12 @@ var GAME = function() {
                 GAME.model.UFO.models.push(spaceship);
                 launch(spaceship, level.spaceshipSpeed, tar, UFO.disappear);
                 SOUND.UFO.play();
+            }
+
+            // update city height
+            for(let i = 0; i < CITY_COUNT; i++) {
+                let curCity = GAME.model.cities[i];
+                curCity.tMatrix[13] = curCity.height + Math.sin(now * 2 * Math.PI / TARGET_FLOAT_PERIOD + curCity.phase) * TARGET_FLOAT_AMPLITUDE;
             }
 
             // next level

@@ -5,7 +5,6 @@ var URL = function () {
         lights: 'model/lights.json',
         cityModel: 'model/city.dae',
         batteryModel: 'model/battery.dae',
-        mountainModel: 'https://kunmiaoyang.github.io/Program4/model/mountain.dae',
         missileModel: 'https://kunmiaoyang.github.io/Program4/model/missile.dae',
         UFOModel: 'https://kunmiaoyang.github.io/Program4/model/UFO.dae',
         img: {
