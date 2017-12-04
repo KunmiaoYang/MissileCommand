@@ -93,7 +93,7 @@ var GAME = function() {
         count: CITY_COUNT,
         pos: [0.875, 0.75, 0.625, 0.375, 0.25, 0.125],
         material: {
-            ambient: [0.1,0.1,0.1], diffuse: [0.278, 0.278, 0.957], specular: [0.3,0.3,0.3], n:1, textureMode: 0
+            ambient: [0.1,0.1,0.1], diffuse: [0.7647, 0.7647, 0.7647], specular: [0.3,0.3,0.3], n:1, textureMode: 0
         },
         tMatrixArray: [],
         rMatrixArray: [],
@@ -287,7 +287,6 @@ var GAME = function() {
                 let targetModel =  GAME.model.cities[i],
                     height = Math.random() * TARGET_HEIGHT_RANGE;
                 targetModel.phase = Math.random()*2*Math.PI;
-                targetModel.height = height;
                 targetModel.tMatrix[13] = height;
                 targetModel.xyz = vec3.fromValues(city.pos[i], height, 0);
                 targetModel.destroy = destroyCity;
@@ -301,7 +300,6 @@ var GAME = function() {
                 let targetModel =  GAME.model.batteries[i],
                     height = Math.random() * TARGET_HEIGHT_RANGE;
                 targetModel.phase = Math.random()*2*Math.PI;
-                targetModel.height = height;
                 targetModel.tMatrix[13] = height;
                 targetModel.xyz = vec3.fromValues(battery.pos[i], height, 0);
                 targetModel.destroy = destroyBattery;
@@ -489,10 +487,19 @@ var GAME = function() {
                 SOUND.UFO.play();
             }
 
-            // update city height
+            // update target height
             for(let i = 0; i < CITY_COUNT; i++) {
                 let curCity = GAME.model.cities[i];
-                curCity.tMatrix[13] = curCity.height + Math.sin(now * 2 * Math.PI / TARGET_FLOAT_PERIOD + curCity.phase) * TARGET_FLOAT_AMPLITUDE;
+                curCity.tMatrix[13] = curCity.xyz[1] + Math.sin(now * 2 * Math.PI / TARGET_FLOAT_PERIOD + curCity.phase) * TARGET_FLOAT_AMPLITUDE;
+            }
+            for(let i = 0; i < BATTERY_COUNT; i++) {
+                let curBattery = GAME.model.batteries[i];
+                if(curBattery.disable) continue;
+                let offset = Math.sin(now * 2 * Math.PI / TARGET_FLOAT_PERIOD + curBattery.phase) * TARGET_FLOAT_AMPLITUDE;
+                curBattery.tMatrix[13] = curBattery.xyz[1] + offset;
+                for(let j = 0, len = GAME.model.defenseMissiles[i].length; j < len; j++) {
+                    GAME.model.defenseMissiles[i][j].tMatrix[13] = curBattery.tMatrix[13];
+                }
             }
 
             // next level
