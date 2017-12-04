@@ -3,7 +3,7 @@ var GAME = function() {
         CANVAS_ORIGIN = [1.15, 1.15, 0];
     const CITY_SCALE = 0.0025, CITY_COUNT = 6, CITY_SCORE = 20,
         BATTERY_SCALE = 0.0025, BATTERY_COUNT = 3, BATTERY_SCORE = 10,
-        MOUNTAIN_SCALE = 0.05, TARGET_HEIGHT_RANGE = 0.15,
+        TARGET_HEIGHT_RANGE = 0.15,
         MISSILE_SCALE = 0.015, MISSILE_SCORE = 1,
         UFO_SCALE = 0.02, UFO_OFFSET = 0.2, UFO_SCORE = 5,
         DEFENSE_MISSILE_SPEED = 1.5, ATTACK_MISSILE_HEIGHT = 1.2,
@@ -113,13 +113,6 @@ var GAME = function() {
             for(let i = 0; i < BATTERY_COUNT; i++) if(!GAME.model.batteries[i].disable) GAME.score += BATTERY_SCORE;
         }
     };
-    var mountain = {
-        material: {
-            ambient: [0.1,0.1,0.1], diffuse: [0.278, 0.278, 0.957], specular: [0,0,0], n:1, textureMode: 0
-        },
-        tMatrixArray: [],
-        rMatrixArray: []
-    }
     var defenseMissile = {
         material: {
             ambient: [0.1,0.1,0.1], diffuse: [1.0, 1.0, 0], specular: [0.5,0.5,0.5], n:1, textureMode: 0
@@ -201,19 +194,11 @@ var GAME = function() {
         // Init cities
         city.rMatrixArray.push(mat4.scale(mat4.create(), idMatrix, [CITY_SCALE, CITY_SCALE, CITY_SCALE]));
         city.tMatrixArray.push(mat4.fromTranslation(mat4.create(), [city.pos[i], 0, 0]));
-
-        // Init mountains
-        mountain.rMatrixArray.push(mat4.scale(mat4.create(), idMatrix, [MOUNTAIN_SCALE, MOUNTAIN_SCALE, MOUNTAIN_SCALE]));
-        mountain.tMatrixArray.push(mat4.fromTranslation(mat4.create(), [city.pos[i], 0, 0]));
     }
     for(let i = 0; i < BATTERY_COUNT; i++) {
         // Init batteries
         battery.rMatrixArray.push(mat4.scale(mat4.create(), idMatrix, [BATTERY_SCALE, BATTERY_SCALE, BATTERY_SCALE]));
         battery.tMatrixArray.push(mat4.fromTranslation(mat4.create(), [battery.pos[i], 0, 0]));
-
-        // Init mountains
-        mountain.rMatrixArray.push(mat4.scale(mat4.create(), idMatrix, [MOUNTAIN_SCALE, MOUNTAIN_SCALE, MOUNTAIN_SCALE]));
-        mountain.tMatrixArray.push(mat4.fromTranslation(mat4.create(), [battery.pos[i], 0, 0]));
 
         // Init defense missiles
         defenseMissile.xyz[i] = [];
@@ -300,10 +285,8 @@ var GAME = function() {
             for(let i = 0; i < CITY_COUNT; i++) {
                 // Init city models
                 let targetModel =  GAME.model.cities[i],
-                    mountainModel = GAME.model.mountainModel.mountains[i],
                     height = Math.random() * TARGET_HEIGHT_RANGE;
                 targetModel.tMatrix[13] = height;
-                mountainModel.tMatrix[13] = height;
                 targetModel.xyz = vec3.fromValues(city.pos[i], height, 0);
                 targetModel.destroy = destroyCity;
                 GAME.model.defenseTarget[i] = targetModel;
@@ -314,15 +297,12 @@ var GAME = function() {
             for(let i = 0; i < BATTERY_COUNT; i++) {
                 // Init battery models
                 let targetModel =  GAME.model.batteries[i],
-                    mountainModel = GAME.model.mountainModel.mountains[i + CITY_COUNT],
                     height = Math.random() * TARGET_HEIGHT_RANGE;
                 targetModel.tMatrix[13] = height;
-                mountainModel.tMatrix[13] = height;
                 targetModel.xyz = vec3.fromValues(battery.pos[i], height, 0);
                 targetModel.destroy = destroyBattery;
                 targetModel.disable = false;
                 GAME.model.defenseTarget[i + CITY_COUNT] = targetModel;
-                // MODELS.array.push(targetModel, mountainModel);
                 MODELS.array.push(targetModel);
             }
         },
@@ -354,16 +334,6 @@ var GAME = function() {
                     prototype: model,
                     launchedMissile: launchedMissile
                 };
-            });
-            SKECHUP_MODEL.loadModel(SHADER.gl, URL.mountainModel, function (model) {
-                model.material = mountain.material;
-                GAME.model.mountainModel = {
-                    prototype: model,
-                    mountains: []
-                };
-                for(let i = 0; i < CITY_COUNT + BATTERY_COUNT; i++) {
-                    GAME.model.mountainModel.mountains[i] = MODELS.copyModel(model, mountain.rMatrixArray[i], mountain.tMatrixArray[i]);
-                }
             });
             SKECHUP_MODEL.loadModel(SHADER.gl, URL.UFOModel, function (model) {
                 GAME.model.UFO = {
