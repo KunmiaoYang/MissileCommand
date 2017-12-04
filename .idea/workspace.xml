@@ -9,22 +9,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3b121063-8de4-436e-8109-1ca6ec105083" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/image.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/JSONModel.js" afterPath="$PROJECT_DIR$/JSONModel.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SkechupModel.js" afterPath="$PROJECT_DIR$/SkechupModel.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/animation.js" afterPath="$PROJECT_DIR$/animation.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/camera.js" afterPath="$PROJECT_DIR$/camera.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dom.js" afterPath="$PROJECT_DIR$/dom.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/events.js" afterPath="$PROJECT_DIR$/events.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game.js" afterPath="$PROJECT_DIR$/game.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/ellipsoids.json" afterPath="$PROJECT_DIR$/model/ellipsoids.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/triangles.json" afterPath="$PROJECT_DIR$/model/triangles.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/models.js" afterPath="$PROJECT_DIR$/models.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/rasterize.js" afterPath="$PROJECT_DIR$/rasterize.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/shader.js" afterPath="$PROJECT_DIR$/shader.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/url.js" afterPath="$PROJECT_DIR$/url.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -150,8 +135,8 @@
       <file leaf-file-name="game.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/game.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="236">
-              <caret line="125" column="10" lean-forward="true" selection-start-line="125" selection-start-column="10" selection-end-line="125" selection-end-column="10" />
+            <state relative-caret-position="278">
+              <caret line="124" column="104" lean-forward="true" selection-start-line="124" selection-start-column="104" selection-end-line="124" selection-end-column="104" />
               <folding>
                 <element signature="e#603#1646#0" expanded="false" />
                 <element signature="e#2143#2234#0" expanded="false" />
@@ -411,12 +396,12 @@
       <workItem from="1512229435426" duration="13334000" />
       <workItem from="1512245958374" duration="7198000" />
       <workItem from="1512254525928" duration="24959000" />
-      <workItem from="1512330482287" duration="16506000" />
+      <workItem from="1512330482287" duration="16863000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="168100000" />
+    <option name="totallyTimeSpent" value="168457000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -980,8 +965,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/game.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="236">
-          <caret line="125" column="10" lean-forward="true" selection-start-line="125" selection-start-column="10" selection-end-line="125" selection-end-column="10" />
+        <state relative-caret-position="278">
+          <caret line="124" column="104" lean-forward="true" selection-start-line="124" selection-start-column="104" selection-end-line="124" selection-end-column="104" />
           <folding>
             <element signature="e#603#1646#0" expanded="false" />
             <element signature="e#2143#2234#0" expanded="false" />

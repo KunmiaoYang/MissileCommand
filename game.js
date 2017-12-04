@@ -122,7 +122,7 @@ var GAME = function() {
     }
     var defenseMissile = {
         material: {
-            ambient: [0.1,0.1,0.1], diffuse: [0.0, 0.0, 1], specular: [0.3,0.3,0.3], n:1, textureMode: 0
+            ambient: [0.1,0.1,0.1], diffuse: [1.0, 1.0, 0], specular: [0.3,0.3,0.3], n:1, textureMode: 0
         },
         xPos: [-0.015, 0, 0.015],
         zPos: [-0.015, 0, 0.015],
