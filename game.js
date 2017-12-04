@@ -3,7 +3,8 @@ var GAME = function() {
         CANVAS_ORIGIN = [1.15, 1.15, 0];
     const CITY_SCALE = 0.0025, CITY_COUNT = 6, CITY_SCORE = 20,
         BATTERY_SCALE = 0.0025, BATTERY_COUNT = 3, BATTERY_SCORE = 10,
-        TARGET_HEIGHT_RANGE = 0.15, TARGET_FLOAT_AMPLITUDE = 0.01, TARGET_FLOAT_PERIOD = 3000,
+        TARGET_HEIGHT_BOTTOM = 0.05, TARGET_HEIGHT_RANGE = 0.15,
+        TARGET_FLOAT_AMPLITUDE = 0.01, TARGET_FLOAT_PERIOD = 3000,
         MISSILE_SCALE = 0.015, MISSILE_SCORE = 1,
         UFO_SCALE = 0.02, UFO_OFFSET = 0.2, UFO_SCORE = 5,
         DEFENSE_MISSILE_SPEED = 1.5, ATTACK_MISSILE_HEIGHT = 1.2,
@@ -285,7 +286,7 @@ var GAME = function() {
             for(let i = 0; i < CITY_COUNT; i++) {
                 // Init city models
                 let targetModel =  GAME.model.cities[i],
-                    height = Math.random() * TARGET_HEIGHT_RANGE;
+                    height = Math.random() * TARGET_HEIGHT_RANGE + TARGET_HEIGHT_BOTTOM;
                 targetModel.phase = Math.random()*2*Math.PI;
                 targetModel.tMatrix[13] = height;
                 targetModel.xyz = vec3.fromValues(city.pos[i], height, 0);
@@ -298,7 +299,7 @@ var GAME = function() {
             for(let i = 0; i < BATTERY_COUNT; i++) {
                 // Init battery models
                 let targetModel =  GAME.model.batteries[i],
-                    height = Math.random() * TARGET_HEIGHT_RANGE;
+                    height = Math.random() * TARGET_HEIGHT_RANGE + TARGET_HEIGHT_BOTTOM;
                 targetModel.phase = Math.random()*2*Math.PI;
                 targetModel.tMatrix[13] = height;
                 targetModel.xyz = vec3.fromValues(battery.pos[i], height, 0);
