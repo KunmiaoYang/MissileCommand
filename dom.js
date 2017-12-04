@@ -1,6 +1,7 @@
 var DOM = function() {
     return {
         canvas: document.getElementById("myWebGLCanvas"),
+        playButton: $('#play_game'),
         load: function(option, camera, url) {
             var canvas = document.getElementById("myWebGLCanvas"); // create a js canvas
             option.useLight = document.getElementById("UseLight").checked;

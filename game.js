@@ -156,6 +156,7 @@ var GAME = function() {
             missile.material = attackMissile.material;
             missile.split = attackMissile.splitMissile;
             missile.isDefense = false;
+            missile.isMissile = true;
             missile.destroy = attackMissile.destroy;
             MODELS.array.push(missile);
             return missile;
@@ -185,7 +186,6 @@ var GAME = function() {
             spaceship.material = UFO.material;
             spaceship.split = attackMissile.splitMissile;
             spaceship.isDefense = false;
-            spaceship.isSpaceship = true;
             spaceship.destroy = UFO.destroy;
             MODELS.array.push(spaceship);
             return spaceship;
@@ -276,6 +276,7 @@ var GAME = function() {
                     missiles[i][j].direction = vec3.fromValues(0, 1, 0);
                     missiles[i][j].material = defenseMissile.material;
                     missiles[i][j].isDefense = true;
+                    missiles[i][j].isMissile = true;
                     MODELS.array.push(missiles[i][j]);
                 }
             }
@@ -356,7 +357,7 @@ var GAME = function() {
             SOUND.gamePlay.load();
             SOUND.gamePlay.play();
             ANIMATION.start();
-            $('#play_game').hide();
+            DOM.playButton.hide();
         },
         endLevel: function () {
             ANIMATION.stop = true;
@@ -365,7 +366,7 @@ var GAME = function() {
             SOUND.missionComplete.play();
             city.countScore();
             battery.countScore();
-            $('#play_game').show().text("Next Level").attr('onclick',"GAME.nextLevel()");
+            DOM.playButton.show().text("Next Level").attr('onclick',"GAME.nextLevel()");
         },
         nextLevel: function () {
             GAME.level.id++;
@@ -386,7 +387,7 @@ var GAME = function() {
             SOUND.gamePlay.load();
             SOUND.gamePlay.play();
             ANIMATION.start();
-            $('#play_game').hide();
+            DOM.playButton.hide();
         },
         over: function () {
             ANIMATION.stop = true;
@@ -397,7 +398,7 @@ var GAME = function() {
             SOUND.gamePlay.load();
             ANIMATION.delayPlay(8000, SOUND.intro);
             renderTriangles(SHADER.gl);
-            $('#play_game').show().text("Play").attr('onclick',"GAME.play()");
+            DOM.playButton.show().text("Play").attr('onclick',"GAME.play()");
         },
         launchDefenseMissile: function(ratioX, ratioY) {
             let xyz = vec3.fromValues(CANVAS_ORIGIN[0] - WIDTH * ratioX, CANVAS_ORIGIN[1] - HEIGHT * ratioY, 0),
@@ -508,7 +509,7 @@ var GAME = function() {
             else if(level.nextMissile >= level.attackMissileCount) {    // next level
                 let isEnd = true;
                 for(let i = 0, len = launchedMissile.length; i < len; i++) {
-                    if (!launchedMissile.isSpaceship) {
+                    if (launchedMissile[i].isMissile) {
                         isEnd = false;
                         break;
                     }
