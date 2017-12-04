@@ -92,6 +92,9 @@ var GAME = function() {
     var city = {
         count: CITY_COUNT,
         pos: [0.875, 0.75, 0.625, 0.375, 0.25, 0.125],
+        material: {
+            ambient: [0.1,0.1,0.1], diffuse: [0.278, 0.278, 0.957], specular: [0.3,0.3,0.3], n:1, textureMode: 0
+        },
         tMatrixArray: [],
         rMatrixArray: [],
         countScore: function () {
@@ -101,6 +104,9 @@ var GAME = function() {
     var battery = {
         count: BATTERY_COUNT,
         pos: [1, 0.5, 0],
+        material: {
+            ambient: [0.1,0.1,0.1], diffuse: [0.278, 0.278, 0.957], specular: [0.3,0.3,0.3], n:1, textureMode: 0
+        },
         tMatrixArray: [],
         rMatrixArray: [],
         countScore: function () {
@@ -109,14 +115,14 @@ var GAME = function() {
     };
     var mountain = {
         material: {
-            ambient: [0.1,0.1,0.1], diffuse: [0.8,0.8,0.2], specular: [0,0,0], n:1
+            ambient: [0.1,0.1,0.1], diffuse: [0.278, 0.278, 0.957], specular: [0,0,0], n:1, textureMode: 0
         },
         tMatrixArray: [],
         rMatrixArray: []
     }
     var defenseMissile = {
         material: {
-            ambient: [0.1,0.1,0.1], diffuse: [0,0,1], specular: [0,0,0], n:1
+            ambient: [0.1,0.1,0.1], diffuse: [0.0, 0.0, 1], specular: [0.3,0.3,0.3], n:1, textureMode: 0
         },
         xPos: [-0.015, 0, 0.015],
         zPos: [-0.015, 0, 0.015],
@@ -126,7 +132,7 @@ var GAME = function() {
     };
     var attackMissile = {
         material: {
-            ambient: [0.1,0.1,0.1], diffuse: [1,0,0], specular: [0,0,0], n:1
+            ambient: [0.1,0.1,0.1], diffuse: [1,0,0], specular: [0,0,0], n:1, textureMode: 0
         },
         rMatrix: mat4.scale(mat4.create(), idMatrix, [MISSILE_SCALE, -MISSILE_SCALE, MISSILE_SCALE]),
         splitMissile: function() {
@@ -318,21 +324,23 @@ var GAME = function() {
             }
         },
         loadModels: function() {
-            GAME.model.background = JSON_MODEL.loadTriangleSets(SHADER.gl);
-            MODELS.array = MODELS.array.concat(GAME.model.background);
+            var background = JSON_MODEL.loadTriangleSets(SHADER.gl);
+            GAME.model.background = background;
+            MODELS.array = MODELS.array.concat(background);
+
             GAME.model.explosion = {
                 prototype: JSON_MODEL.loadEllipsoids(SHADER.gl)[0],
                 airExplosions: airExplosions
             };
             SKECHUP_MODEL.loadModel(SHADER.gl, URL.cityModel, function (model) {
-                model.material.diffuse = [0.2, 0.2, 0.8];
+                model.material = city.material;
                 GAME.model.cities = [];
                 for(let i = 0; i < CITY_COUNT; i++) {
                     GAME.model.cities[i] = MODELS.copyModel(model, city.rMatrixArray[i], city.tMatrixArray[i]);
                 }
             });
             SKECHUP_MODEL.loadModel(SHADER.gl, URL.batteryModel, function (model) {
-                model.material.diffuse = [0.2, 0.2, 0.8];
+                model.material = battery.material;
                 GAME.model.batteries = [];
                 for(let i = 0; i < BATTERY_COUNT; i++) {
                     GAME.model.batteries[i] = MODELS.copyModel(model, battery.rMatrixArray[i], battery.tMatrixArray[i]);
@@ -411,7 +419,7 @@ var GAME = function() {
             SOUND.gameOver.play();
             SOUND.gamePlay.load();
             ANIMATION.delayPlay(8000, SOUND.intro);
-            renderTriangles();
+            renderTriangles(SHADER.gl);
             $('#play_game').show().text("Play").attr('onclick',"GAME.play()");
         },
         launchDefenseMissile: function(ratioX, ratioY) {

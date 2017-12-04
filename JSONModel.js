@@ -2,7 +2,6 @@ var JSON_MODEL = function() {
     var nLatitude = 10,
         nLongitude = 20;
     return {
-        ellipsoids: {},
         loadTriangleSets: function(gl) {
             var inputTriangles = JSON_MODEL.getJSONFile(URL.triangles,"triangles");
             var triangleSets = [];
@@ -20,6 +19,8 @@ var JSON_MODEL = function() {
                     triangleSet.coordArray = []; // 1D array of vertex coords for WebGL
                     triangleSet.normalArray = []; // 1D array of vertex normals for WebGL
                     triangleSet.indexArray = []; // 1D array of vertex indices for WebGL
+                    triangleSet.uvArray = []; // 1D array of vertex uvs for WebGL
+                    triangleSet.texture = SHADER.loadTexture(IMAGE.img[triangleSet.material.texture]);
 
                     // Calculate triangles center
                     var triCenter = vec3.create();
@@ -45,6 +46,10 @@ var JSON_MODEL = function() {
                             triangleSet.indexArray.push(curSet.triangles[whichSetTri][i]);
                         }
                     } // end for triangles in set
+
+                    // Add uvs
+                    for(let i = 0; i < curSet.uvs.length; i++)
+                        triangleSet.uvArray.push(curSet.uvs[i][0], curSet.uvs[i][1]);
 
                     // Buffer data arrays into GPU
                     MODELS.bufferTriangleSet(gl, triangleSet);
@@ -77,9 +82,12 @@ var JSON_MODEL = function() {
                     triangleSet.material.diffuse = curSet.diffuse;
                     triangleSet.material.specular = curSet.specular;
                     triangleSet.material.n = curSet.n;
+                    triangleSet.material.textureMode = curSet.textureMode;
                     triangleSet.coordArray = []; // 1D array of vertex coords for WebGL
                     triangleSet.normalArray = []; // 1D array of vertex normals for WebGL
                     triangleSet.indexArray = []; // 1D array of vertex indices for WebGL
+                    triangleSet.uvArray = []; // 1D array of vertex uvs for WebGL
+                    triangleSet.texture = SHADER.loadTexture(IMAGE.img[curSet.texture]);
 
                     // Create triangles center
                     var triCenter = vec3.fromValues(curSet.x, curSet.y, curSet.z);
@@ -88,12 +96,13 @@ var JSON_MODEL = function() {
                     let deltaLat = Math.PI / nLatitude;
                     let deltaLong = 2 * Math.PI / nLongitude;
                     for(let i = 0, theta = 0.0; i <= nLatitude; i++, theta += deltaLat) {
-                        let sinT = Math.sin(theta), cosT = Math.cos(theta);
+                        let sinT = Math.sin(theta), cosT = Math.cos(theta), v = 1.0 - theta/Math.PI;
                         for(let j = 0, phi = 0.0; j <= nLongitude; j++, phi += deltaLong) {
                             let sinP = Math.sin(phi), cosP = Math.cos(phi);
                             let xu = cosP*sinT, yu = cosT, zu = sinP*sinT;
                             triangleSet.coordArray.push(xu * curSet.a, yu * curSet.b, zu * curSet.c);
                             triangleSet.normalArray.push(xu / curSet.a, yu / curSet.b, zu / curSet.c);
+                            triangleSet.uvArray.push(phi/Math.PI/2, v);
                         }
                     }
 

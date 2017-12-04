@@ -44,7 +44,7 @@ var EVENTS = function () {
             currentlyPressedKeys[event.keyCode] = false;
         },
         handleClick: function(event) {
-            GAME.launchDefenseMissile(event.offsetX/SHADER.canvas.width, event.offsetY/SHADER.canvas.height);
+            GAME.launchDefenseMissile(event.offsetX/DOM.canvas.width, event.offsetY/DOM.canvas.height);
         },
         setupEvent: function() {
             document.onkeydown = EVENTS.handleKeyDown;

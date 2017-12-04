@@ -51,6 +51,9 @@ var SKECHUP_MODEL = function() {
                 // Initialize light mode
                 model.doubleSide = true;
 
+                // Add dummy UVs
+                MODELS.addDummyTexture(model);
+
                 // Buffer data arrays into GPU
                 MODELS.bufferTriangleSet(gl, model);
 

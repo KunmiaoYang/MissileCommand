@@ -16,7 +16,7 @@ var ANIMATION = function () {
             if (duration > 20) {
                 lastTime = now;
                 GAME.update(duration);
-                if(!ANIMATION.stop) renderTriangles();
+                if(!ANIMATION.stop) renderTriangles(SHADER.gl);
                 renderInfo();
             }
             requestAnimationFrame(ANIMATION.animate);
