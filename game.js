@@ -169,7 +169,7 @@ var GAME = function() {
     };
     var UFO = {
         material: {
-            ambient: [0.1,0.1,0.1], diffuse: [1,0,0], specular: [0.5,0.5,0.5], n:1, textureMode: 0
+            ambient: [0.1,0.1,0.1], diffuse: [0.5,0.5,0.5], specular: [0.5,0.5,0.5], n:1, textureMode: 0
         },
         rMatrix: mat4.scale(mat4.create(), idMatrix, [UFO_SCALE, UFO_SCALE, UFO_SCALE]),
         disappear: function () {
@@ -248,7 +248,7 @@ var GAME = function() {
                 duration: 15000,
                 splitLimit: 3,
                 splitProbability: 0.0005,
-                spaceshipProbability: 0.101,
+                spaceshipProbability: 0.001,
                 nextMissile: 0,
                 time: 0,
                 missileSchedule: []
