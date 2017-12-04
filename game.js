@@ -7,7 +7,7 @@ var GAME = function() {
         MISSILE_SCALE = 0.015, MISSILE_SCORE = 1,
         UFO_SCALE = 0.02, UFO_OFFSET = 0.2, UFO_SCORE = 5,
         DEFENSE_MISSILE_SPEED = 1.5, ATTACK_MISSILE_HEIGHT = 1.2,
-        EXPLOSION_RANGE = 0.04, EXPLOSION_DURATION = 2000;
+        EXPLOSION_RANGE = 0.08, EXPLOSION_DURATION = 2000;
     const ZERO_THRESHOLD = 0.0001;
     function guidance(missile, target) {
         missile.target = target;
@@ -93,7 +93,7 @@ var GAME = function() {
         count: CITY_COUNT,
         pos: [0.875, 0.75, 0.625, 0.375, 0.25, 0.125],
         material: {
-            ambient: [0.1,0.1,0.1], diffuse: [0.278, 0.278, 0.957], specular: [0.3,0.3,0.3], n:1, textureMode: 0
+            ambient: [0.1,0.1,0.1], diffuse: [0.278, 0.278, 0.957], specular: [0.0,0.0,0.0], n:1, textureMode: 0
         },
         tMatrixArray: [],
         rMatrixArray: [],

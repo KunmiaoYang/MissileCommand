@@ -9,8 +9,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3b121063-8de4-436e-8109-1ca6ec105083" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/img/background.jpg" afterPath="$PROJECT_DIR$/img/background.jpg" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dom.js" afterPath="$PROJECT_DIR$/dom.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/game.js" afterPath="$PROJECT_DIR$/game.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/model/lights.json" afterPath="$PROJECT_DIR$/model/lights.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/url.js" afterPath="$PROJECT_DIR$/url.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -27,34 +30,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
-      <file leaf-file-name="rasterize.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/rasterize.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="154">
-              <caret line="14" column="46" lean-forward="false" selection-start-line="14" selection-start-column="46" selection-end-line="14" selection-end-column="46" />
-              <folding>
-                <element signature="n#!!block;n#refresh#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="shader.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/shader.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="231">
-              <caret line="11" column="23" lean-forward="false" selection-start-line="11" selection-start-column="15" selection-end-line="11" selection-end-column="23" />
-              <folding>
-                <element signature="e#2816#3908#0" expanded="false" />
-                <element signature="e#7218#7423#0" expanded="false" />
-                <element signature="e#7499#7704#0" expanded="false" />
-                <element signature="e#8250#8416#0" expanded="false" />
-                <element signature="e#10981#11028#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="triangles.json" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/triangles.json">
           <provider selected="true" editor-type-id="text-editor">
@@ -69,7 +44,7 @@
         <entry file="file://$PROJECT_DIR$/url.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="84">
-              <caret line="4" column="37" lean-forward="true" selection-start-line="4" selection-start-column="37" selection-end-line="4" selection-end-column="37" />
+              <caret line="4" column="36" lean-forward="true" selection-start-line="4" selection-start-column="36" selection-end-line="4" selection-end-column="36" />
               <folding />
             </state>
           </provider>
@@ -126,8 +101,31 @@
       <file leaf-file-name="lights.json" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model/lights.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="84">
-              <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+            <state relative-caret-position="63">
+              <caret line="3" column="1" lean-forward="true" selection-start-line="3" selection-start-column="1" selection-end-line="3" selection-end-column="1" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="lights.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/lights.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="126">
+              <caret line="6" column="51" lean-forward="true" selection-start-line="6" selection-start-column="51" selection-end-line="6" selection-end-column="51" />
+              <folding>
+                <element signature="e#407#763#0" expanded="false" />
+                <element signature="e#824#1100#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dom.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dom.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="147">
+              <caret line="7" column="71" lean-forward="true" selection-start-line="7" selection-start-column="71" selection-end-line="7" selection-end-column="71" />
               <folding />
             </state>
           </provider>
@@ -136,8 +134,8 @@
       <file leaf-file-name="game.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/game.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="327">
-              <caret line="250" column="41" lean-forward="false" selection-start-line="250" selection-start-column="41" selection-end-line="250" selection-end-column="41" />
+            <state relative-caret-position="273">
+              <caret line="93" column="54" lean-forward="true" selection-start-line="93" selection-start-column="54" selection-end-line="93" selection-end-column="54" />
               <folding>
                 <element signature="e#604#1647#0" expanded="false" />
                 <element signature="e#2144#2235#0" expanded="false" />
@@ -260,7 +258,6 @@
         <option value="$PROJECT_DIR$/sound.js" />
         <option value="$PROJECT_DIR$/IMAGE.js" />
         <option value="$PROJECT_DIR$/index.html" />
-        <option value="$PROJECT_DIR$/dom.js" />
         <option value="$PROJECT_DIR$/events.js" />
         <option value="$PROJECT_DIR$/animation.js" />
         <option value="$PROJECT_DIR$/camera.js" />
@@ -272,8 +269,9 @@
         <option value="$PROJECT_DIR$/JSONModel.js" />
         <option value="$PROJECT_DIR$/model/ellipsoids.json" />
         <option value="$PROJECT_DIR$/model/triangles.json" />
-        <option value="$PROJECT_DIR$/model/lights.json" />
+        <option value="$PROJECT_DIR$/dom.js" />
         <option value="$PROJECT_DIR$/url.js" />
+        <option value="$PROJECT_DIR$/model/lights.json" />
         <option value="$PROJECT_DIR$/game.js" />
       </list>
     </option>
@@ -393,12 +391,12 @@
       <workItem from="1512229435426" duration="13334000" />
       <workItem from="1512245958374" duration="7198000" />
       <workItem from="1512254525928" duration="24959000" />
-      <workItem from="1512330482287" duration="18103000" />
+      <workItem from="1512330482287" duration="19895000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="169697000" />
+    <option name="totallyTimeSpent" value="171489000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -462,7 +460,7 @@
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="14" />
+      <option name="time" value="15" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -740,17 +738,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lights.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="9" column="48" lean-forward="false" selection-start-line="8" selection-start-column="36" selection-end-line="9" selection-end-column="48" />
-          <folding>
-            <element signature="e#407#763#0" expanded="false" />
-            <element signature="e#824#1100#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/canvas2D.js" />
     <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavaScriptLanguage.jar!/com/intellij/lang/javascript/index/predefined/HTML5.js">
       <provider selected="true" editor-type-id="text-editor">
@@ -821,14 +808,6 @@
             <element signature="e#343#2177#0" expanded="false" />
             <element signature="e#2227#2295#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dom.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="42">
-          <caret line="2" column="8" lean-forward="false" selection-start-line="2" selection-start-column="8" selection-end-line="2" selection-end-column="8" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -940,26 +919,45 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/dom.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="147">
+          <caret line="7" column="71" lean-forward="true" selection-start-line="7" selection-start-column="71" selection-end-line="7" selection-end-column="71" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/url.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="84">
-          <caret line="4" column="37" lean-forward="true" selection-start-line="4" selection-start-column="37" selection-end-line="4" selection-end-column="37" />
+          <caret line="4" column="36" lean-forward="true" selection-start-line="4" selection-start-column="36" selection-end-line="4" selection-end-column="36" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lights.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="6" column="51" lean-forward="true" selection-start-line="6" selection-start-column="51" selection-end-line="6" selection-end-column="51" />
+          <folding>
+            <element signature="e#407#763#0" expanded="false" />
+            <element signature="e#824#1100#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/model/lights.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="84">
-          <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
+        <state relative-caret-position="63">
+          <caret line="3" column="1" lean-forward="true" selection-start-line="3" selection-start-column="1" selection-end-line="3" selection-end-column="1" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/game.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="327">
-          <caret line="250" column="41" lean-forward="false" selection-start-line="250" selection-start-column="41" selection-end-line="250" selection-end-column="41" />
+        <state relative-caret-position="273">
+          <caret line="93" column="54" lean-forward="true" selection-start-line="93" selection-start-column="54" selection-end-line="93" selection-end-column="54" />
           <folding>
             <element signature="e#604#1647#0" expanded="false" />
             <element signature="e#2144#2235#0" expanded="false" />
