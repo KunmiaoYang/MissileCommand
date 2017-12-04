@@ -391,6 +391,7 @@ var GAME = function() {
         over: function () {
             ANIMATION.stop = true;
             SOUND.UFO.pause();
+            SOUND.missionComplete.pause();
             SOUND.gamePlay.pause();
             SOUND.gameOver.play();
             SOUND.gamePlay.load();
@@ -503,8 +504,8 @@ var GAME = function() {
                 }
             }
 
-            // next level
-            if(level.nextMissile >= level.attackMissileCount) {
+            if(0 >= city.count) GAME.over();    // game over
+            else if(level.nextMissile >= level.attackMissileCount) {    // next level
                 let isEnd = true;
                 for(let i = 0, len = launchedMissile.length; i < len; i++) {
                     if (!launchedMissile.isSpaceship) {
@@ -515,8 +516,6 @@ var GAME = function() {
                 if(isEnd) GAME.endLevel();
             }
 
-            // game over
-            if(0 >= city.count) GAME.over();
         },
         test: function (i, j) {
             let missiles = GAME.model.defenseMissiles;
