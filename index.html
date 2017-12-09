@@ -7,7 +7,7 @@
     <link type="text/css" rel="stylesheet" href="index.css">
   </head>
 
-  <body onload="main();">
+  <body onload="GAME.main();">
     <table>
       <tr>
         <td class="info">Level: </td><td id="level" class="info info_value">1</td>
@@ -21,9 +21,9 @@
     <table class="config">
       <tr>
         <td></td>
-        <td><input type="checkbox" id="UseLight" onchange="refresh()" checked>Use Light</td>
+        <td><input type="checkbox" id="UseLight" onchange="RASTERIZE.refresh()" checked>Use Light</td>
         <td></td>
-        <td><button onclick="refresh()">Set Parameters</button></td>
+        <td><button onclick="RASTERIZE.refresh()">Set Parameters</button></td>
       </tr>
       <tr>
         <th>Canvas</th>

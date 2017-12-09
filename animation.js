@@ -16,8 +16,8 @@ var ANIMATION = function () {
             if (duration > 20) {
                 lastTime = now;
                 GAME.update(duration, now);
-                if(!ANIMATION.stop) renderTriangles(SHADER.gl);
-                renderInfo();
+                if(!ANIMATION.stop) RASTERIZE.renderTriangles(SHADER.gl);
+                RASTERIZE.renderInfo();
             }
             requestAnimationFrame(ANIMATION.animate);
         },

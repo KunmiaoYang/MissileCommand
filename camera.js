@@ -22,14 +22,14 @@ var CAMERA = function () {
         rotateCamera: function (rad, axis) {
             mat4.multiply(this.vMatrix, mat4.fromRotation(mat4.create(), -rad, axis), this.vMatrix);
             this.updateCameraAxis();
-            renderTriangles(SHADER.gl);
+            RASTERIZE.renderTriangles(SHADER.gl);
         },
         translateCamera: function (vec) {
             for(let i = 0; i < 3; i++) {
                 this.vMatrix[i + 12] -= vec[i];
                 this.xyz[i] += this.X[i] * vec[0] + this.Y[i] * vec[1] + this.Z[i] * vec[2];
             }
-            renderTriangles(SHADER.gl);
+            RASTERIZE.renderTriangles(SHADER.gl);
         },
         calcPerspective: function(left, right, top, bottom, near, far) {
             let n = Math.abs(near), f = Math.abs(far);

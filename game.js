@@ -404,7 +404,7 @@ var GAME = function() {
             SOUND.gameOver.play();
             SOUND.gamePlay.load();
             ANIMATION.delayPlay(8000, SOUND.intro);
-            renderTriangles(SHADER.gl);
+            RASTERIZE.renderTriangles(SHADER.gl);
             DOM.playButton.show().text("Play").attr('onclick',"GAME.play()");
         },
         launchDefenseMissile: function(ratioX, ratioY) {
@@ -520,6 +520,15 @@ var GAME = function() {
                 if(isEnd) GAME.endLevel();
             }
 
+        },
+        main: function() {
+            DOM.load(OPTION, CAMERA, URL);   // load the data from html page
+            LIGHTS.load(); // load in the lights
+            SHADER.setupWebGL(); // set up the webGL environment
+            CAMERA.initCamera(); // Initialize camera
+            GAME.loadModels();
+            EVENTS.setupEvent();
+            RASTERIZE.setupOnLoad();
         },
         test: function (i, j) {
             let missiles = GAME.model.defenseMissiles;
