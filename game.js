@@ -419,10 +419,12 @@ var GAME = function() {
             SOUND.gamePlay.pause();
             SOUND.gameOver.play();
             SOUND.gamePlay.load();
-            ANIMATION.delayPlay(8000, SOUND.intro);
+            ANIMATION.delayRun(5000, function () {
+                SOUND.intro.play();
+                DOM.playButton.show().attr('class', 'play').attr('onclick',"GAME.play()");
+                DOM.title.show();
+            });
             RASTERIZE.renderTriangles(SHADER.gl);
-            DOM.playButton.show().attr('class', 'play').attr('onclick',"GAME.play()");
-            DOM.title.show();
         },
         launchDefenseMissile: function(ratioX, ratioY) {
             let xyz = vec3.fromValues(CANVAS_ORIGIN[0] - WIDTH * ratioX, CANVAS_ORIGIN[1] - HEIGHT * ratioY, 0),

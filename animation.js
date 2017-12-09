@@ -1,7 +1,7 @@
 var ANIMATION = function () {
     var lastTime = 0;
     var callTime = 0;
-    var node;
+    var callback;
     return {
         stop: true,
         timeStart: 0,
@@ -21,13 +21,13 @@ var ANIMATION = function () {
             }
             requestAnimationFrame(ANIMATION.animate);
         },
-        delayPlay: function (timeRemain, media) {
-            node = media;
+        delayRun: function (timeRemain, fun) {
+            callback = fun;
             callTime = performance.now() + timeRemain;
             requestAnimationFrame(ANIMATION.sleep);
         },
         sleep: function (now) {
-            if(now > callTime) node.play();
+            if(now > callTime) callback();
             else requestAnimationFrame(ANIMATION.sleep);
         }
     }
