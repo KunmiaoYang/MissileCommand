@@ -1,17 +1,18 @@
 var URL = function () {
+    let baseAddress = 'https://kunmiaoyang.github.io/MissileCommand/';
     return {
-        triangles: 'https://kunmiaoyang.github.io/MissileCommand/model/triangles.json',
-        ellipsoids: 'https://kunmiaoyang.github.io/MissileCommand/model/ellipsoids.json',
-        lights: 'https://kunmiaoyang.github.io/MissileCommand/model/lights.json',
-        cityModel: 'https://kunmiaoyang.github.io/MissileCommand/model/city.dae',
-        batteryModel: 'https://kunmiaoyang.github.io/MissileCommand/model/battery.dae',
-        missileModel: 'https://kunmiaoyang.github.io/MissileCommand/model/missile.dae',
-        UFOModel: 'https://kunmiaoyang.github.io/MissileCommand/model/UFO.dae',
+        triangles: baseAddress + 'model/triangles.json',
+        ellipsoids: baseAddress + 'model/ellipsoids.json',
+        lights: baseAddress + 'model/lights.json',
+        cityModel: baseAddress + 'model/city.dae',
+        batteryModel: baseAddress + 'model/battery.dae',
+        missileModel: baseAddress + 'model/missile.dae',
+        UFOModel: baseAddress + 'model/UFO.dae',
         img: {
-            base: 'https://kunmiaoyang.github.io/MissileCommand/img/',
-            terrain: 'https://kunmiaoyang.github.io/MissileCommand/img/terrain.jpg',
-            background: 'https://kunmiaoyang.github.io/MissileCommand/img/background.jpg',
-            explosion: 'https://kunmiaoyang.github.io/MissileCommand/img/explosion.jpg'
+            base: baseAddress + 'img/',
+            terrain: baseAddress + 'img/terrain.jpg',
+            background: baseAddress + 'img/background.jpg',
+            explosion: baseAddress + 'img/explosion.jpg'
         }
     };
 }();
