@@ -12,9 +12,11 @@ var SOUND = function () {
         launches =  [document.getElementById('sound_launch')];
     intro.volume = 0.3;
     gamePlay.volume = 0.3;
-    UFO.volume = 0.5;
+    UFO.volume = 0.3;
+    explosions[0].volume = 0.2;
     for(let i = 1; i < COPY_COUNT; i++) {
         explosions[i] = explosions[0].cloneNode(true);
+        explosions[i].volume = explosions[0].volume;
         launches[i] = launches[0].cloneNode(true);
     }
     return {
