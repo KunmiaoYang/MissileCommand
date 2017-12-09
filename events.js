@@ -49,7 +49,7 @@ var EVENTS = function () {
         setupEvent: function() {
             document.onkeydown = EVENTS.handleKeyDown;
             document.onkeyup = EVENTS.handleKeyUp;
-            $('#myWebGLCanvas').on('click', EVENTS.handleClick);
+            $(DOM.canvas).on('click', EVENTS.handleClick);
         }
     };
 }();

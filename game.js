@@ -388,7 +388,7 @@ var GAME = function() {
             SOUND.missionComplete.play();
             city.countScore();
             battery.countScore();
-            DOM.playButton.show().text("Next Level").attr('onclick',"GAME.nextLevel()");
+            DOM.playButton.show().attr('class', 'next').attr('onclick',"GAME.nextLevel()");
         },
         nextLevel: function () {
             GAME.level.id++;
@@ -420,7 +420,7 @@ var GAME = function() {
             SOUND.gamePlay.load();
             ANIMATION.delayPlay(8000, SOUND.intro);
             RASTERIZE.renderTriangles(SHADER.gl);
-            DOM.playButton.show().text("Play").attr('onclick',"GAME.play()");
+            DOM.playButton.show().attr('class', 'play').attr('onclick',"GAME.play()");
         },
         launchDefenseMissile: function(ratioX, ratioY) {
             let xyz = vec3.fromValues(CANVAS_ORIGIN[0] - WIDTH * ratioX, CANVAS_ORIGIN[1] - HEIGHT * ratioY, 0),

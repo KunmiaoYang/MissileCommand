@@ -2,12 +2,50 @@
     visibility: hidden;
 }
 
+#myWebGLCanvas {
+    z-index: -1;
+}
+
+#play_game {
+    width: 167px;
+    height: 62px;
+    position: absolute;
+    top: 340px;
+    left: 180px;
+    z-index: 2;
+}
+
+#play_game.play {
+    content: url("img/play.png");
+}
+
+#play_game.play:hover {
+    content: url("img/play_highlight.png");
+}
+
+#play_game.next {
+    content: url("img/nextlevel.png");
+}
+
+#play_game.next:hover {
+    content: url("img/nextlevel_highlight.png");
+}
+
+#statistics {
+    position: absolute;
+    left: 30px;
+    top: 10px;
+    z-index: 1;
+}
+
 .info_value {
     width: 100px;
 }
 
 .info {
     font-weight:bold;
+    color: green;
+    font-family: "Agency FB";
 }
 
 audio {
