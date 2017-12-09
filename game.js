@@ -41,9 +41,7 @@ var GAME = function() {
         this.disable = true;
 
         // create explosion
-        createExplosion(this.target.xyz, EXPLOSION_RANGE, function () {
-            // Do nothing
-        });
+        createExplosion(this.target.xyz, EXPLOSION_RANGE, destroyObjectsInRange);
 
         // destroy target
         if((j = MODELS.array.indexOf(this.target)) > -1) MODELS.array.splice(j, 1);
@@ -167,9 +165,7 @@ var GAME = function() {
             GAME.score += MISSILE_SCORE;
             this.disable = true;
             // create explosion
-            createExplosion(this.xyz, DESTRUCT_EXPLOSION_RANGE, function () {
-                // Do nothing
-            });
+            createExplosion(this.xyz, DESTRUCT_EXPLOSION_RANGE, destroyObjectsInRange);
         },
         create: function(xyz) {
             let missile = MODELS.copyModel(GAME.model.missile.prototype,
@@ -201,9 +197,7 @@ var GAME = function() {
             GAME.model.UFO.models.splice(GAME.model.UFO.models.indexOf(this), 1);
             SOUND.UFO.pause();
             // create explosion
-            createExplosion(this.xyz, DESTRUCT_EXPLOSION_RANGE, function () {
-                // Do nothing
-            });
+            createExplosion(this.xyz, DESTRUCT_EXPLOSION_RANGE, destroyObjectsInRange);
         },
         create: function(xyz) {
             let spaceship = MODELS.copyModel(GAME.model.UFO.prototype,
