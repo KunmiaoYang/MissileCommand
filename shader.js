@@ -104,7 +104,6 @@ var SHADER = function() {
 
         texture.image = image;
         texture.image.onload = function () {
-            console.log("Load texture");
             gl.bindTexture(gl.TEXTURE_2D, texture);
             gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);       // Flip image v direction, so v oriented from bottom to top
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, texture.image);

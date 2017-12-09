@@ -8,7 +8,8 @@ var GAME = function() {
         MISSILE_SCALE = 0.015, MISSILE_SCORE = 1,
         UFO_SCALE = 0.02, UFO_OFFSET = 0.2, UFO_SCORE = 5,
         DEFENSE_MISSILE_SPEED = 1.5, ATTACK_MISSILE_HEIGHT = 1.2,
-        EXPLOSION_RANGE = 0.08, EXPLOSION_DURATION = 2000;
+        EXPLOSION_RANGE = 0.08, DESTRUCT_EXPLOSION_RANGE = 0.04,
+        EXPLOSION_DURATION = 2000;
     const ZERO_THRESHOLD = 0.0001;
     function guidance(missile, target) {
         missile.target = target;
@@ -34,19 +35,19 @@ var GAME = function() {
         this.disable = true;
 
         // create explosion
-        createExplosion(this.target.xyz);
-        SOUND.explosion.play();
+        createExplosion(this.target.xyz, EXPLOSION_RANGE, destroyObjectsInRange);
     }
     function hitTarget() {
         this.disable = true;
 
         // create explosion
-        createExplosion(this.target.xyz);
-        SOUND.explosion.play();
+        createExplosion(this.target.xyz, EXPLOSION_RANGE, function () {
+            // Do nothing
+        });
 
         // destroy target
         if((j = MODELS.array.indexOf(this.target)) > -1) MODELS.array.splice(j, 1);
-        this.target.destroy();
+        this.target.destruct();
     }
     function destroyCity() {
         if(this.disable) return;
@@ -63,12 +64,22 @@ var GAME = function() {
         GAME.model.defenseMissiles[i] = [];
         battery.count--;
     }
+    function destroyObjectsInRange(objects) {
+        for(let i = 0, len = objects.length; i < len; i++) {
+            if(objects[i].disable || objects[i].isDefense) continue;
+            let dis = vec3.distance(this.xyz, objects[i].xyz);
+            if(dis <= this.range) {
+                objects[i].destruct();
+            }
+        }
+    }
     function createAirTarget(xyz) {
         return {
             xyz: xyz,
         }
     }
-    function createExplosion(xyz) {
+    function createExplosion(xyz, maxRange, destroy) {
+        SOUND.explosion.play();
         let expModel = MODELS.copyModel(GAME.model.explosion.prototype,
             mat4.scale(mat4.create(), idMatrix,[ZERO_THRESHOLD, ZERO_THRESHOLD, ZERO_THRESHOLD]),
             mat4.fromTranslation(mat4.create(), xyz));
@@ -77,15 +88,17 @@ var GAME = function() {
         airExplosions.push({
             xyz: xyz,
             timeRemain: EXPLOSION_DURATION,
+            maxRange: maxRange,
             range: ZERO_THRESHOLD,
             model: expModel,
-            updateRange: function () {
-                this.range = 2 * Math.sin(this.timeRemain / EXPLOSION_DURATION * Math.PI) * EXPLOSION_RANGE;
-                if(this.range > EXPLOSION_RANGE) this.range = EXPLOSION_RANGE;
+            updateModel: function () {
+                this.range = 2 * Math.sin(this.timeRemain / EXPLOSION_DURATION * Math.PI) * this.maxRange;
+                if(this.range > this.maxRange) this.range = this.maxRange;
                 this.model.rMatrix[0] = this.range;
                 this.model.rMatrix[5] = this.range;
                 this.model.rMatrix[10] = this.range;
-            }
+            },
+            destroyObjects: destroy
         });
     }
     function launch(missile, speed, target, hit) {
@@ -150,9 +163,13 @@ var GAME = function() {
                 j++;
             }
         },
-        destroy: function () {
+        destruct: function () {
             GAME.score += MISSILE_SCORE;
             this.disable = true;
+            // create explosion
+            createExplosion(this.xyz, DESTRUCT_EXPLOSION_RANGE, function () {
+                // Do nothing
+            });
         },
         create: function(xyz) {
             let missile = MODELS.copyModel(GAME.model.missile.prototype,
@@ -164,7 +181,7 @@ var GAME = function() {
             missile.split = attackMissile.splitMissile;
             missile.isDefense = false;
             missile.isMissile = true;
-            missile.destroy = attackMissile.destroy;
+            missile.destruct = attackMissile.destruct;
             MODELS.array.push(missile);
             return missile;
         }
@@ -178,7 +195,7 @@ var GAME = function() {
             this.disable = true;
             GAME.model.UFO.models.splice(GAME.model.UFO.models.indexOf(this), 1);
         },
-        destroy: function () {
+        destruct: function () {
             GAME.score += UFO_SCORE;
             this.disable = true;
             GAME.model.UFO.models.splice(GAME.model.UFO.models.indexOf(this), 1);
@@ -193,7 +210,7 @@ var GAME = function() {
             spaceship.material = UFO.material;
             spaceship.split = attackMissile.splitMissile;
             spaceship.isDefense = false;
-            spaceship.destroy = UFO.destroy;
+            spaceship.destruct = UFO.destruct;
             MODELS.array.push(spaceship);
             return spaceship;
         }
@@ -298,7 +315,7 @@ var GAME = function() {
                 targetModel.phase = Math.random()*2*Math.PI;
                 targetModel.tMatrix[13] = height;
                 targetModel.xyz = vec3.fromValues(city.pos[i], height, 0);
-                targetModel.destroy = destroyCity;
+                targetModel.destruct = destroyCity;
                 GAME.model.defenseTarget[i] = targetModel;
                 if(!targetModel.disable) MODELS.array.push(targetModel);
                 // MODELS.array.push(mountainModel);
@@ -311,7 +328,7 @@ var GAME = function() {
                 targetModel.phase = Math.random()*2*Math.PI;
                 targetModel.tMatrix[13] = height;
                 targetModel.xyz = vec3.fromValues(battery.pos[i], height, 0);
-                targetModel.destroy = destroyBattery;
+                targetModel.destruct = destroyBattery;
                 targetModel.disable = false;
                 GAME.model.defenseTarget[i + CITY_COUNT] = targetModel;
                 MODELS.array.push(targetModel);
@@ -448,15 +465,8 @@ var GAME = function() {
 
             // update explosion
             for(let i = 0, iLen = airExplosions.length; i < iLen; i++) {
-                airExplosions[i].updateRange();
-
-                for(let j = 0, jLen = launchedMissile.length; j < jLen; j++) {
-                    if(launchedMissile[j].disable || launchedMissile[j].isDefense) continue;
-                    let dis = vec3.distance(airExplosions[i].xyz, launchedMissile[j].xyz);
-                    if(dis <= airExplosions[i].range) {
-                        launchedMissile[j].destroy();
-                    }
-                }
+                airExplosions[i].updateModel();
+                airExplosions[i].destroyObjects(launchedMissile);
                 airExplosions[i].timeRemain -= duration;
             }
 
