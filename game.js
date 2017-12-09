@@ -200,6 +200,10 @@ var GAME = function() {
             this.disable = true;
             GAME.model.UFO.models.splice(GAME.model.UFO.models.indexOf(this), 1);
             SOUND.UFO.pause();
+            // create explosion
+            createExplosion(this.xyz, DESTRUCT_EXPLOSION_RANGE, function () {
+                // Do nothing
+            });
         },
         create: function(xyz) {
             let spaceship = MODELS.copyModel(GAME.model.UFO.prototype,
