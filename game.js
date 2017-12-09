@@ -380,6 +380,7 @@ var GAME = function() {
             SOUND.gamePlay.play();
             ANIMATION.start();
             DOM.playButton.hide();
+            DOM.title.hide();
         },
         endLevel: function () {
             ANIMATION.stop = true;
@@ -421,6 +422,7 @@ var GAME = function() {
             ANIMATION.delayPlay(8000, SOUND.intro);
             RASTERIZE.renderTriangles(SHADER.gl);
             DOM.playButton.show().attr('class', 'play').attr('onclick',"GAME.play()");
+            DOM.title.show();
         },
         launchDefenseMissile: function(ratioX, ratioY) {
             let xyz = vec3.fromValues(CANVAS_ORIGIN[0] - WIDTH * ratioX, CANVAS_ORIGIN[1] - HEIGHT * ratioY, 0),

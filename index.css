@@ -48,6 +48,15 @@
     font-family: "Agency FB";
 }
 
+#title {
+    position: absolute;
+    z-index: 2;
+    height: 300px;
+    width: auto;
+    left: 0;
+    top: 65px;
+}
+
 audio {
     visibility: hidden;
 }
