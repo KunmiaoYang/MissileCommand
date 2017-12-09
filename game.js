@@ -78,7 +78,14 @@ var GAME = function() {
             xyz: xyz,
             timeRemain: EXPLOSION_DURATION,
             range: ZERO_THRESHOLD,
-            model: expModel
+            model: expModel,
+            updateRange: function () {
+                this.range = 2 * Math.sin(this.timeRemain / EXPLOSION_DURATION * Math.PI) * EXPLOSION_RANGE;
+                if(this.range > EXPLOSION_RANGE) this.range = EXPLOSION_RANGE;
+                this.model.rMatrix[0] = this.range;
+                this.model.rMatrix[5] = this.range;
+                this.model.rMatrix[10] = this.range;
+            }
         });
     }
     function launch(missile, speed, target, hit) {
@@ -441,12 +448,8 @@ var GAME = function() {
 
             // update explosion
             for(let i = 0, iLen = airExplosions.length; i < iLen; i++) {
-                if(airExplosions[i].range < EXPLOSION_RANGE) {
-                    airExplosions[i].range = Math.sin(airExplosions[i].timeRemain / EXPLOSION_DURATION * Math.PI) * EXPLOSION_RANGE;
-                    airExplosions[i].model.rMatrix[0] = airExplosions[i].range;
-                    airExplosions[i].model.rMatrix[5] = airExplosions[i].range;
-                    airExplosions[i].model.rMatrix[10] = airExplosions[i].range;
-                }
+                airExplosions[i].updateRange();
+
                 for(let j = 0, jLen = launchedMissile.length; j < jLen; j++) {
                     if(launchedMissile[j].disable || launchedMissile[j].isDefense) continue;
                     let dis = vec3.distance(airExplosions[i].xyz, launchedMissile[j].xyz);
