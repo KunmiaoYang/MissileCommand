@@ -1,7 +1,8 @@
 var GAME = function() {
     const WIDTH = 1.3, HEIGHT = 1.3,
         CANVAS_ORIGIN = [1.15, 1.15, 0];
-    const INTRO_STATUS = 0, PLAY_STATUS = 1, MISSION_COMPLETE_STATUS = 2, GAME_OVER_STATUS = 3;
+    const INTRO_STATUS = 0, PLAY_STATUS = 1, MISSION_COMPLETE_STATUS = 2,
+        GAME_OVER_STATUS = 3, PAUSE_STATUS = 4;
     const CITY_SCALE = 0.0038, CITY_COUNT = 6, CITY_SCORE = 20,
         BATTERY_SCALE = 0.0025, BATTERY_COUNT = 3, BATTERY_SCORE = 10,
         TARGET_HEIGHT_BOTTOM = 0.05, TARGET_HEIGHT_RANGE = 0.15,
@@ -149,17 +150,19 @@ var GAME = function() {
         },
         rMatrix: mat4.scale(mat4.create(), idMatrix, [MISSILE_SCALE, -MISSILE_SCALE, MISSILE_SCALE]),
         splitMissile: function() {
-            console.log("Split missile: " + this.xyz[1]);
-            let count = Math.floor(Math.random()*GAME.level.splitLimit) + 1,
-                targets = GAME.model.defenseTarget,
-                curIndex = targets.indexOf(this.target),
-                startIndex = Math.max(0, curIndex - Math.floor(Math.random()*(count + 1))),
-                targetCount = BATTERY_COUNT + CITY_COUNT;
-            for(let i = startIndex, j = 0; i < targetCount && j < count; i++) {
-                if(i === curIndex) continue;
-                let missile = attackMissile.create(vec3.clone(this.xyz));
-                launch(missile, GAME.level.attackMissileSpeed, targets[i], hitTarget);
-                j++;
+            if(PLAY_STATUS === GAME.status) {
+                console.log("Split missile: " + this.xyz[1]);
+                let count = Math.floor(Math.random() * GAME.level.splitLimit) + 1,
+                    targets = GAME.model.defenseTarget,
+                    curIndex = targets.indexOf(this.target),
+                    startIndex = Math.max(0, curIndex - Math.floor(Math.random() * (count + 1))),
+                    targetCount = BATTERY_COUNT + CITY_COUNT;
+                for (let i = startIndex, j = 0; i < targetCount && j < count; i++) {
+                    if (i === curIndex) continue;
+                    let missile = attackMissile.create(vec3.clone(this.xyz));
+                    launch(missile, GAME.level.attackMissileSpeed, targets[i], hitTarget);
+                    j++;
+                }
             }
         },
         destruct: function () {
@@ -391,6 +394,20 @@ var GAME = function() {
                     models: []
                 };
             });
+        },
+        pause: function () {
+            if(PLAY_STATUS === GAME.status) {
+                GAME.status = PAUSE_STATUS;
+                ANIMATION.pause();
+                DOM.pauseButton.attr('class', 'pause').attr('onclick', "GAME.continue()");
+            }
+        },
+        continue: function () {
+            if(PAUSE_STATUS === GAME.status) {
+                GAME.status = PLAY_STATUS;
+                ANIMATION.start();
+                DOM.pauseButton.attr('class', 'play').attr('onclick', "GAME.pause()");
+            }
         },
         play: function () {
             GAME.status = PLAY_STATUS;

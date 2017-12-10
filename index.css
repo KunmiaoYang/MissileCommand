@@ -35,6 +35,24 @@
     top: 280px;
 }
 
+#pause_game {
+    position: absolute;
+    height: 15px;
+    width: auto;
+}
+
+#pause_game.play {
+    content: url(img/pause.png);
+    top: 15px;
+    left: 490px;
+}
+
+#pause_game.pause {
+    content: url("img/continue.png");
+    top: 15px;
+    left: 490px;
+}
+
 #statistics {
     position: absolute;
     left: 30px;

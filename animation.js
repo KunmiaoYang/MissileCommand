@@ -10,6 +10,9 @@ var ANIMATION = function () {
             ANIMATION.stop = false;
             requestAnimationFrame(ANIMATION.animate);
         },
+        pause: function () {
+            ANIMATION.stop = true;
+        },
         animate: function(now) {
             if(ANIMATION.stop) return;
             let duration = now - lastTime;
