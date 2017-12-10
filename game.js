@@ -56,11 +56,11 @@ var GAME = function() {
     function destroyBattery() {
         if(this.disable) return;
         this.disable = true;
-        let i = GAME.model.batteries.indexOf(this), missiles = GAME.model.defenseMissiles[i];
+        let i = GAME.model.batteries.indexOf(this), missiles = GAME.model.defenseMissile.array[i];
         for(let j = 0, len = missiles.length, k; j < len; j++) {
             if ((k = MODELS.array.indexOf(missiles[j])) > -1) MODELS.array.splice(k, 1);
         }
-        GAME.model.defenseMissiles[i] = [];
+        GAME.model.defenseMissile.array[i] = [];
         battery.count--;
     }
     function destroyObjectsInRange(objects) {
@@ -298,7 +298,7 @@ var GAME = function() {
             for(let i = 0; i < GAME.level.attackMissileCount; i++) {
                 missiles[i] = attackMissile.create([Math.random(), ATTACK_MISSILE_HEIGHT, 0]);
             }
-            GAME.model.attackMissiles = missiles;
+            GAME.model.attackMissile.array = missiles;
             GAME.model.UFO.models = [];
         },
         initDefenseMissile: function () {
@@ -319,7 +319,7 @@ var GAME = function() {
                     MODELS.array.push(missiles[i][j]);
                 }
             }
-            GAME.model.defenseMissiles = missiles;
+            GAME.model.defenseMissile.array = missiles;
         },
         initDefenseTarget: function () {
             GAME.model.defenseTarget = new Array(CITY_COUNT + BATTERY_COUNT);
@@ -460,7 +460,7 @@ var GAME = function() {
             let xyz = vec3.fromValues(CANVAS_ORIGIN[0] - WIDTH * ratioX, CANVAS_ORIGIN[1] - HEIGHT * ratioY, 0),
                 tar = createAirTarget(xyz),
                 batteryIndex = -1,
-                missiles = GAME.model.defenseMissiles;
+                missiles = GAME.model.defenseMissile.array;
             if(xyz[1] < 0) return;
             for(let i = 0, delta = WIDTH; i < BATTERY_COUNT; i++) {
                 if(0 === missiles[i].length) continue;
@@ -522,7 +522,7 @@ var GAME = function() {
             for(let len = level.attackMissileCount, defenseTarget = GAME.model.defenseTarget;
                 level.nextMissile < len && level.missileSchedule[level.nextMissile] < level.time; level.nextMissile++) {
                 let tar = defenseTarget[Math.floor(Math.random()*defenseTarget.length)];
-                launch(GAME.model.attackMissiles.pop(), level.attackMissileSpeed, tar, hitTarget);
+                launch(GAME.model.attackMissile.array.pop(), level.attackMissileSpeed, tar, hitTarget);
             }
 
             // launch space ship
@@ -545,8 +545,8 @@ var GAME = function() {
                 if(curBattery.disable) continue;
                 let offset = Math.sin(now * 2 * Math.PI / TARGET_FLOAT_PERIOD + curBattery.phase) * TARGET_FLOAT_AMPLITUDE;
                 curBattery.tMatrix[13] = curBattery.xyz[1] + offset;
-                for(let j = 0, len = GAME.model.defenseMissiles[i].length; j < len; j++) {
-                    GAME.model.defenseMissiles[i][j].tMatrix[13] = curBattery.tMatrix[13];
+                for(let j = 0, len = GAME.model.defenseMissile.array[i].length; j < len; j++) {
+                    GAME.model.defenseMissile.array[i][j].tMatrix[13] = curBattery.tMatrix[13];
                 }
             }
 
@@ -574,7 +574,7 @@ var GAME = function() {
             RASTERIZE.setupOnLoad();
         },
         test: function (i, j) {
-            let missiles = GAME.model.defenseMissiles;
+            let missiles = GAME.model.defenseMissile.array;
             let t = createAirTarget(vec3.fromValues(0.5, 0.5, 0));
             launch(missiles[i][j], DEFENSE_MISSILE_SPEED, t, hitAir);
         }
