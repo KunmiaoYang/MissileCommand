@@ -1,6 +1,7 @@
 var GAME = function() {
     const WIDTH = 1.3, HEIGHT = 1.3,
         CANVAS_ORIGIN = [1.15, 1.15, 0];
+    const INTRO_STATUS = 0, PLAY_STATUS = 1, MISSION_COMPLETE_STATUS = 2, GAME_OVER_STATUS = 3;
     const CITY_SCALE = 0.0038, CITY_COUNT = 6, CITY_SCORE = 20,
         BATTERY_SCALE = 0.0025, BATTERY_COUNT = 3, BATTERY_SCORE = 10,
         TARGET_HEIGHT_BOTTOM = 0.05, TARGET_HEIGHT_RANGE = 0.15,
@@ -238,6 +239,7 @@ var GAME = function() {
     }
 
     return {
+        status: INTRO_STATUS,
         model: {},
         level: {},
         score: 0,
@@ -371,6 +373,7 @@ var GAME = function() {
             });
         },
         play: function () {
+            GAME.status = PLAY_STATUS;
             GAME.initGame();
             GAME.initLevel();
             GAME.initMODELS();
@@ -385,7 +388,8 @@ var GAME = function() {
             DOM.title.hide();
         },
         endLevel: function () {
-            ANIMATION.stop = true;
+            GAME.status = MISSION_COMPLETE_STATUS;
+            // ANIMATION.stop = true;
             SOUND.gamePlay.pause();
             SOUND.missionComplete.load();
             SOUND.missionComplete.play();
@@ -394,6 +398,7 @@ var GAME = function() {
             DOM.playButton.show().attr('class', 'next').attr('onclick',"GAME.nextLevel()");
         },
         nextLevel: function () {
+            GAME.status = PLAY_STATUS;
             GAME.level.id++;
             GAME.level.splitProbability += 0.0002;
             GAME.level.spaceshipProbability += 0.0002;
@@ -415,7 +420,8 @@ var GAME = function() {
             DOM.playButton.hide();
         },
         over: function () {
-            ANIMATION.stop = true;
+            GAME.status = GAME_OVER_STATUS;
+            // ANIMATION.stop = true;
             SOUND.UFO.pause();
             SOUND.missionComplete.pause();
             SOUND.gamePlay.pause();
@@ -425,10 +431,12 @@ var GAME = function() {
                 SOUND.intro.play();
                 DOM.playButton.show().attr('class', 'play').attr('onclick',"GAME.play()");
                 DOM.title.show();
+                GAME.status = INTRO_STATUS;
             });
             RASTERIZE.renderTriangles(SHADER.gl);
         },
         launchDefenseMissile: function(ratioX, ratioY) {
+            if(GAME.status !== PLAY_STATUS) return;
             let xyz = vec3.fromValues(CANVAS_ORIGIN[0] - WIDTH * ratioX, CANVAS_ORIGIN[1] - HEIGHT * ratioY, 0),
                 tar = createAirTarget(xyz),
                 batteryIndex = -1,
@@ -522,7 +530,8 @@ var GAME = function() {
                 }
             }
 
-            if(0 >= city.count) GAME.over();    // game over
+            if(GAME.status !== PLAY_STATUS) return;
+            else if(0 >= city.count) GAME.over();    // game over
             else if(level.nextMissile >= level.attackMissileCount) {    // next level
                 let isEnd = true;
                 for(let i = 0, len = launchedMissile.length; i < len; i++) {
