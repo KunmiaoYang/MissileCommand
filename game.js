@@ -309,8 +309,10 @@ var GAME = function() {
             for(let i = 0; i < CITY_COUNT; i++) {
                 // Init city models
                 let targetModel =  GAME.model.cities[i],
-                    height = Math.random() * TARGET_HEIGHT_RANGE + TARGET_HEIGHT_BOTTOM;
+                    height = Math.random() * TARGET_HEIGHT_RANGE + TARGET_HEIGHT_BOTTOM,
+                    rotMatrix = mat4.fromRotation(mat4.create(), Math.random()*2*Math.PI, [0,1,0]);
                 targetModel.phase = Math.random()*2*Math.PI;
+                targetModel.rMatrix = mat4.multiply(mat4.create(), rotMatrix, city.rMatrixArray[i]);
                 targetModel.tMatrix[13] = height;
                 targetModel.xyz = vec3.fromValues(city.pos[i], height, 0);
                 targetModel.destruct = destroyCity;
