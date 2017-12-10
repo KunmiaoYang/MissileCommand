@@ -23,7 +23,10 @@ var SKECHUP_MODEL = function() {
                     });
                     model.coordArray = text2Array($(geo).find(model.posId).find('float_array').text(), " ", parseFloat);
                     model.normalArray = text2Array($(geo).find(model.norId).find('float_array').text(), " ", parseFloat);
-                    model.indexArray = text2Array($(geo).find('p').text(), " ", parseInt);
+                    model.indexArray = [];
+                    $.each($(geo).find('p'), function (k, indexArrayNode) {
+                        model.indexArray = model.indexArray.concat(text2Array($(indexArrayNode).text(), " ", parseInt));
+                    });
                     models.push(model);
                 });
                 if(complete) complete(models);
@@ -33,13 +36,17 @@ var SKECHUP_MODEL = function() {
         mergeModels: function(models) {
             let mergedModel = MODELS.createModel();
             $.each(models, function (i, model) {
-                let offset = mergedModel.coordArray.length / 3;
-                mergedModel.coordArray = mergedModel.coordArray.concat(model.coordArray);
-                mergedModel.normalArray = mergedModel.normalArray.concat(model.normalArray);
-                $.each(model.indexArray, function(j, index) {
-                    mergedModel.indexArray.push(index + offset);
-                    mergedModel.triBufferSize++;
-                });
+                if(model.coordArray.length === model.normalArray.length && Math.max(...model.indexArray) <= model.coordArray.length / 3) {
+                    let offset = mergedModel.coordArray.length / 3;
+                    mergedModel.coordArray = mergedModel.coordArray.concat(model.coordArray);
+                    mergedModel.normalArray = mergedModel.normalArray.concat(model.normalArray);
+                    $.each(model.indexArray, function (j, index) {
+                        mergedModel.indexArray.push(index + offset);
+                        mergedModel.triBufferSize++;
+                    });
+                } else {
+                    console.log("maxIndex = " + Math.max(...model.indexArray) + ": coordCount = " + model.coordArray.length / 3);
+                }
             });
             return mergedModel;
         },

@@ -10,25 +10,29 @@
     width: 167px;
     height: 62px;
     position: absolute;
-    top: 340px;
     left: 180px;
     z-index: 2;
+    visibility: inherit;
 }
 
 #play_game.play {
     content: url("img/play.png");
+    top: 340px;
 }
 
 #play_game.play:hover {
     content: url("img/play_highlight.png");
+    top: 340px;
 }
 
 #play_game.next {
     content: url("img/nextlevel.png");
+    top: 280px;
 }
 
 #play_game.next:hover {
     content: url("img/nextlevel_highlight.png");
+    top: 280px;
 }
 
 #statistics {

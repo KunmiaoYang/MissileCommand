@@ -4,7 +4,7 @@ var URL = function () {
         triangles: baseAddress + 'model/triangles.json',
         ellipsoids: baseAddress + 'model/ellipsoids.json',
         lights: baseAddress + 'model/lights.json',
-        cityModel: baseAddress + 'model/city.dae',
+        cityModel: 'model/city.dae',
         batteryModel: baseAddress + 'model/battery.dae',
         missileModel: baseAddress + 'model/missile.dae',
         UFOModel: baseAddress + 'model/UFO.dae',
