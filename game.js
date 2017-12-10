@@ -228,6 +228,7 @@ var GAME = function() {
         battery.tMatrixArray.push(mat4.fromTranslation(mat4.create(), [battery.pos[i], 0, 0]));
 
         // Init defense missiles
+        let relativeScale = MISSILE_SCALE/BATTERY_SCALE;
         defenseMissile.xyz[i] = [];
         defenseMissile.rMatrixArray[i] = [];
         defenseMissile.tMatrixArray[i] = [];
@@ -235,8 +236,8 @@ var GAME = function() {
             for(let k = 0; k < defenseMissile.zPos.length; k++) {
                 let xyz = vec3.fromValues(battery.pos[i] + defenseMissile.xPos[j], 0, defenseMissile.zPos[k]);
                 defenseMissile.xyz[i].push(xyz);
-                defenseMissile.rMatrixArray[i].push(mat4.scale(mat4.create(), idMatrix, [MISSILE_SCALE, MISSILE_SCALE, MISSILE_SCALE]));
-                defenseMissile.tMatrixArray[i].push(mat4.fromTranslation(mat4.create(), xyz));
+                defenseMissile.rMatrixArray[i].push(mat4.scale(mat4.create(), idMatrix, [relativeScale, relativeScale, relativeScale]));
+                defenseMissile.tMatrixArray[i].push(mat4.fromTranslation(mat4.create(), [defenseMissile.xPos[j]/BATTERY_SCALE, 0, defenseMissile.zPos[k]/BATTERY_SCALE]));
             }
         }
     }
@@ -310,16 +311,18 @@ var GAME = function() {
                 missiles[i] = [];
                 for(let j = 0, len = defenseMissile.tMatrixArray[i].length; j < len; j++) {
                     let tMatrix = mat4.clone(defenseMissile.tMatrixArray[i][j]);
-                    tMatrix[13] = GAME.model.batteries[i].xyz[1];
-                    missiles[i][j] = MODELS.copyModel(GAME.model.defenseMissile.prototype,
+                    // tMatrix[13] = GAME.model.batteries[i].xyz[1];
+                    let missile = MODELS.copyModel(GAME.model.defenseMissile.prototype,
                         mat4.clone(defenseMissile.rMatrixArray[i][j]), tMatrix);
-                    missiles[i][j].xyz = vec3.clone(defenseMissile.xyz[i][j]);
-                    missiles[i][j].xyz[1] = tMatrix[13];
-                    missiles[i][j].direction = vec3.fromValues(0, 1, 0);
-                    missiles[i][j].material = defenseMissile.material;
-                    missiles[i][j].isDefense = true;
-                    missiles[i][j].isMissile = true;
-                    MODELS.array.push(missiles[i][j]);
+                    missile.rootModel = GAME.model.batteries[i];
+                    missile.xyz = vec3.clone(defenseMissile.xyz[i][j]);
+                    missile.xyz[1] = GAME.model.batteries[i].xyz[1];
+                    missile.direction = vec3.fromValues(0, 1, 0);
+                    missile.material = defenseMissile.material;
+                    missile.isDefense = true;
+                    missile.isMissile = true;
+                    MODELS.array.push(missile);
+                    missiles[i][j] = missile;
                 }
             }
             GAME.model.defenseMissile.array = missiles;
@@ -488,6 +491,10 @@ var GAME = function() {
             }
             if(-1 === batteryIndex) return;
             let missile = missiles[batteryIndex].pop();
+            missile.rootModel = null;
+            missile.rMatrix = mat4.scale(mat4.create(), idMatrix, [MISSILE_SCALE, MISSILE_SCALE, MISSILE_SCALE]);
+            missile.tMatrix = mat4.fromTranslation(mat4.create(), missile.xyz);
+            console.log("Launch at:" + missile.xyz);
             launch(missile, DEFENSE_MISSILE_SPEED, tar, hitAir);
             SOUND.launch.play();
         },
@@ -562,9 +569,6 @@ var GAME = function() {
                 if(curBattery.disable) continue;
                 let offset = Math.sin(now * 2 * Math.PI / TARGET_FLOAT_PERIOD + curBattery.phase) * TARGET_FLOAT_AMPLITUDE;
                 curBattery.tMatrix[13] = curBattery.xyz[1] + offset;
-                for(let j = 0, len = GAME.model.defenseMissile.array[i].length; j < len; j++) {
-                    GAME.model.defenseMissile.array[i][j].tMatrix[13] = curBattery.tMatrix[13];
-                }
             }
 
             if(GAME.status !== PLAY_STATUS) return;
@@ -590,10 +594,26 @@ var GAME = function() {
             EVENTS.setupEvent();
             RASTERIZE.setupOnLoad();
         },
-        test: function (i, j) {
-            let missiles = GAME.model.defenseMissile.array;
+        test: function () {
+            DOM.playButton.hide();
+            DOM.title.hide();
+            GAME.status = PLAY_STATUS;
+            GAME.initGame();
+            GAME.initLevel();
+            GAME.initMODELS();
+            GAME.initDefenseTarget();
+            GAME.initDefenseMissile();
+            let missiles = GAME.model.defenseMissile.array, missile = missiles[0][0];
+            let battery = GAME.model.batteries[0];
             let t = createAirTarget(vec3.fromValues(0.5, 0.5, 0));
-            launch(missiles[i][j], DEFENSE_MISSILE_SPEED, t, hitAir);
+
+            // Test
+            missile.rootModel = battery;
+            missile.rMatrix = mat4.scale(mat4.create(), idMatrix, [MISSILE_SCALE/BATTERY_SCALE, MISSILE_SCALE/BATTERY_SCALE, MISSILE_SCALE/BATTERY_SCALE]);
+            missile.tMatrix = mat4.fromTranslation(mat4.create(), [-0.015/BATTERY_SCALE, 0, -0.015/BATTERY_SCALE]);
+
+            RASTERIZE.renderTriangles(SHADER.gl);
+            // launch(missiles[i][j], DEFENSE_MISSILE_SPEED, t, hitAir);
         }
     }
 }();

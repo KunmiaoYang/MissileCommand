@@ -39,6 +39,10 @@ var MODELS = function () {
         },
         calcModelMatrix: function (model) {
             let mMatrix = mat4.multiply(mat4.create(), model.tMatrix, model.rMatrix);
+            if(model.rootModel) {
+                mMatrix = mat4.multiply(mat4.create(), MODELS.calcModelMatrix(model.rootModel), mMatrix);
+            }
+            model.mMatrix = mMatrix;
             return mMatrix;
         },
         getMaterialUniformLocation: function(gl, program, varName) {

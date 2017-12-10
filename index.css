@@ -82,3 +82,7 @@
 audio {
     visibility: hidden;
 }
+
+.test {
+    visibility: visible;
+}
