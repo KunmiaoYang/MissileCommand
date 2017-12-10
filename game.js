@@ -13,22 +13,28 @@ var GAME = function() {
         EXPLOSION_RANGE = 0.08, DESTRUCT_EXPLOSION_RANGE = 0.04,
         EXPLOSION_DURATION = 2000;
     const ZERO_THRESHOLD = 0.0001;
+    function calcRotationMatrix(oldDirection, newDirection) {
+        vec3.normalize(oldDirection, oldDirection);
+        vec3.normalize(newDirection, newDirection);
+        let axis = vec3.cross(vec3.create(), oldDirection, newDirection),
+            sinRad = vec3.length(axis), cosRad = vec3.dot(oldDirection, newDirection),
+            rotMatrix = null;
+        if(sinRad > ZERO_THRESHOLD) {
+            let rad = cosRad > 0 ? Math.asin(sinRad) : Math.PI - Math.asin(sinRad);
+            rotMatrix = mat4.fromRotation(mat4.create(), Math.asin(sinRad), axis);
+        } else if(cosRad < 0) {
+            // reverse direction
+            rotMatrix = mat4.fromRotation(mat4.create(), Math.PI, [0,0,1]);
+        }
+        return rotMatrix;
+    }
     function guidance(missile, target) {
         missile.target = target;
         missile.distance = 0;
         let direction = vec3.subtract(vec3.create(), target.xyz, missile.xyz);
         missile.targetDistance = vec3.length(direction);
-        vec3.normalize(direction, direction);
-        let axis = vec3.cross(vec3.create(), missile.direction, direction),
-            sinRad = vec3.length(axis), cosRad = vec3.dot(missile.direction, direction);
-        if(sinRad > ZERO_THRESHOLD) {
-            let rad = cosRad > 0 ? Math.asin(sinRad) : Math.PI - Math.asin(sinRad);
-            let rotMatrix = mat4.fromRotation(mat4.create(), Math.asin(sinRad), axis);
-            missile.rMatrix = mat4.multiply(mat4.create(), rotMatrix, missile.rMatrix);
-            missile.direction = direction;
-        } else if(cosRad < 0) {
-            // reverse direction
-            let rotMatrix = mat4.fromRotation(mat4.create(), Math.PI, [0,0,1]);
+        let rotMatrix = calcRotationMatrix(missile.direction, direction);
+        if (rotMatrix) {
             missile.rMatrix = mat4.multiply(mat4.create(), rotMatrix, missile.rMatrix);
             missile.direction = direction;
         }
@@ -494,7 +500,6 @@ var GAME = function() {
             missile.rootModel = null;
             missile.rMatrix = mat4.scale(mat4.create(), idMatrix, [MISSILE_SCALE, MISSILE_SCALE, MISSILE_SCALE]);
             missile.tMatrix = mat4.fromTranslation(mat4.create(), missile.xyz);
-            console.log("Launch at:" + missile.xyz);
             launch(missile, DEFENSE_MISSILE_SPEED, tar, hitAir);
             SOUND.launch.play();
         },
