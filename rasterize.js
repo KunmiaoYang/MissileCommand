@@ -19,8 +19,7 @@ var RASTERIZE = function () {
                 // triangleSetArray[i].material.ambient = [0.5,1.0,1.0];
                 gl.uniform1f(SHADER.uniforms.doubleSideUniform, MODELS.array[i].doubleSide);
                 MODELS.setMaterialUniform(gl, SHADER.uniforms.materialUniform, MODELS.array[i].material);
-                var mMatrix = mat4.multiply(mat4.create(), MODELS.array[i].tMatrix, MODELS.array[i].rMatrix);
-                gl.uniformMatrix4fv(SHADER.uniforms.mMatrixUniform, false, mMatrix);
+                gl.uniformMatrix4fv(SHADER.uniforms.mMatrixUniform, false, MODELS.calcModelMatrix(MODELS.array[i]));
                 gl.uniformMatrix3fv(SHADER.uniforms.nMatrixUniform, false, mat3.normalFromMat4(mat3.create(), MODELS.array[i].rMatrix));
 
                 // vertex buffer: activate and feed into vertex shader

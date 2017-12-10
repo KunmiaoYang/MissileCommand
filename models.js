@@ -37,6 +37,10 @@ var MODELS = function () {
             };
             return model;
         },
+        calcModelMatrix: function (model) {
+            let mMatrix = mat4.multiply(mat4.create(), model.tMatrix, model.rMatrix);
+            return mMatrix;
+        },
         getMaterialUniformLocation: function(gl, program, varName) {
             return {
                 ambient: gl.getUniformLocation(program, varName + ".ambient"),
