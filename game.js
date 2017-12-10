@@ -252,16 +252,21 @@ var GAME = function() {
             GAME.score = 0;
             GAME.level = {
                 id: 1,
+                duration: 15000,
+                time: 0,
+
                 attackMissileCount: 10,
                 attackMissileSpeed: 0.1,
-                spaceshipSpeed: 0.1,
-                duration: 15000,
-                splitLimit: 3,
-                splitProbability: 0.0005,
-                spaceshipProbability: 0.001,
                 nextMissile: 0,
-                time: 0,
-                missileSchedule: []
+                missileSchedule: [],
+
+                spaceshipCount: 1,
+                spaceshipSpeed: 0.1,
+                nextSpaceship: 0,
+                spaceshipSchedule: [],
+
+                splitLimit: 3,
+                splitProbability: 0.0005
             };
             city.count = CITY_COUNT;
             for(let i = 0; i < CITY_COUNT; i++) {
@@ -269,14 +274,24 @@ var GAME = function() {
             }
         },
         initLevel: function () {
+            let level = GAME.level;
+            GAME.level.time = 0;
+
             // schedule missile
             GAME.level.missileSchedule = [];
             for(let i = 0; i < GAME.level.attackMissileCount; i++)
                 GAME.level.missileSchedule.push(Math.floor(Math.random() * GAME.level.duration));
             GAME.level.missileSchedule.sort(function(n1, n2){return n1 - n2});
             GAME.level.nextMissile = 0;
-            GAME.level.time = 0;
             launchedMissile = [];
+
+            // schedule spaceship
+            let lastMissileTime = level.missileSchedule[level.attackMissileCount - 1];
+            level.spaceshipSchedule = [];
+            for(let i = 0; i < level.spaceshipCount; i++)
+                level.spaceshipSchedule.push(Math.floor(Math.random() * lastMissileTime));
+            level.spaceshipSchedule.sort(function(n1, n2){return n1 - n2});
+            level.nextSpaceship = 0;
         },
         initAttackMissile: function () {
             let missiles = [];
@@ -401,7 +416,7 @@ var GAME = function() {
             GAME.status = PLAY_STATUS;
             GAME.level.id++;
             GAME.level.splitProbability += 0.0002;
-            GAME.level.spaceshipProbability += 0.0002;
+            GAME.level.spaceshipCount = Math.floor(GAME.level.id / 2) + 1;
             GAME.level.attackMissileSpeed += 0.02;
             GAME.level.spaceshipSpeed += 0.02;
             GAME.level.attackMissileCount += 1;
@@ -506,7 +521,7 @@ var GAME = function() {
             }
 
             // launch space ship
-            if(level.nextMissile < level.attackMissileCount && Math.random() < GAME.level.spaceshipProbability) {
+            for(; level.nextSpaceship < level.spaceshipCount && level.spaceshipSchedule[level.nextSpaceship] < level.time; level.nextSpaceship++) {
                 let xyz = [Math.random() < 0.5 ? -UFO_OFFSET : 1 + UFO_OFFSET, Math.random()*0.5 + 0.5, 0],
                     spaceship = UFO.create(xyz),
                     tar = createAirTarget([1.0 - xyz[0], xyz[1], 0]);
