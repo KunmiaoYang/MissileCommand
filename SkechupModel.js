@@ -28,6 +28,7 @@ var SKECHUP_MODEL = function() {
                         model.indexArray = model.indexArray.concat(text2Array($(indexArrayNode).text(), " ", parseInt));
                     });
                     models.push(model);
+                    if(model.coordArray.length%3 !== 0) console.log("ID = " + $(geo).id + "maxIndex = " + Math.max(...model.indexArray) + ": coordCount = " + model.coordArray.length / 3);
                 });
                 if(complete) complete(models);
             }, "xml");

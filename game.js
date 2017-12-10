@@ -169,7 +169,7 @@ var GAME = function() {
             createExplosion(this.xyz, DESTRUCT_EXPLOSION_RANGE, destroyObjectsInRange);
         },
         create: function(xyz) {
-            let missile = MODELS.copyModel(GAME.model.missile.prototype,
+            let missile = MODELS.copyModel(GAME.model.attackMissile.prototype,
                 mat4.clone(attackMissile.rMatrix),
                 mat4.fromTranslation(mat4.create(), xyz));
             missile.xyz = xyz;
@@ -308,7 +308,7 @@ var GAME = function() {
                 for(let j = 0, len = defenseMissile.tMatrixArray[i].length; j < len; j++) {
                     let tMatrix = mat4.clone(defenseMissile.tMatrixArray[i][j]);
                     tMatrix[13] = GAME.model.batteries[i].xyz[1];
-                    missiles[i][j] = MODELS.copyModel(GAME.model.missile.prototype,
+                    missiles[i][j] = MODELS.copyModel(GAME.model.defenseMissile.prototype,
                         mat4.clone(defenseMissile.rMatrixArray[i][j]), tMatrix);
                     missiles[i][j].xyz = vec3.clone(defenseMissile.xyz[i][j]);
                     missiles[i][j].xyz[1] = tMatrix[13];
@@ -374,10 +374,15 @@ var GAME = function() {
                     GAME.model.batteries[i] = MODELS.copyModel(model, battery.rMatrixArray[i], battery.tMatrixArray[i]);
                 }
             });
-            SKECHUP_MODEL.loadModel(SHADER.gl, URL.missileModel, function (model) {
-                GAME.model.missile = {
+            SKECHUP_MODEL.loadModel(SHADER.gl, URL.attackMissileModel, function (model) {
+                GAME.model.attackMissile = {
                     prototype: model,
                     launchedMissile: launchedMissile
+                };
+            });
+            SKECHUP_MODEL.loadModel(SHADER.gl, URL.defenseMissileModel, function (model) {
+                GAME.model.defenseMissile = {
+                    prototype: model,
                 };
             });
             SKECHUP_MODEL.loadModel(SHADER.gl, URL.UFOModel, function (model) {

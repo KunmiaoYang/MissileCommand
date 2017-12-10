@@ -5,8 +5,9 @@ var URL = function () {
         ellipsoids: baseAddress + 'model/ellipsoids.json',
         lights: baseAddress + 'model/lights.json',
         cityModel: 'model/city.dae',
-        batteryModel: baseAddress + 'model/battery.dae',
-        missileModel: baseAddress + 'model/missile.dae',
+        batteryModel: 'model/battery.dae',
+        attackMissileModel: 'model/AttackMissile.dae',
+        defenseMissileModel: 'model/DefenseMissile.dae',
         UFOModel: baseAddress + 'model/UFO.dae',
         img: {
             base: baseAddress + 'img/',
