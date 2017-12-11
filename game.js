@@ -123,7 +123,7 @@ var GAME = function() {
         count: CITY_COUNT,
         pos: [0.875, 0.75, 0.625, 0.375, 0.25, 0.125],
         material: {
-            ambient: [0.1,0.1,0.1], diffuse: [0.7647, 0.7647, 0.7647], specular: [0.3,0.3,0.3], n:1, textureMode: 0
+            ambient: [0,0,0], diffuse: [1.0, 1.0, 1.0], specular: [1.0, 1.0, 1.0], n:10, textureMode: 0
         },
         tMatrixArray: [],
         rMatrixArray: [],
@@ -135,7 +135,7 @@ var GAME = function() {
         count: BATTERY_COUNT,
         pos: [1, 0.5, 0],
         material: {
-            ambient: [0.1,0.1,0.1], diffuse: [0.278, 0.278, 0.957], specular: [0.3,0.3,0.3], n:1, textureMode: 0
+            ambient: [0,0,0], diffuse: [0.1, 0.1, 0.1], specular: [1.0, 1.0, 1.0], n:10, textureMode: 0
         },
         tMatrixArray: [],
         rMatrixArray: [],
@@ -159,7 +159,7 @@ var GAME = function() {
     };
     var defenseMissile = {
         material: {
-            ambient: [0.1,0.1,0.1], diffuse: [1.0, 1.0, 0], specular: [0.5,0.5,0.5], n:1, textureMode: 0
+            ambient: [0,0,0], diffuse: [1.0, 1.0, 1.0], specular: [1.0, 1.0, 1.0], n:10, textureMode: 0
         },
         xPos: [-0.015, 0, 0.015],
         zPos: [-0.015, 0, 0.015],
@@ -169,7 +169,7 @@ var GAME = function() {
     };
     var attackMissile = {
         material: {
-            ambient: [0.1,0.1,0.1], diffuse: [1,0,0], specular: [0.5,0.5,0.5], n:1, textureMode: 0
+            ambient: [0,0,0], diffuse: [1.0, 0.0, 0.0], specular: [1.0, 1.0, 1.0], n:10, textureMode: 0
         },
         rMatrix: mat4.scale(mat4.create(), idMatrix, [MISSILE_SCALE, -MISSILE_SCALE, MISSILE_SCALE]),
         splitMissile: function() {
@@ -211,7 +211,7 @@ var GAME = function() {
     };
     var UFO = {
         material: {
-            ambient: [0.1,0.1,0.1], diffuse: [0.5,0.5,0.5], specular: [0.5,0.5,0.5], n:1, textureMode: 0
+            ambient: [0,0,0], diffuse: [1.0, 0.0, 0.0], specular: [1.0, 1.0, 1.0], n:10, textureMode: 0
         },
         rMatrix: mat4.scale(mat4.create(), idMatrix, [UFO_SCALE, UFO_SCALE, UFO_SCALE]),
         disappear: function () {
@@ -520,8 +520,11 @@ var GAME = function() {
                 batteryIndex = battery.getNearestIndex(xyz[0]);
             if(-1 === batteryIndex) return;
             let curBattery = GAME.model.batteries[batteryIndex],
-                direction = vec3.subtract(vec3.create(), xyz, curBattery.xyz);
-            curBattery.rMatrix = mat4.multiply(mat4.create(), battery.scaleMatrix, calcRotationMatrix(oldDirection, direction));
+                direction = vec3.subtract(vec3.create(), xyz, curBattery.xyz),
+                rotMatrix = calcRotationMatrix(oldDirection, direction);
+            if (rotMatrix) {
+                curBattery.rMatrix = mat4.multiply(mat4.create(), battery.scaleMatrix, rotMatrix);
+            }
         },
         update: function(duration, now) {
             let seconds = duration/1000, level = GAME.level;
@@ -622,7 +625,7 @@ var GAME = function() {
         test: function () {
             DOM.playButton.hide();
             DOM.title.hide();
-            GAME.status = PLAY_STATUS;
+            GAME.status = MISSION_COMPLETE_STATUS;
             GAME.initGame();
             GAME.initLevel();
             GAME.initMODELS();
