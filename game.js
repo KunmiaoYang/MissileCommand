@@ -13,6 +13,9 @@ var GAME = function() {
         EXPLOSION_RANGE = 0.08, DESTRUCT_EXPLOSION_RANGE = 0.04,
         EXPLOSION_DURATION = 2000;
     const ZERO_THRESHOLD = 0.0001;
+    function calcXYZFromScreen(ratioX, ratioY) {
+        return vec3.fromValues(CANVAS_ORIGIN[0] - WIDTH * ratioX, CANVAS_ORIGIN[1] - HEIGHT * ratioY, 0);
+    }
     function calcRotationMatrix(oldDirection, newDirection) {
         vec3.normalize(oldDirection, oldDirection);
         vec3.normalize(newDirection, newDirection);
@@ -138,6 +141,19 @@ var GAME = function() {
         rMatrixArray: [],
         countScore: function () {
             for(let i = 0; i < BATTERY_COUNT; i++) if(!GAME.model.batteries[i].disable) GAME.score += BATTERY_SCORE;
+        },
+        getNearestIndex: function (x) {
+            let batteryIndex = -1,
+                missiles = GAME.model.defenseMissile.array;
+            for(let i = 0, delta = WIDTH; i < BATTERY_COUNT; i++) {
+                if(0 === missiles[i].length) continue;
+                let curDelta = Math.abs(battery.pos[i] - x);
+                if(delta > curDelta) {
+                    batteryIndex = i;
+                    delta = curDelta;
+                }
+            }
+            return batteryIndex;
         }
     };
     var defenseMissile = {
@@ -335,8 +351,8 @@ var GAME = function() {
         },
         initDefenseTarget: function () {
             GAME.model.defenseTarget = new Array(CITY_COUNT + BATTERY_COUNT);
+            // Init cities
             for(let i = 0; i < CITY_COUNT; i++) {
-                // Init city models
                 let targetModel =  GAME.model.cities[i],
                     height = Math.random() * TARGET_HEIGHT_RANGE + TARGET_HEIGHT_BOTTOM,
                     rotMatrix = mat4.fromRotation(mat4.create(), Math.random()*2*Math.PI, [0,1,0]);
@@ -347,8 +363,9 @@ var GAME = function() {
                 targetModel.destruct = destroyCity;
                 GAME.model.defenseTarget[i] = targetModel;
                 if(!targetModel.disable) MODELS.array.push(targetModel);
-                // MODELS.array.push(mountainModel);
             }
+
+            // initialize batteries
             battery.count = BATTERY_COUNT;
             for(let i = 0; i < BATTERY_COUNT; i++) {
                 // Init battery models
@@ -483,25 +500,26 @@ var GAME = function() {
         },
         launchDefenseMissile: function(ratioX, ratioY) {
             if(GAME.status !== PLAY_STATUS) return;
-            let xyz = vec3.fromValues(CANVAS_ORIGIN[0] - WIDTH * ratioX, CANVAS_ORIGIN[1] - HEIGHT * ratioY, 0),
-                tar = createAirTarget(xyz),
-                batteryIndex = -1,
-                missiles = GAME.model.defenseMissile.array;
+            let xyz = calcXYZFromScreen(ratioX, ratioY);
             if(xyz[1] < 0) return;
-            for(let i = 0, delta = WIDTH; i < BATTERY_COUNT; i++) {
-                if(0 === missiles[i].length) continue;
-                if(delta > Math.abs(battery.pos[i] - xyz[0])) {
-                    batteryIndex = i;
-                    delta = Math.abs(battery.pos[i] - xyz[0]);
-                }
-            }
+            let batteryIndex = battery.getNearestIndex(xyz[0]);
             if(-1 === batteryIndex) return;
+            let missiles = GAME.model.defenseMissile.array,
+                tar = createAirTarget(xyz);
             let missile = missiles[batteryIndex].pop();
             missile.rootModel = null;
             missile.rMatrix = mat4.scale(mat4.create(), idMatrix, [MISSILE_SCALE, MISSILE_SCALE, MISSILE_SCALE]);
             missile.tMatrix = mat4.fromTranslation(mat4.create(), missile.xyz);
             launch(missile, DEFENSE_MISSILE_SPEED, tar, hitAir);
             SOUND.launch.play();
+        },
+        rotateBatteries: function (ratioX, ratioY) {
+            // if(GAME.status !== PLAY_STATUS) return;
+            let xyz = calcXYZFromScreen(ratioX, ratioY), oldDirection = vec3.fromValues(0,1,0),
+                scaleMatrix = mat4.scale(mat4.create(), idMatrix, [BATTERY_SCALE, BATTERY_SCALE, BATTERY_SCALE]);
+            let curBattery = GAME.model.batteries[0],
+                direction = vec3.subtract(vec3.create(), xyz, curBattery.xyz);
+            curBattery.rMatrix = mat4.multiply(mat4.create(),scaleMatrix, calcRotationMatrix(oldDirection, direction));
         },
         update: function(duration, now) {
             let seconds = duration/1000, level = GAME.level;
@@ -590,7 +608,7 @@ var GAME = function() {
             }
 
         },
-        main: function() {
+        main: function () {
             DOM.load(OPTION, CAMERA, URL);   // load the data from html page
             LIGHTS.load(); // load in the lights
             SHADER.setupWebGL(); // set up the webGL environment

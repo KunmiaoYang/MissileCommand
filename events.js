@@ -45,6 +45,7 @@ var EVENTS = function () {
         },
         handleClick: function(event) {
             GAME.launchDefenseMissile(event.offsetX/DOM.canvas.width, event.offsetY/DOM.canvas.height);
+            GAME.rotateBatteries(event.offsetX/DOM.canvas.width, event.offsetY/DOM.canvas.height);
         },
         setupEvent: function() {
             document.onkeydown = EVENTS.handleKeyDown;
