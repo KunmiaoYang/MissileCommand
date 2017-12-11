@@ -162,7 +162,7 @@ var GAME = function() {
             ambient: [0,0,0], diffuse: [1.0, 1.0, 1.0], specular: [1.0, 1.0, 1.0], n:10, textureMode: 0
         },
         xPos: [-0.015, 0, 0.015],
-        zPos: [-0.015, 0, 0.015],
+        zPos: [0.015, 0, -0.015],
         xyz: [],
         tMatrixArray: [],
         rMatrixArray: []
