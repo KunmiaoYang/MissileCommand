@@ -2,7 +2,7 @@ var GAME = function() {
     const WIDTH = 1.3, HEIGHT = 1.3,
         CANVAS_ORIGIN = [1.15, 1.15, 0];
     const INTRO_STATUS = 0, PLAY_STATUS = 1, MISSION_COMPLETE_STATUS = 2,
-        GAME_OVER_STATUS = 3, PAUSE_STATUS = 4;
+        GAME_OVER_STATUS = 3, PAUSE_STATUS = 4, TEST_STATUS = -1;
     const CITY_SCALE = 0.0038, CITY_COUNT = 6, CITY_SCORE = 20,
         BATTERY_SCALE = 0.0025, BATTERY_COUNT = 3, BATTERY_SCORE = 10,
         TARGET_HEIGHT_BOTTOM = 0.05, TARGET_HEIGHT_RANGE = 0.15,
@@ -422,6 +422,35 @@ var GAME = function() {
                 };
             });
         },
+
+        launchDefenseMissile: function(ratioX, ratioY) {
+            if(GAME.status !== PLAY_STATUS && GAME.status !== TEST_STATUS) return;
+            let xyz = calcXYZFromScreen(ratioX, ratioY);
+            if(xyz[1] < 0) return;
+            let batteryIndex = battery.getNearestIndex(xyz[0]);
+            if(-1 === batteryIndex) return;
+            let missiles = GAME.model.defenseMissile.array,
+                tar = createAirTarget(xyz);
+            let missile = missiles[batteryIndex].pop();
+            missile.rootModel = null;
+            missile.rMatrix = mat4.scale(mat4.create(), idMatrix, [MISSILE_SCALE, MISSILE_SCALE, MISSILE_SCALE]);
+            missile.tMatrix = mat4.fromTranslation(mat4.create(), missile.xyz);
+            launch(missile, DEFENSE_MISSILE_SPEED, tar, hitAir);
+            SOUND.launch.play();
+        },
+        rotateBatteries: function (ratioX, ratioY) {
+            if(GAME.status !== PLAY_STATUS && GAME.status !== TEST_STATUS) return;
+            let xyz = calcXYZFromScreen(ratioX, ratioY), oldDirection = vec3.fromValues(0,1,0),
+                batteryIndex = battery.getNearestIndex(xyz[0]);
+            if(-1 === batteryIndex) return;
+            let curBattery = GAME.model.batteries[batteryIndex],
+                direction = vec3.subtract(vec3.create(), xyz, curBattery.xyz),
+                rotMatrix = calcRotationMatrix(oldDirection, direction);
+            if (rotMatrix) {
+                curBattery.rMatrix = mat4.multiply(mat4.create(), battery.scaleMatrix, rotMatrix);
+            }
+        },
+
         pause: function () {
             if(PLAY_STATUS === GAME.status) {
                 GAME.status = PAUSE_STATUS;
@@ -485,6 +514,7 @@ var GAME = function() {
         },
         over: function () {
             GAME.status = GAME_OVER_STATUS;
+            DOM.title.show().attr('class', 'over');
             // ANIMATION.stop = true;
             SOUND.UFO.pause();
             SOUND.missionComplete.pause();
@@ -494,37 +524,10 @@ var GAME = function() {
             ANIMATION.delayRun(5000, function () {
                 SOUND.intro.play();
                 DOM.playButton.show().attr('class', 'play').attr('onclick',"GAME.play()");
-                DOM.title.show();
+                DOM.title.attr('class', 'intro');
                 GAME.status = INTRO_STATUS;
             });
             RASTERIZE.renderTriangles(SHADER.gl);
-        },
-        launchDefenseMissile: function(ratioX, ratioY) {
-            if(GAME.status !== PLAY_STATUS) return;
-            let xyz = calcXYZFromScreen(ratioX, ratioY);
-            if(xyz[1] < 0) return;
-            let batteryIndex = battery.getNearestIndex(xyz[0]);
-            if(-1 === batteryIndex) return;
-            let missiles = GAME.model.defenseMissile.array,
-                tar = createAirTarget(xyz);
-            let missile = missiles[batteryIndex].pop();
-            missile.rootModel = null;
-            missile.rMatrix = mat4.scale(mat4.create(), idMatrix, [MISSILE_SCALE, MISSILE_SCALE, MISSILE_SCALE]);
-            missile.tMatrix = mat4.fromTranslation(mat4.create(), missile.xyz);
-            launch(missile, DEFENSE_MISSILE_SPEED, tar, hitAir);
-            SOUND.launch.play();
-        },
-        rotateBatteries: function (ratioX, ratioY) {
-            if(GAME.status !== PLAY_STATUS) return;
-            let xyz = calcXYZFromScreen(ratioX, ratioY), oldDirection = vec3.fromValues(0,1,0),
-                batteryIndex = battery.getNearestIndex(xyz[0]);
-            if(-1 === batteryIndex) return;
-            let curBattery = GAME.model.batteries[batteryIndex],
-                direction = vec3.subtract(vec3.create(), xyz, curBattery.xyz),
-                rotMatrix = calcRotationMatrix(oldDirection, direction);
-            if (rotMatrix) {
-                curBattery.rMatrix = mat4.multiply(mat4.create(), battery.scaleMatrix, rotMatrix);
-            }
         },
         update: function(duration, now) {
             let seconds = duration/1000, level = GAME.level;
@@ -625,15 +628,22 @@ var GAME = function() {
         test: function () {
             DOM.playButton.hide();
             DOM.title.hide();
-            GAME.status = MISSION_COMPLETE_STATUS;
+            GAME.status = TEST_STATUS;
             GAME.initGame();
             GAME.initLevel();
             GAME.initMODELS();
             GAME.initDefenseTarget();
             GAME.initDefenseMissile();
+            SOUND.intro.pause();
+            SOUND.gamePlay.load();
+            SOUND.gamePlay.play();
+            ANIMATION.start();
             let missiles = GAME.model.defenseMissile.array, missile = missiles[0][0];
             let battery = GAME.model.batteries[0];
             let t = createAirTarget(vec3.fromValues(0.5, 0.5, 0));
+            let level = GAME.level;
+            level.nextMissile = level.attackMissileCount;
+            level.nextSpaceship = level.spaceshipCount;
 
             // Test
             missile.rootModel = battery;

@@ -73,10 +73,19 @@
 #title {
     position: absolute;
     z-index: 2;
-    height: 300px;
-    width: auto;
+    height: auto;
+    width: 520px;
     left: 0;
+}
+
+#title.intro {
+    content: url("img/title.png");
     top: 65px;
+}
+
+#title.over {
+    content: url("img/gameOver.png");
+    top: 150px;
 }
 
 audio {
