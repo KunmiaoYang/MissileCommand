@@ -139,6 +139,7 @@ var GAME = function() {
         },
         tMatrixArray: [],
         rMatrixArray: [],
+        scaleMatrix: mat4.scale(mat4.create(), idMatrix, [BATTERY_SCALE, BATTERY_SCALE, BATTERY_SCALE]),
         countScore: function () {
             for(let i = 0; i < BATTERY_COUNT; i++) if(!GAME.model.batteries[i].disable) GAME.score += BATTERY_SCORE;
         },
@@ -514,12 +515,13 @@ var GAME = function() {
             SOUND.launch.play();
         },
         rotateBatteries: function (ratioX, ratioY) {
-            // if(GAME.status !== PLAY_STATUS) return;
+            if(GAME.status !== PLAY_STATUS) return;
             let xyz = calcXYZFromScreen(ratioX, ratioY), oldDirection = vec3.fromValues(0,1,0),
-                scaleMatrix = mat4.scale(mat4.create(), idMatrix, [BATTERY_SCALE, BATTERY_SCALE, BATTERY_SCALE]);
-            let curBattery = GAME.model.batteries[0],
+                batteryIndex = battery.getNearestIndex(xyz[0]);
+            if(-1 === batteryIndex) return;
+            let curBattery = GAME.model.batteries[batteryIndex],
                 direction = vec3.subtract(vec3.create(), xyz, curBattery.xyz);
-            curBattery.rMatrix = mat4.multiply(mat4.create(),scaleMatrix, calcRotationMatrix(oldDirection, direction));
+            curBattery.rMatrix = mat4.multiply(mat4.create(), battery.scaleMatrix, calcRotationMatrix(oldDirection, direction));
         },
         update: function(duration, now) {
             let seconds = duration/1000, level = GAME.level;
