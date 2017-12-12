@@ -646,9 +646,6 @@ var GAME = function() {
             level.nextSpaceship = level.spaceshipCount;
 
             // Test
-            missile.rootModel = battery;
-            missile.rMatrix = mat4.scale(mat4.create(), idMatrix, [MISSILE_SCALE/BATTERY_SCALE, MISSILE_SCALE/BATTERY_SCALE, MISSILE_SCALE/BATTERY_SCALE]);
-            missile.tMatrix = mat4.fromTranslation(mat4.create(), [-0.015/BATTERY_SCALE, 0, -0.015/BATTERY_SCALE]);
 
             RASTERIZE.renderTriangles(SHADER.gl);
             // launch(missiles[i][j], DEFENSE_MISSILE_SPEED, t, hitAir);
