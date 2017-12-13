@@ -477,8 +477,8 @@ var GAME = function() {
             SOUND.gamePlay.load();
             SOUND.gamePlay.play();
             ANIMATION.start();
-            DOM.playButton.hide();
-            DOM.title.hide();
+            DOM.playButton.hide("fade");
+            DOM.title.hide("fade");
         },
         endLevel: function () {
             GAME.status = MISSION_COMPLETE_STATUS;
@@ -488,7 +488,7 @@ var GAME = function() {
             SOUND.missionComplete.play();
             city.countScore();
             battery.countScore();
-            DOM.playButton.show().attr('class', 'next').attr('onclick',"GAME.nextLevel()");
+            DOM.playButton.show("fade").attr('class', 'next').attr('onclick',"GAME.nextLevel()");
         },
         nextLevel: function () {
             GAME.status = PLAY_STATUS;
@@ -510,11 +510,11 @@ var GAME = function() {
             SOUND.gamePlay.load();
             SOUND.gamePlay.play();
             ANIMATION.start();
-            DOM.playButton.hide();
+            DOM.playButton.hide("fade");
         },
         over: function () {
             GAME.status = GAME_OVER_STATUS;
-            DOM.title.show().attr('class', 'over');
+            DOM.title.show("fade").attr('class', 'over');
             // ANIMATION.stop = true;
             SOUND.UFO.pause();
             SOUND.missionComplete.pause();
@@ -523,7 +523,7 @@ var GAME = function() {
             SOUND.gamePlay.load();
             ANIMATION.delayRun(5000, function () {
                 SOUND.intro.play();
-                DOM.playButton.show().attr('class', 'play').attr('onclick',"GAME.play()");
+                DOM.playButton.show("fade").attr('class', 'play').attr('onclick',"GAME.play()");
                 DOM.title.attr('class', 'intro');
                 GAME.status = INTRO_STATUS;
             });
@@ -626,8 +626,8 @@ var GAME = function() {
             RASTERIZE.setupOnLoad();
         },
         test: function () {
-            DOM.playButton.hide();
-            DOM.title.hide();
+            DOM.playButton.hide("fade");
+            DOM.title.hide("fade");
             GAME.status = TEST_STATUS;
             GAME.initGame();
             GAME.initLevel();
